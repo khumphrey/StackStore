@@ -15,7 +15,7 @@ var schema = new mongoose.Schema({
         type: Array
     },
     history: {
-        type: Array
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
     },
     email: {
         type: String,
