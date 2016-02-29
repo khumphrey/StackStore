@@ -64,11 +64,10 @@ var encryptPassword = function (plainText, salt) {
     return hash.digest('hex');
 };
 
+    
 schema.pre('save', function (next) {
-
     if (!this.username) {
-        var usernameTemp = this.email.split('@')[0];
-        this.username = usernameTemp;
+        this.username = this.email;
     }
 
     if (this.isModified('password')) {
