@@ -140,6 +140,14 @@ describe('User model', function () {
                 });
             });
 
+            it('should set a default username if none is given', function (done) {
+                createUser().then(function (user) {
+                    expect(user.username).to.be.equal('obama@gmail.com');
+                    done();
+                });
+            });
+
+
         });
 
         describe('sanitize method', function () {

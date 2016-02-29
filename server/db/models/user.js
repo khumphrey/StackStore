@@ -4,11 +4,30 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 
 var schema = new mongoose.Schema({
-    email: {
+    username: {
+        type: String,
+        unique: true
+    },
+    fullname: {
         type: String
     },
+    cart: {
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Product'}]
+    },
+    history: {
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    admin: {
+        type: Boolean,
+        default: false
+    },
     password: {
-        type: String
+        type: String,
+        required: true,
     },
     salt: {
         type: String
@@ -29,7 +48,7 @@ var schema = new mongoose.Schema({
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
-    return _.omit(this.toJSON(), ['password', 'salt']);
+    return _.omit(this.toJSON(), ['password', 'salt', 'twitter']);
 };
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
@@ -45,7 +64,11 @@ var encryptPassword = function (plainText, salt) {
     return hash.digest('hex');
 };
 
+    
 schema.pre('save', function (next) {
+    if (!this.username) {
+        this.username = this.email;
+    }
 
     if (this.isModified('password')) {
         this.salt = this.constructor.generateSalt();
