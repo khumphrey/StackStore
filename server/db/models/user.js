@@ -4,11 +4,30 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 
 var schema = new mongoose.Schema({
-    email: {
+    username: {
+        type: String,
+        unique: true
+    },
+    fullname: {
         type: String
     },
+    cart: {
+        type: Array
+    },
+    history: {
+        type: Array
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    admin: {
+        type: Boolean,
+        default: false
+    },
     password: {
-        type: String
+        type: String,
+        required: true,
     },
     salt: {
         type: String
@@ -46,6 +65,11 @@ var encryptPassword = function (plainText, salt) {
 };
 
 schema.pre('save', function (next) {
+
+    if (!this.username) {
+        var usernameTemp = this.email.split('@')[0];
+        this.username = usernameTemp;
+    }
 
     if (this.isModified('password')) {
         this.salt = this.constructor.generateSalt();
