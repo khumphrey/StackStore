@@ -12,7 +12,7 @@ var schema = new mongoose.Schema({
         type: String
     },
     cart: {
-        type: Array
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Product'}]
     },
     history: {
         type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
@@ -48,7 +48,7 @@ var schema = new mongoose.Schema({
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
-    return _.omit(this.toJSON(), ['password', 'salt']);
+    return _.omit(this.toJSON(), ['password', 'salt', 'twitter']);
 };
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
