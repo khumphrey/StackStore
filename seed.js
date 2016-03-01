@@ -22,6 +22,9 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
+var Product = Promise.promisifyAll(mongoose.model('Product'));
+var Catagory = Promise.promisifyAll(mongoose.model('Catagory'));
+var chance = require('chance')(123);
 
 var seedUsers = function () {
 
@@ -39,6 +42,53 @@ var seedUsers = function () {
     return User.createAsync(users);
 
 };
+
+var catagories = ['motor boat', 'cruise ship', 'pirate ship'];
+
+function seedCatagories (){
+    var catagoriesObj = catagories.map(function(elem){
+        return {name:elem};
+    });
+    return Catagory.createAsync(catagoriesObj);
+}
+
+function randPhoto () {
+    var g = chance.pick(['men', 'women']);
+    var n = chance.natural({
+        min: 0,
+        max: 96
+    });
+    return 'http://api.randomuser.me/portraits/thumb/' + g + '/' + n + '.jpg';
+}
+
+function randWords (minWords, maxWords) {
+    var numWords = chance.natural({
+        min: minWords,
+        max: maxWords
+    });
+    return chance.sentence({words: numWords})
+    .replace(/\b\w/g, function (m) {
+        return m.toUpperCase();
+    })
+    .slice(0, -1);
+}
+
+function randNumber (minNum, maxNum){
+    chance.natural({min: 0, max: maxNum});
+}
+
+
+function randProduct (){
+    return new Product({
+        title: randWords(1,3),
+        description: randWords(10,30),
+        price: randNumber(100000, 10000000),
+        quantity: randNumber(0,10),
+        catagory: chance.pickone(catagories),
+        photoUrl: randPhoto(),
+        // this is of people for now
+    });
+}
 
 connectToDb.then(function () {
     User.findAsync({}).then(function (users) {
