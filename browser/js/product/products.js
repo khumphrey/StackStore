@@ -13,18 +13,3 @@ app.config(function ($stateProvider) {
     });
 
 });
-
-app.controller('ProductsController', function ($scope, products) {
-	$scope.products = products;
-});
-
-app.factory('ProductsFactory', function ($http) {
-	return {
-
-		fetchAll: function() {
-			return $http.get('/api/products')
-			.then(products => products.data);
-		}
-
-	};
-});
