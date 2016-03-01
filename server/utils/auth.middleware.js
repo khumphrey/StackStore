@@ -14,12 +14,12 @@ Auth.ensureAuthenticated = function (req, res, next) {
 };
 
 Auth.ensureAdminOrSelf = function (req, res, next) {
-    if (isAdmin(req) || isSelf(req)) next();
+    if (Auth.isAdmin(req) || Auth.isSelf(req)) next();
     res.status(401).end();
 };
 
 Auth.ensureAdmin = function (req, res, next) {
-    if (isAdmin(req)) next();
+    if (Auth.isAdmin(req)) next();
     res.status(401).end();
 };
 
