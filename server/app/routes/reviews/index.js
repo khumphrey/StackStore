@@ -16,7 +16,7 @@ router.param('reviewId', function(req, res, next, id) {
 
 // Return all reviews
 router.get('/', function(req, res, next) {
-	Review.find()
+	Review.find({})
 		.then(function(reviews) {
 			res.status(200).json(reviews);	
 		})
@@ -36,3 +36,6 @@ router.get('/:reviewId', function(req, res, next) {
 
 // router.delete()
 // TBD
+
+
+module.exports = router;
