@@ -6,20 +6,24 @@ var _ = require('lodash');
 var schema = new mongoose.Schema({
     username: {
         type: String,
-        unique: true
     },
     fullname: {
         type: String
     },
-    cart: {
-        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Product'}]
-    },
+    cart: [{ 
+        product: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Product'
+        }, 
+        quantity: {type:Number, min:1, default:1}
+    }],
     history: {
         type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
     },
     email: {
         type: String,
         required: true,
+        unique: true
     },
     admin: {
         type: Boolean,
@@ -48,7 +52,7 @@ var schema = new mongoose.Schema({
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
-    return _.omit(this.toJSON(), ['password', 'salt', 'twitter']);
+    return _.omit(this.toJSON(), ['password', 'salt', 'twitter', 'facebook', 'google']);
 };
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
