@@ -42,7 +42,7 @@ router.put('/:id', Auth.ensureAdmin, function(req, res, next){
 });
 
 router.delete('/:id', Auth.ensureAdmin, function(req, res, next){
-	req.product.delete()
+	req.product.remove()
 	.then(function(){
 		res.status(204).end();
 	}).then(null, next);
