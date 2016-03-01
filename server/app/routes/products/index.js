@@ -2,6 +2,7 @@
 const router = require('express').Router();
 const _ = require('lodash');
 const Product = require('mongoose').model('Product');
+const Auth = require('../../../utils/auth.middleware');
 module.exports = router;
 
 router.param('id', function(req, res, next, id) {
@@ -27,23 +28,20 @@ router.get('/:id', function(req, res){
 });
 
 //These will be admin functions:
-router.post('/', function(req, res, next){
-
+router.post('/', Auth.ensureAdmin, function(req, res, next){
 	Product.create(req.body)
 	.then(product => res.status(201).json(product))
 	.then(null,next);
 });
 
-router.put('/:id', function(req, res, next){
-	
+router.put('/:id', Auth.ensureAdmin, function(req, res, next){
 	_.extend(req.product, req.body);
 	req.product.save()
 	.then(products => res.json(products))
 	.then(null, next);
 });
 
-router.delete('/:id', function(req, res, next){
-	
+router.delete('/:id', Auth.ensureAdmin, function(req, res, next){
 	req.product.delete()
 	.then(function(){
 		res.status(204).end();
