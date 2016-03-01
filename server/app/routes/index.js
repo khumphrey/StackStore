@@ -2,6 +2,8 @@
 var router = require('express').Router();
 module.exports = router;
 
+
+router.use('/products', require('./products'));
 router.use('/users', require('./users'));
 
 // Make sure this is after all of
