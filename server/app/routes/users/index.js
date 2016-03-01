@@ -7,7 +7,8 @@ const User = mongoose.model('User');
 const Auth = require('../../../utils/auth.middleware');
 
 router.param('userId', function (req, res, next, userId) {
-    User.findById(userId)
+    var id = userId.toString();
+    User.findById(id)
     .populate('cart history')
     .then(function (user) {
         if (!user) throw new Error('User does not exist');
