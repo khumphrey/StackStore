@@ -1,8 +1,7 @@
 'use strict';
-var router = require('express').Router(),
-	_ = require('lodash');
-
-var Product  = require('mongoose').model('Product');
+var router = require('express').Router();
+var _ = require('lodash');
+var Product = require('mongoose').model('Product');
 module.exports = router;
 
 router.param('id', function(req, res, next, id) {
@@ -23,7 +22,7 @@ router.get('/', function(req, res, next){
 	// return .data?
 });
 
-router.get('/:id', function(req, res, next){
+router.get('/:id', function(req, res){
 	res.json(req.product);
 });
 
@@ -36,7 +35,7 @@ router.post('/', function(req, res, next){
 });
 
 router.put('/:id', function(req, res, next){
-
+	
 	_.extend(req.product, req.body);
 	req.product.save()
 	.then(products => res.json(products))
