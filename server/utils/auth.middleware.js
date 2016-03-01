@@ -1,24 +1,24 @@
 var Auth = {};
 
-var isAdmin = function (req) {
+Auth.isAdmin = function (req) {
     return req.user.admin === true;
 };
 
-var isSelf = function (req) {
+Auth.isSelf = function (req) {
     return req.user.equals(req.requestedUser);
 };
 
-var ensureAuthenticated = function (req, res, next) {
+Auth.ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) next();
     res.status(401).end(); 
 };
 
-var ensureAdminOrSelf = function (req, res, next) {
+Auth.ensureAdminOrSelf = function (req, res, next) {
     if (isAdmin(req) || isSelf(req)) next();
     res.status(401).end();
 };
 
-var ensureAdmin = function (req, res, next) {
+Auth.ensureAdmin = function (req, res, next) {
     if (isAdmin(req)) next();
     res.status(401).end();
 };

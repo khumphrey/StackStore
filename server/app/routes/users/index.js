@@ -40,7 +40,7 @@ router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
     _.extend(req.requestedUser, req.body); //should this be _.assignIn?
     req.requestedUser.save() //because we already pulled this to the server we can just save rather than update
     .then(function (user) {
-        res.json(user); //will this have the cart and history populated? Do we need it?
+        res.json(user.sanitize()); //will this have the cart and history populated? Do we need it?
     })
     .then(null, next);
 });
@@ -48,7 +48,7 @@ router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
 router.post('/', Auth.ensureAdmin, function (req, res, next) {
     User.create(req.body)
     .then(function (createdUser) {
-        res.status(201).json(createdUser);
+        res.status(201).json(createdUser.sanitize());
     })
     .then(null, next);
 });
