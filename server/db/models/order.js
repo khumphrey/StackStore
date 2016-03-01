@@ -2,22 +2,7 @@
 const mongoose = require('mongoose');
 
 var orderSchema = new mongoose.Schema({
-	products: [{
-		productId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Product',
-			required: true
-		},
-		quantity: {
-			type: Number,
-			required: true
-		},
-		// We need to remember price at the time of purchase
-		price: {
-			type: Number,
-			required: true
-		},
-	}],
+	order: Array,
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
