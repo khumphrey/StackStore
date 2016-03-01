@@ -23,7 +23,7 @@ var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
 var Product = Promise.promisifyAll(mongoose.model('Product'));
-var Catagory = Promise.promisifyAll(mongoose.model('Catagory'));
+var Category = Promise.promisifyAll(mongoose.model('Category'));
 var chance = require('chance')(123);
 
 var seedUsers = function () {
@@ -43,14 +43,6 @@ var seedUsers = function () {
 
 };
 
-var catagories = ['motor boat', 'cruise ship', 'pirate ship'];
-
-function seedCatagories (){
-    var catagoriesObj = catagories.map(function(elem){
-        return {name:elem};
-    });
-    return Catagory.createAsync(catagoriesObj);
-}
 
 function randPhoto () {
     var g = chance.pick(['men', 'women']);
@@ -66,38 +58,58 @@ function randWords (minWords, maxWords) {
         min: minWords,
         max: maxWords
     });
-    return chance.sentence({words: numWords})
-    .replace(/\b\w/g, function (m) {
-        return m.toUpperCase();
-    })
-    .slice(0, -1);
+    return chance.sentence({words: numWords});
 }
 
-function randNumber (minNum, maxNum){
-    chance.natural({min: 0, max: maxNum});
-}
+var categories = ['motor boat', 'cruise ship', 'pirate ship'];
 
-
-function randProduct (){
+function randProduct (catId){
     return new Product({
         title: randWords(1,3),
         description: randWords(10,30),
-        price: randNumber(100000, 10000000),
-        quantity: randNumber(0,10),
-        catagory: chance.pickone(catagories),
+        price: chance.integer({min: 400, max: 900}),
+        quantity: chance.integer({min: 0, max: 10}),
+        categories: [catId],
         photoUrl: randPhoto(),
-        // this is of people for now
+        // this is photos of people for now
+    });
+}
+
+function seedProdCat (numOfProducts){
+    var productDocs = [];
+    var categoriesObj = categories.map(function(elem){
+        return {name:elem};
+    });
+    return Category.createAsync(categoriesObj)
+    .then(function(categoryDocs){
+        for (var i = 0; i < numOfProducts; i++) {
+            console.log(randProduct(chance.pickone(categoryDocs)._id));
+            productDocs.push(randProduct(chance.pickone(categoryDocs)._id));
+        }
+        return productDocs;
     });
 }
 
 connectToDb.then(function () {
-    User.findAsync({}).then(function (users) {
-        if (users.length === 0) {
-            return seedUsers();
+    Product.findAsync({})
+    .then(function (product) {
+        if (product.length === 0) {
+            return Promise.map(seedProdCat(5), function (productDoc) {
+                return productDoc.save();
+            });
         } else {
-            console.log(chalk.magenta('Seems to already be user data, exiting!'));
+            console.log(chalk.magenta('Seems to already be product data, exiting!'));
             process.kill(0);
         }
+    }).then(function(){
+        return User.findAsync({}).then(function (users) {
+            if (users.length === 0) {
+                return seedUsers();
+            } else {
+                console.log(chalk.magenta('Seems to already be user data, exiting!'));
+                process.kill(0);
+            }
+        });
     }).then(function () {
         console.log(chalk.green('Seed successful!'));
         process.kill(0);
