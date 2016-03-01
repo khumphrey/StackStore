@@ -1,7 +1,7 @@
 'use strict';
-var router = require('express').Router();
-var _ = require('lodash');
-var Product = require('mongoose').model('Product');
+const router = require('express').Router();
+const _ = require('lodash');
+const Product = require('mongoose').model('Product');
 module.exports = router;
 
 router.param('id', function(req, res, next, id) {
