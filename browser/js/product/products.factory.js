@@ -4,6 +4,11 @@ app.factory('ProductsFactory', function ($http) {
 		fetchAll: function() {
 			return $http.get('/api/products')
 			.then(products => products.data);
+		},
+
+		fetchById: function(id) {
+			return $http.get('/api/products/' + id)
+			.then(product => product.data);
 		}
 
 	};

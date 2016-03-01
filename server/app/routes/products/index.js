@@ -26,7 +26,7 @@ router.get('/:id', function(req, res){
 	res.json(req.product);
 });
 
-//These are admin functions:
+//These will be admin functions:
 router.post('/', function(req, res, next){
 
 	Product.create(req.body)

@@ -12,4 +12,15 @@ app.config(function ($stateProvider) {
         }
     });
 
+    $stateProvider.state('product', {
+        url: '/products/:productId',
+        controller: 'ProductController',
+        templateUrl: 'js/product/product.html',
+        resolve: {
+            product: function(ProductsFactory, $stateParams){
+                return ProductsFactory.fetchById($stateParams.productId);
+            }
+        }
+    });
+
 });
