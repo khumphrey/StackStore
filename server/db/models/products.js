@@ -16,11 +16,13 @@ var productSchema = new mongoose.Schema({
 	},
 	quantity: {
 		type: Number,
-		required: true 
+		required: true
 	},
-	categories: {
-		type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Category'}],	
-	},
+	categories: [{
+			type: mongoose.Schema.Types.ObjectId, 
+			ref: 'Category',
+			required: true
+	}],
 	photoUrl: {
 		type: String, //this can either be a local url (public folder) or to a website
 		default: true 
