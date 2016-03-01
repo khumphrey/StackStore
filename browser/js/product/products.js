@@ -15,7 +15,7 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('ProductsController', function ($scope, products) {
-	
+	$scope.products = products;
 });
 
 app.factory('ProductsFactory', function ($http) {
