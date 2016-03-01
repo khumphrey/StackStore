@@ -18,3 +18,5 @@ var reviewSchema = new mongoose.Schema({
 		minlength: 10
 	}
 });
+
+mongoose.model('Review', reviewSchema);

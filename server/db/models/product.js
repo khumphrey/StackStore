@@ -26,7 +26,11 @@ var productSchema = new mongoose.Schema({
 	photoUrl: {
 		type: String, //this can either be a local url (public folder) or to a website
 		default: true 
-	}
+	},
+	reviews: [{
+		type: mongoose.Schema.Types.ObjectId, 
+		ref: 'Review'
+	}]
 });
 
 mongoose.model('Product', productSchema);
