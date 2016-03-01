@@ -45,12 +45,11 @@ var seedUsers = function () {
 
 
 function randPhoto () {
-    var g = chance.pick(['men', 'women']);
     var n = chance.natural({
         min: 0,
-        max: 96
+        max: 20
     });
-    return 'http://api.randomuser.me/portraits/thumb/' + g + '/' + n + '.jpg';
+    return '/imgBoat/boatImg' + n + '.jpg';
 }
 
 function randWords (minWords, maxWords) {
