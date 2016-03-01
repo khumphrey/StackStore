@@ -6,17 +6,16 @@ var _ = require('lodash');
 var schema = new mongoose.Schema({
     username: {
         type: String,
-        unique: true
     },
     fullname: {
         type: String
     },
     cart: [{ 
-        cartItem: {
+        product: {
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'Product'
         }, 
-        qunatity: {type:Number}
+        quantity: {type:Number}
     }],
     history: {
         type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
@@ -24,6 +23,7 @@ var schema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     admin: {
         type: Boolean,
