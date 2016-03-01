@@ -11,9 +11,13 @@ var schema = new mongoose.Schema({
     fullname: {
         type: String
     },
-    cart: {
-        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Product'}]
-    },
+    cart: [{ 
+        cartItem: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Product'
+        }, 
+        qunatity: {type:Number}
+    }],
     history: {
         type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
     },
