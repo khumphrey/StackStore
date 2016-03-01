@@ -63,12 +63,16 @@ function randWords (minWords, maxWords) {
 
 var categories = ['motor boat', 'cruise ship', 'pirate ship'];
 
+function randInteger (minNum, maxNum){
+    return chance.integer({min: minNum, max: maxNum});
+}
+
 function randProduct (catId){
     return new Product({
         title: randWords(1,3),
         description: randWords(10,30),
-        price: chance.integer({min: 400, max: 900}),
-        quantity: chance.integer({min: 0, max: 10}),
+        price: randInteger(400, 900),
+        quantity: randInteger(0, 10),
         categories: [catId],
         photoUrl: randPhoto(),
         // this is photos of people for now
@@ -76,15 +80,20 @@ function randProduct (catId){
 }
 
 function seedProdCat (numOfProducts){
-    var productDocs = [];
+    var productDocs = [],
+        catIDs = [];
+
     var categoriesObj = categories.map(function(elem){
         return {name:elem};
     });
     return Category.createAsync(categoriesObj)
     .then(function(categoryDocs){
+        catIDs = categoryDocs.map(elem => elem._id);
         for (var i = 0; i < numOfProducts; i++) {
-            console.log(randProduct(chance.pickone(categoryDocs)._id));
-            productDocs.push(randProduct(chance.pickone(categoryDocs)._id));
+
+            console.log(chance.pickone(catIDs));
+            // TODO update this to allow for multiple catagories
+            productDocs.push(randProduct(chance.pickone(catIDs)));
         }
         return productDocs;
     });
@@ -94,7 +103,7 @@ connectToDb.then(function () {
     Product.findAsync({})
     .then(function (product) {
         if (product.length === 0) {
-            return Promise.map(seedProdCat(5), function (productDoc) {
+            return Promise.map(seedProdCat(50), function (productDoc) {
                 return productDoc.save();
             });
         } else {
