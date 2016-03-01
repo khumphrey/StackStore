@@ -15,7 +15,7 @@ var schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'Product'
         }, 
-        quantity: {type:Number}
+        quantity: {type:Number, min:1, default:1}
     }],
     history: {
         type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}]
