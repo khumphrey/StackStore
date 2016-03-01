@@ -1,6 +1,6 @@
 'use strict';
 var passport = require('passport');
-var _ = require('lodash');
+// var _ = require('lodash');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
@@ -51,6 +51,22 @@ module.exports = function (app) {
         };
 
         passport.authenticate('local', authCb)(req, res, next);
+
+    });
+
+    app.post('/signup', function (req, res, next) {
+        delete req.body.admin;
+        User.create(req.body)
+        .then(function(createdUser){
+            req.logIn(createdUser, function (loginErr) {
+                if (loginErr) return next(loginErr);
+                // We respond with a response object that has user with _id and email.
+                res.status(200).send({
+                    createdUser: createdUser.sanitize()
+                });
+            });
+        })
+        .then(null, next);   
 
     });
 
