@@ -127,6 +127,134 @@ describe('Orders Routes', function() {
 
 	});
 
+	describe('Authenticated user', function () {
+
+		var loggedInAgent, createdOrders;
+
+		beforeEach('Create loggedIn user agent and authenticate', function (done) {
+			loggedInAgent = supertest.agent(app);
+			var user = {
+				email: createdUsers[0].email,
+				password: createdUsers[0].password
+			};
+			loggedInAgent.post('/login').send(user).end(done);
+		});
+
+		beforeEach('Create orders', function (done) {
+			Order.create([
+				{
+					user: createdUsers[0]._id,
+					purchasedItems: createdProducts,
+					shippingAddress: "123 ABC",
+					shippingEmail: "me@aol.com"
+				},
+				{
+					purchasedItems: createdProducts,
+					shippingAddress: "456 DEF",
+					shippingEmail: "you@aol.com"
+				}])
+				.then(function (orders) {
+					createdOrders = orders;
+					done();
+				});
+		});
+
+		it('should get 403 for get all orders', function (done) {
+			loggedInAgent.get('/api/orders')
+				.expect(403)
+				.end(done);
+		});
+
+		it('should get 403 for get one order that was not made by user', function (done) {
+			loggedInAgent.get('/api/orders/' + createdOrders[1]._id)
+				.expect(403)
+				.end(done);
+		});
+
+		it('should get 200 for get one order that was made by user', function (done) {
+			loggedInAgent.get('/api/orders/' + createdOrders[0]._id)
+				.expect(200)
+				.end(done);
+		});
+
+		it('should get 403 for put on order that was not made by user', function (done) {
+			loggedInAgent.put('/api/orders/' + createdOrders[1]._id)
+				.send({ orderStatus: "Cancelled" })
+				.expect(403)
+				.end(done);
+		});
+
+		it('should get 400 for put on order if the change is not to cancel status', function (done) {
+			loggedInAgent.put('/api/orders/' + createdOrders[0]._id)
+				.send({ orderStatus: "Processing" })
+				.expect(400)
+				.end(done);
+		});
+
+		it('should get 200 for put on order that is appropriate', function (done) {
+			loggedInAgent.put('/api/orders/' + createdOrders[0]._id)
+				.send({ orderStatus: "Cancelled" })
+				.expect(200)
+				.end(done);
+		});
+	});
+
+	describe('Authenticated Admin user', function () {
+
+		var loggedInAgent, createdOrders;
+
+		beforeEach('Create loggedIn user agent and authenticate', function (done) {
+			loggedInAgent = supertest.agent(app);
+			var adminUser = {
+				email: createdUsers[1].email,
+				password: createdUsers[1].password
+			};
+			loggedInAgent.post('/login').send(adminUser).end(done);
+		});
+
+		beforeEach('Create orders', function (done) {
+			Order.create([
+				{
+					user: createdUsers[0]._id,
+					purchasedItems: createdProducts,
+					shippingAddress: "123 ABC",
+					shippingEmail: "me@aol.com"
+				},
+				{
+					purchasedItems: createdProducts,
+					shippingAddress: "456 DEF",
+					shippingEmail: "you@aol.com"
+				}])
+				.then(function (orders) {
+					createdOrders = orders;
+					done();
+				});
+		});
+
+		it('should get 200 for get all orders and the response should be an array', function (done) {
+			loggedInAgent.get('/api/orders')
+				.expect(200)
+				.end(function (err, res) {
+					if (err) return done(err);
+					expect(res.body).to.be.an('array');
+					done();
+			});
+		});
+
+		it('should get 200 for get one order', function (done) {
+			loggedInAgent.get('/api/orders/' + createdOrders[0]._id)
+				.expect(200)
+				.end(done);
+		});
+
+		it('should get 200 for put on order that is appropriate', function (done) {
+			loggedInAgent.put('/api/orders/' + createdOrders[0]._id)
+				.send({ orderStatus: "Processing" })
+				.expect(200)
+				.end(done);
+		});
+	});
+
 	xdescribe('Creating a new order',function() {
 
 		it('should not work if any of the items is not in stock', function(done) {

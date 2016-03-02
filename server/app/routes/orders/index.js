@@ -29,25 +29,40 @@ router.get('/', Auth.ensureAdmin, function (req, res, next) {
 		.populate('user')
 		.then(function (allOrders) {
 			allOrders.forEach(function (order) {
-				order.user.sanitize();
+				if (order.user) order.user = order.user.sanitize();
 			});
 			res.json(allOrders);
 		})
 		.then(null, next);
 });
 
-router.get('/:orderId', Auth.ensureAdminOrSelf, function (req, res) {
-	req.requestedOrder.user = req.requestedOrder.user.sanitize();
+router.get('/:orderId', function (req, res, next) {
+	//make sure to ensure admin or user
+	if (!Auth.isAdmin(req)) {
+		if (req.requestedOrder.user) {
+			req.requestedUser = req.requestedOrder.user;
+			if (!Auth.isSelf(req)) return next({status: 403, message:"Users can only view his/her own orders"});
+		} else return next({status: 403, message:"Users can only view his/her own orders"});	
+	}
+	if (req.requestedOrder.user) req.requestedOrder.user = req.requestedOrder.user.sanitize();
 	res.json(req.requestedOrder);
 });
 
 
-router.put('/:orderId', Auth.ensureAdminOrSelf, function (req, res, next) {
+router.put('/:orderId', function (req, res, next) {
 	delete req.body.purchasedItems;
-	//user can change only status to 
-	if (Auth.isSelf(req)) {
-		if (req.body.status !== "Cancelled") return next({status: 400, message:"User can only change order status to cancelled"});
+
+	//user can change only status to
+	if (!Auth.isAdmin(req)) {
+		if (req.requestedOrder.user) {
+			req.requestedUser = req.requestedOrder.user;
+			if (Auth.isSelf(req)) {
+				if (req.body.orderStatus !== "Cancelled") return next({status: 400, message:"User can only change order status to cancelled"});
+			} else return next({status: 403, message:"Users can only change his/her own orders"});
+		} else return next({status: 403, message:"Users can only change his/her own orders"});	
 	}
+
+	if (req.body.orderStatus) req.requestedOrder.status = req.body.orderStatus;
 	_.extend(req.requestedOrder, req.body);
 	req.requestedOrder.save()
 		.then(function (order) {
@@ -55,6 +70,7 @@ router.put('/:orderId', Auth.ensureAdminOrSelf, function (req, res, next) {
 			res.json(order);
 		})
 		.then(null, next);
+ 
 });
 
 // req.body = {cart: cart, shippingAddress: xxxx, shippingEmail: xxx}
