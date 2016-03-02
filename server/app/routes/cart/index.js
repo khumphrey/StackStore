@@ -7,11 +7,12 @@ const User = mongoose.model('User');
 router.get('/', function (req, res, next) {
 	if(req.user) {
 		res.status(200).json(req.user.cart);
+		// We can populate the products here or make a new request from the return
 	}
 	else {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
-		res.status(200);
-		res.send(req.session.cart);
+		res.status(200).json(req.session.cart);
+		// We can populate the products here or make a new request from the return
 	}
 });
 
@@ -34,12 +35,11 @@ router.post('/', function (req, res, next) {
 						req.session.cart[i].quantity += req.body.item.quantity;
 						notAdded = false;
 						break;
-					}
+					} 
 				}
 				if(notAdded) req.session.cart.push(req.body.item);
 			}
-			res.status(201)
-			res.send(req.session.cart);
+			res.status(201).json(req.session.cart);
 		};
 });
 
@@ -48,8 +48,9 @@ router.post('/', function (req, res, next) {
 router.put('/', function (req, res, next) {
 		if(req.user) {
 			req.user.cart[req.body.index].quantity = req.body.quantity;
-			req.user.save();
-			res.status(200).json(req.user.cart);
+			req.user.save().then(function(){
+			        res.status(200).json(req.user.cart);
+			})
 		}
 		else {
 			req.session.cart[req.body.index].quantity = req.body.quantity;
@@ -62,17 +63,17 @@ router.put('/', function (req, res, next) {
 router.delete('/', function (req, res, next) {
 	if(req.user) {
 			req.user.cart.splice(req.body.index, 1);
-			req.user.save();
-			res.status(401).json(req.user.cart);
+			req.user.save().then(function(){
+			         res.sendStatus(204);
+			});
 	}
 	else {
 		if(!req.session.cart) {
-			req.session.cart = []; //making sure noone can somehow give a delete request without a cart
-			res.status(200).json(req.session.cart);
+		        next({status:404, message:"Cart does not exist"});
 		}
 		else{
 			req.session.cart.splice(req.body.index, 1);
-			res.status(401).json(req.session.cart);
+			res.sendStatus(204);
 		};
 	};
 });
