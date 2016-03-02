@@ -20,11 +20,8 @@ router.param('userId', function (req, res, next, userId) {
     });
 });
 
-router.use(Auth.ensureAuthenticated);
-
 router.get('/', Auth.ensureAdmin, function (req, res, next) {
-    var search = req.query.name ? { fullname: req.query.name } : {}; //in case we want to be able to search the user on the user mgmt page of the admin
-    User.find(search)
+    User.find(req.query)
     .populate('cart history')
     .then(allUsers => res.json(allUsers))
     .then(null, next);
@@ -45,7 +42,10 @@ router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
 });
 
 router.post('/', Auth.ensureAdmin, function (req, res, next) {
+    if (!req.body.email || !req.body.password) return next({status: 400, message: "Email or password not provided"});
     User.create(req.body)
     .then(createdUser => res.status(201).json(createdUser.sanitize()))
     .then(null, next);
 });
+
+module.exports = router;
