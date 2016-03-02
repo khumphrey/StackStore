@@ -22,6 +22,62 @@ describe('Users Route', function () {
 		clearDB(done);
 	});
 
+	describe('Authentication requests', function () {
+
+		var guestAgent;
+
+		beforeEach('Create guest agent', function () {
+			guestAgent = supertest.agent(app);
+		});
+
+		it('should get a 400 for signup without all user data', function (done) {
+			guestAgent.post('/signup')
+				.send({ email: "k" })
+				.expect(400)
+				.end();
+			guestAgent.post('/signup')
+				.send({ password: "k" })
+				.expect(400)
+				.end(done);
+		});
+
+		it('should get a 201 for appropriate signup', function (done) {
+			guestAgent.post('/signup')
+				.send({
+					email: "k",
+					password: "k"
+				})
+				.expect(201)
+				.end(done);
+		});
+
+		it('should get a 401 for login without all user data', function (done) {
+			guestAgent.post('/login')
+				.send({ email: "k" })
+				.expect(401)
+				.end();
+			guestAgent.post('/login')
+				.send({ password: "k" })
+				.expect(401)
+				.end(done);
+		});
+
+		it('should get a 200 for appropriate login', function (done) {
+			User.create({
+				email: "h",
+				password: "h"
+			});
+			guestAgent.post('/login')
+				.send({
+					email: "h",
+					password: "h"
+				})
+				.expect(200)
+				.end(done);
+		});
+
+	});
+
 	describe('Unauthenticated request', function () {
 
 		var guestAgent;
@@ -78,9 +134,8 @@ describe('Users Route', function () {
 			User.create(userInfo)
 			.then(function (createdUser) {
 				userId = createdUser._id;
-				done();
+				return User.create(secondUserInfo, done);
 			});
-			User.create(secondUserInfo, done);
 		});
 
 		beforeEach('Create loggedIn user agent and authenticate', function (done) {
@@ -89,13 +144,19 @@ describe('Users Route', function () {
 		});
 
 		
-		it('should get a 401 response for get all request', function (done) {
+		it('should get a 403 response for get all request', function (done) {
 			loggedInAgent.get('/api/users')
-				.expect(401)
+				.expect(403)
 				.end(done);
 		});
 
-		it('should get with 200 response and with a user as the body', function (done) {
+		it('should get a 404 response for a get by fakeId', function (done) {
+			loggedInAgent.get('/api/users/fakeId')
+				.expect(404)
+				.end(done);
+		});
+
+		it('should get a 200 response with a user as the body for a get by Id', function (done) {
 			loggedInAgent.get('/api/users/'+userId).expect(200).end(function (err, response) {
 				if (err) return done(err);
 				expect(response.body.email).to.equal(userInfo.email);
@@ -113,13 +174,13 @@ describe('Users Route', function () {
 			});
 		});
 
-		it('should get a 401 response for post request', function (done) {
+		it('should get a 403 response for post request', function (done) {
 			loggedInAgent.post('/api/users')
 				.send({
 					email: 'l@l.l',
 					password: 'l'
 				})
-				.expect(401)
+				.expect(403)
 				.end(done);
 		});
 	});
@@ -143,10 +204,9 @@ describe('Users Route', function () {
 			User.create(userInfo)
 			.then(function (createdUser) {
 				userId = createdUser._id;
-				done();
-			});
-			User.create(secondUserInfo)
-			 	.then(function (createdUser) {
+				return User.create(secondUserInfo);
+			})
+			.then(function (createdUser) {
 				secondUserId = createdUser._id;
 				done();
 			});
@@ -165,12 +225,14 @@ describe('Users Route', function () {
 			});
 		});
 
-		it('should get with 200 response for a get by userId request and a user as the body', function (done) {
-			loggedInAgent.get('/api/users/'+userId).expect(200).end(function (err, response) {
-				if (err) return done(err);
-				expect(response.body.email).to.equal(userInfo.email);
-				done();
-			});
+		it('should get a 404 response for put request with the fake user', function (done) {
+			loggedInAgent.put('/api/users/fakeId')
+				.send({ 
+					admin: "true",
+					fullname: "Kate" 
+				})
+				.expect(404)
+				.end(done);
 		});
 
 		it('should get a 200 response for put request with the updated user as the response', function (done) {
@@ -182,13 +244,13 @@ describe('Users Route', function () {
 				.expect(200).end(function (err, response) {
 				if (err) return done(err);
 				expect(response.body.fullname).to.equal("Kate");
-				expect(response.body.admin).to.equal("true");
+				expect(response.body.admin).to.equal(true);
 				done();
 			});
 		});
 
 		it('should get a 201 response for post request', function (done) {
-			loggedInAgent.put('/api/users/')
+			loggedInAgent.post('/api/users/')
 				.send({
 					email: 'l@l.l',
 					password: 'l'

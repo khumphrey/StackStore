@@ -11,11 +11,13 @@ router.param('userId', function (req, res, next, userId) {
     User.findById(id)
     .populate('cart history')
     .then(function (user) {
-        if (!user) throw new Error('User does not exist');
+        if (!user) return next({status: 404, message:"user does not exist"});
         req.requestedUser = user;
         next();
     })
-    .then(null, next);
+    .then(null, function() {
+        next({status: 404, message:"user does not exist"});
+    });
 });
 
 router.use(Auth.ensureAuthenticated);
