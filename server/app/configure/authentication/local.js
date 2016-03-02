@@ -40,12 +40,11 @@ module.exports = function (app) {
             }
 
             // req.logIn will establish our session.
+            user = user.sanitize();
             req.logIn(user, function (loginErr) {
                 if (loginErr) return next(loginErr);
                 // We respond with a response object that has user with _id and email.
-                res.status(200).send({
-                    user: user.sanitize()
-                });
+                res.status(200).send(user);
             });
 
         };
@@ -58,12 +57,11 @@ module.exports = function (app) {
         delete req.body.admin;
         User.create(req.body)
         .then(function(createdUser){
+            createdUser = createdUser.sanitize();
             req.logIn(createdUser, function (loginErr) {
                 if (loginErr) return next(loginErr);
                 // We respond with a response object that has user with _id and email.
-                res.status(200).send({
-                    createdUser: createdUser.sanitize()
-                });
+                res.status(200).send(createdUser);
             });
         })
         .then(null, next);   
