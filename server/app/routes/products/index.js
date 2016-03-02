@@ -7,7 +7,6 @@ module.exports = router;
 router.param('prodId', function(req, res, next, prodId) {
 	var id = prodId.toString();
 	Product.findById(id)
-	.populate('categories')
 	.then(function (product){
 		if(!product) return next({status: 404, message: "Product not found"}); 
 		req.requestedProduct = product;
@@ -20,6 +19,7 @@ router.param('prodId', function(req, res, next, prodId) {
 
 router.get('/', function(req, res, next){
 	Product.find({})
+	.populate('categories')
 	.then(products => res.json(products))
 	.then(null, next);
 	// return .data?
