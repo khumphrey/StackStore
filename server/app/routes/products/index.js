@@ -30,8 +30,7 @@ router.get('/:prodId', function(req, res){
 });
 
 // These will be admin functions:
-// router.use(Auth.ensureAuthenticated);
-// router.use(Auth.ensureAdmin);
+router.use(Auth.ensureAdmin);
 
 router.post('/', function(req, res, next){
 	Product.create(req.body)

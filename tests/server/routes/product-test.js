@@ -17,51 +17,6 @@ describe('Product Routes', function () {
 	var category, product;
 	var testPrice = 900;
 
-	beforeEach(function(done){
-		Category.create({
-			name:"Test Boat"
-		}, function (err, c) {
-			if (err) return done(err);
-			category = c;
-			return Product.create({
-				title: "Mu opzor hu.",
-	            description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
-	            price: testPrice,
-	            categories: [category],
-	            quantity: 3,
-	            photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
-			});
-		}).then(function(p){
-			product = p; done();
-		});
-	});
-
-	// var productBase = {
- //              title: "Mu opzor hu.",
- //              description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
- //              price: testPrice,
- //              quantity: 3,
- //              photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
- //            };
-
-	// var testProduct = productBase;
-
- //    var categoryBase = {name:"Test Boat"};
-
- //    var testCategory;
-
- //    var createProduct = function () {
- //        return Category.create(categoryBase)
- //        .then(function(createdCategory){
- //        	testCategory = createdCategory;
- //            testProduct.categories = createdCategory._id;
- //            return Product.create(testProduct); 
- //        });
- //    };
-
-
-
-
 	beforeEach('Establish DB connection', function (done) {
 		if (mongoose.connection.db) return done();
 		mongoose.connect(dbURI, done);
@@ -72,7 +27,7 @@ describe('Product Routes', function () {
 	});
 
 
-	describe('guest/user should be able to get', function () {
+	describe('guest/user should be able to', function () {
 		var guestAgent, category, product;
 		var testPrice = 900;
 
@@ -100,7 +55,7 @@ describe('Product Routes', function () {
 			guestAgent = supertest.agent(app);
 		});
 
-		it('/api/products should return array of products', function (done) {
+		it('get /api/products should return array of products', function (done) {
 			guestAgent.get('/api/products').expect(200).end(function (err, res) {
 				if (err) return done(err);
 				expect(res.body).to.be.an('array');
@@ -108,12 +63,29 @@ describe('Product Routes', function () {
 			});
 		});
 
-		it('/api/products/:id should return one product', function (done) {
+		it('get /api/products/:id should return one product', function (done) {
 			guestAgent.get('/api/products/' + product._id).expect(200).end(function (err, res) {
 				if (err) return done(err);
 				expect(res.body.price).to.be.equal(testPrice);
 				done();
 			});
+		});
+
+		it('not put existing product by id', function (done) {
+			guestAgent
+			.put('/api/products/' + product._id)
+			.send({
+				title:'Santa Maria'
+			})
+			.expect(401)
+			.end(done);
+		});
+
+		it('not delete an existing product by id', function (done) {
+			guestAgent
+			.delete('/api/products/' + product._id)
+			.expect(401)
+			.end(done);
 		});
 
 	});
