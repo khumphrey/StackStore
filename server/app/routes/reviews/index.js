@@ -22,10 +22,12 @@ router.param('reviewId', function(req, res, next, id) {
 		.then(null, next);
 });
 
-// Return all reviews
-// do we want to populate them?
+// Return all reviews, or filtered with a query 
+// (to get all reviews of a user or of a product)
 router.get('/', function(req, res, next) {
-	Review.find({})
+	Review.find(req.query)
+		.populate('user')
+		.populate('product')
 		.then(function(reviews) {
 			res.status(200).json(reviews);	
 		})
@@ -33,13 +35,11 @@ router.get('/', function(req, res, next) {
 });
 
 // Return one specific review by ID
-// do we want to populate it?
 router.get('/:reviewId', function(req, res, next) {
 	res.status(200).json(req.review);
 });
 
-
-router.post('/',Auth.ensureAuthenticated, function(req, res, next) {
+router.post('/', Auth.ensureAuthenticated, function(req, res, next) {
 	Review.create(req.body)
 		.then(function(newReview) {
 			res.status(201).json(newReview);

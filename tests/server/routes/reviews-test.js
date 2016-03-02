@@ -121,6 +121,31 @@ describe('Reviews Route', function() {
 					done();
 				});
 		});
+
+		it('should return all reviews of a user when a query is passed', function(done) {
+			guestAgent.get('/api/reviews'+'?user=' + createdUsers[0]._id)
+				.expect(200)
+				.end(function(err, response) {
+					if (err) return done(err);
+					console.log(response.body)
+					expect(response.body).to.be.an('array');
+					expect(response.body.length).to.equal(2);
+					done();
+				});
+		});
+
+		it('should return all reviews for a product when a query is passed', function(done) {
+			guestAgent.get('/api/reviews'+'?product=' + createdProducts[1]._id)
+				.expect(200)
+				.end(function(err, response) {
+					if (err) return done(err);
+					console.log(response.body)
+					
+					expect(response.body).to.be.an('array');
+					expect(response.body.length).to.equal(1);
+					done();
+				});
+		});
 	});
 
 	describe('Fetch one review', function() {
