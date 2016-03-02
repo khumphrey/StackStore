@@ -7,7 +7,6 @@ app.controller('ProductsController', function ($scope, products) {
 			$scope.categoryModel[elem]=true;
 	});
 		
-
 	$scope.categoryResults = [];
 
 	$scope.$watchCollection('categoryModel', function () {
