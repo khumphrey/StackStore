@@ -20,28 +20,25 @@ router.param('categoryId', function (req, res, next, categoryId) {
 });
 
 router.get('/', function (req, res, next) {
-    Category.find(search)
-    .populate('cart history')
-    .then(allCategorys => res.json(allCategorys))
+    Category.find(req.query)
+    .then(allCategories => res.json(allCategories))
     .then(null, next);
 });
 
-//get all Category info for a particular ID
-router.get('/:categoryId', Auth.ensureAdminOrSelf, function (req, res) {
-    //if the Category is logged, is either admin or the Category it is requesting send back the Category info
+router.get('/:categoryId', function (req, res) {
     res.json(req.requestedCategory);
 });
 
-router.put('/:categoryId', Auth.ensureAdminOrSelf, function (req, res, next) {
-    if (Auth.isSelf(req)) delete req.body.admin;
-    _.extend(req.requestedCategory, req.body); //should this be _.assignIn?
-    req.requestedCategory.save() //because we already pulled this to the server we can just save rather than update
-    .then(Category => res.json(Category.sanitize())) //will this have the cart and history populated? Do we need it?
-    .then(null, next);
+router.put('/:categoryId', Auth.ensureAdmin, function (req, res, next) {
+    _.extend(req.requestedCategory, req.body);
+    req.requestedCategory.save() 
+        .then(res.json)
+        .then(null, next);
 });
 
 router.post('/', Auth.ensureAdmin, function (req, res, next) {
+    if (!req.body.name) return next({status: 400, message: "Name was not give for the category"})
     Category.create(req.body)
-    .then(createdCategory => res.status(201).json(createdCategory.sanitize()))
-    .then(null, next);
+        .then(createdCategory => res.status(201).json(createdCategory))
+        .then(null, next);
 });
