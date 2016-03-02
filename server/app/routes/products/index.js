@@ -5,12 +5,13 @@ const Product = require('mongoose').model('Product');
 const Auth = require('../../../utils/auth.middleware');
 module.exports = router;
 
-router.param('id', function(req, res, next, id) {
-	id = id.toString();
+router.param('prodId', function(req, res, next, prodId) {
+	var id = prodId.toString();
 	Product.findById(id)
+	.populate('categories')
 	.then(function (product){
 		if(!product) throw Error; 
-		req.product = product;
+		req.requestedProduct = product;
 		next();
 	})
 	.then(null, next);
@@ -23,8 +24,8 @@ router.get('/', function(req, res, next){
 	// return .data?
 });
 
-router.get('/:id', function(req, res){
-	res.json(req.product);
+router.get('/:prodId', function(req, res){
+	res.json(req.requestedProduct);
 });
 
 // These will be admin functions:
@@ -37,15 +38,15 @@ router.post('/', function(req, res, next){
 	.then(null,next);
 });
 
-router.put('/:id', function(req, res, next){
-	_.extend(req.product, req.body);
-	req.product.save()
+router.put('/:prodId', function(req, res, next){
+	_.extend(req.requestedProduct, req.body);
+	req.requestedProduct.save()
 	.then(product => res.json(product))
 	.then(null, next);
 });
 
-router.delete('/:id', function(req, res, next){
-	req.product.remove()
+router.delete('/:prodId', function(req, res, next){
+	req.requestedProduct.remove()
 	.then(function(){
 		res.status(204).end();
 	}).then(null, next);
