@@ -128,6 +128,18 @@ describe('Category Route', function () {
 				});
 		});
 
+		it('should get a 404 for an invalid delete request', function (done) {
+			loggedInAgent.delete('/api/categories/fakeId')
+				.expect(404)
+				.end(done);
+		});
+
+		it('should get a 204 response for delete request', function (done) {
+			loggedInAgent.delete('/api/categories/' + catId)
+				.expect(204)
+				.end(done);
+		});
+
 	});
 
 });

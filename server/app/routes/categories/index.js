@@ -43,4 +43,11 @@ router.post('/', Auth.ensureAdmin, function (req, res, next) {
         .then(null, next);
 });
 
+router.delete('/:categoryId', Auth.ensureAdmin, function (req, res, next) {
+    req.requestedCategory.remove() 
+        .then(function(){
+            res.status(204).end();
+        }).then(null, next);
+});
+
 module.exports = router;
