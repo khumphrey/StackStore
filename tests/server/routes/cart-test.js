@@ -307,7 +307,7 @@ describe('Cart Route', function () {
 			});	
 		})
 
-		xit('should delete a cart item', function (done) {
+		it('should delete a cart item', function (done) {
 			var category, product;
 			var testPrice = 900;
 			
@@ -331,12 +331,13 @@ describe('Cart Route', function () {
 					.end(function (err, response) {
 						if(err) done(err);
 						expect(response.body[0].product).to.equal(p._id.toString());
-						loggedInAgent.post('/api/cart/')
-						.send({item: {product: p._id, quantity: 5}})
-						.expect(201)
+						loggedInAgent.delete('/api/cart/')
+						.send({index: 0})
+						.expect(401)
 						.end(function (err, response) {
 							if(err) done(err);
-							expect(response.body[0].product).to.equal(p._id.toString());
+							expect(response.body.length).to.equal(0);
+							done();
 						})
 					})
 				});

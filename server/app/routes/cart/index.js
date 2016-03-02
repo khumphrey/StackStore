@@ -71,9 +71,7 @@ router.delete('/', function (req, res, next) {
 			res.status(200).json(req.session.cart);
 		}
 		else{
-			console.log("IM IN HERE", req.session.cart);
 			req.session.cart.splice(req.body.index, 1);
-			console.log("IM IN HERE", req.session.cart);
 			res.status(401).json(req.session.cart);
 		};
 	};
