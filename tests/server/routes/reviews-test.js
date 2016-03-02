@@ -127,7 +127,6 @@ describe('Reviews Route', function() {
 				.expect(200)
 				.end(function(err, response) {
 					if (err) return done(err);
-					console.log(response.body)
 					expect(response.body).to.be.an('array');
 					expect(response.body.length).to.equal(2);
 					done();
@@ -139,8 +138,6 @@ describe('Reviews Route', function() {
 				.expect(200)
 				.end(function(err, response) {
 					if (err) return done(err);
-					console.log(response.body)
-					
 					expect(response.body).to.be.an('array');
 					expect(response.body.length).to.equal(1);
 					done();
