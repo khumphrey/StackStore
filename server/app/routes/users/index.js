@@ -25,7 +25,11 @@ router.use(Auth.ensureAuthenticated);
 router.get('/', Auth.ensureAdmin, function (req, res, next) {
     User.find(req.query)
     .populate('cart history')
-    .then(allUsers => res.json(allUsers))
+    .then(function (allUsers) {
+        res.json(allUsers.map(function (user) {
+            user = user.sanitize();
+        }));
+    })
     .then(null, next);
 });
 
