@@ -151,7 +151,7 @@ describe('Reviews Route', function() {
 
 	describe('Post a new review', function() {
 
-		describe('Unauthicated requests', function() {
+		describe('(Unauthicated request)', function() {
 
 			var guestAgent;
 			var newReviewContent = "I emphasize this is good!";
@@ -174,12 +174,8 @@ describe('Reviews Route', function() {
 
 		});
 
-		describe('Authenticated requests', function() {
+		describe('(Authenticated request)', function() {
 			var loggedInAgent;
-
-			// beforeEach('Create a user', function(done) {
-			// 	User.create(userInfo, done);
-			// });
 
 			beforeEach('Create loggedIn user agent and authenticate', function (done) {
 				loggedInAgent = supertest.agent(app);
@@ -208,9 +204,86 @@ describe('Reviews Route', function() {
 		});
 	});
 
+	describe('Update a review', function() {
+
+		var updatedContent = "this is the new content";
+		
+		describe('(Unauthicated request)', function() {
+
+			var guestAgent;
+
+			beforeEach('Create guest agent', function() {
+				guestAgent = supertest.agent(app);
+			});
+
+			it('should not be allowed to update a review', function(done) {
+				guestAgent.put('/api/reviews/' + createdReviews[0]._id)
+					.send({content: updatedContent})
+					.expect(401)
+					.end(done);
+			});
+
+		});
+
+		describe('(Authenticated request)', function() {
+
+			var loggedInAgent;
+
+			beforeEach('Create loggedIn user agent and authenticate', function (done) {
+				loggedInAgent = supertest.agent(app);
+				loggedInAgent.post('/login').send({
+					email: createdUsers[0].email,
+					password: createdUsers[0].password
+				}).end(done);
+			});
+
+			it('should return the updated review', function(done) {
+				loggedInAgent.put('/api/reviews/' + createdReviews[0]._id)
+					.send({content: updatedContent})
+					.expect(200)
+					.end(function(err, response) {
+						expect(response.body.content).to.equal(updatedContent);
+						done();
+					});
+			});
+
+			// review 1 is not created by user 0 -> 403
+			it('should only be allowed to update ones own review', function(done) {
+				loggedInAgent.put('/api/reviews/' + createdReviews[1]._id)
+					.send({content: updatedContent})
+					.expect(403)
+					.end(done);
+			});
+		});
+
+		describe('(Admin request)', function() {
+			var adminAgent;
+
+			// user 1 is an admin
+			beforeEach('Create admin user agent and authenticate', function (done) {
+				adminAgent = supertest.agent(app);
+				adminAgent.post('/login').send({
+					email: createdUsers[1].email,
+					password: createdUsers[1].password
+				}).end(done);
+			});
+
+			// review 2 is created by user 0, but user 1 is admin
+			it('an admin can edit any review', function(done) {
+				adminAgent.put('/api/reviews/' + createdReviews[0]._id)
+					.send({content: updatedContent})
+					.expect(200)
+					.end(function(err, response) {
+						expect(response.body.content).to.equal(updatedContent);
+						done();
+					});
+			});	
+		});
+	});
+
 	describe('Delete a review', function() {
 
-		describe('Unauthicated requests', function() {
+		describe('(Unauthicated request)', function() {
 
 			var guestAgent;
 
@@ -226,8 +299,7 @@ describe('Reviews Route', function() {
 
 		});
 
-
-		describe('Authenticated requests', function() {
+		describe('(Authenticated request)', function() {
 			var loggedInAgent;
 
 			beforeEach('Create loggedIn user agent and authenticate', function (done) {
@@ -238,10 +310,10 @@ describe('Reviews Route', function() {
 				}).end(done);
 			});
 
-			// review 1 is not created by user 0 -> 401
+			// review 1 is not created by user 0 -> 403
 			it('should only allow to delete your own reviews as a user', function(done) {
 				loggedInAgent.delete('/api/reviews/' + createdReviews[1]._id)
-					.expect(401)
+					.expect(403)
 					.end(done);
 			});
 
@@ -257,10 +329,10 @@ describe('Reviews Route', function() {
 			});
 		});
 
-		describe('Admin requests', function() {
+		describe('(Admin request)', function() {
 			var adminAgent;
 
-			// user 0 is an admin
+			// user 1 is an admin
 			beforeEach('Create admin user agent and authenticate', function (done) {
 				adminAgent = supertest.agent(app);
 				adminAgent.post('/login').send({

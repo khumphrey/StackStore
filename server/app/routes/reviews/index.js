@@ -2,14 +2,18 @@
 
 var Review = require('mongoose').model('Review');
 var router = require('express').Router();
+var Auth = require('../../../utils/auth.middleware.js');
 
 router.param('reviewId', function(req, res, next, id) {
-	Review.findById(id)
+	Review.findById(id).populate('user')
 		.then(function(review) {
 			if (!review) {
 				return next({status: 404, message: "Review not found"});
 			}
 			req.review = review;
+			// the requestedUser property is used by the Auth middleware utility
+			// to check for isSelf
+			req.requestedUser = review.user;
 			next();
 		})
 		.then(null, function(err){
@@ -35,18 +39,7 @@ router.get('/:reviewId', function(req, res, next) {
 });
 
 
-// AUTHENTICATION --- ALL FOLLOWING ROUTES ARE NOT PUBLIC
-var ensureAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.status(401).end();
-    }
-};
-
-router.use(ensureAuthenticated);
-
-router.post('/', function(req, res, next) {
+router.post('/',Auth.ensureAuthenticated, function(req, res, next) {
 	Review.create(req.body)
 		.then(function(newReview) {
 			res.status(201).json(newReview);
@@ -54,7 +47,7 @@ router.post('/', function(req, res, next) {
 		.then(null, next);
 });
 
-router.put('/:reviewId', function(req, res, next) {
+router.put('/:reviewId', Auth.ensureAdminOrSelf, function(req, res, next) {
 	Review.update(req.review, req.body)
 		.then(function() {
 			return Review.findById(req.review._id);
@@ -65,7 +58,8 @@ router.put('/:reviewId', function(req, res, next) {
 		.then(null, next);
 });
 
-router.delete('/:reviewId', function(req, res, next) {
+
+router.delete('/:reviewId', Auth.ensureAdminOrSelf, function(req, res, next) {
 	Review.remove(req.review)
 		.then(function() {
 			res.status(204).send();
