@@ -42,7 +42,10 @@ router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
 });
 
 router.post('/', Auth.ensureAdmin, function (req, res, next) {
+    if (!req.body.email || !req.body.password) return next({status: 400, message: "Email or password not provided"});
     User.create(req.body)
     .then(createdUser => res.status(201).json(createdUser.sanitize()))
     .then(null, next);
 });
+
+module.exports = router;
