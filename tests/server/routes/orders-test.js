@@ -1,10 +1,10 @@
-// Instantiate all models
 var mongoose = require('mongoose');
 require('../../../server/db/models');
 var User = mongoose.model('User');
 var Review = mongoose.model('Review');
 var Product = mongoose.model('Product');
 var Category = mongoose.model('Category');
+var Order = mongoose.model('Order');
 
 var expect = require('chai').expect;
 
@@ -77,10 +77,55 @@ describe('Orders Routes', function() {
 		.then(null, done);
 	});
 
-	afterEach('Clear test database', function(done) {
+	afterEach('Clear test database', function (done) {
 		clearDB(done);
 	});
 
+	describe('Unauthenticated user', function () {
+
+		var guestAgent, createdOrders;
+
+		beforeEach('Create guest agent', function () {
+			guestAgent = supertest.agent(app);
+		});
+
+		beforeEach('Create orders', function () {
+			Order.create([
+				{
+					purchasedItems: createdProducts,
+					shippingAddress: "123 ABC",
+					shippingEmail: "me@aol.com"
+				},
+				{
+					purchasedItems: createdProducts,
+					shippingAddress: "456 DEF",
+					shippingEmail: "you@aol.com"
+				}])
+				.then(function (orders) {
+					createdOrders = orders;
+					done();
+				});
+		});
+
+		it('should get 401 for get all orders', function (done) {
+			guestAgent.get('/api/orders')
+				.expect(401)
+				.end(done);
+		});
+
+		it('should get 401 for get one order', function (done) {
+			guestAgent.get('/api/orders/' + createdOrders[0]._id)
+				.expect(401)
+				.end(done);
+		});
+
+		it('should get 401 for put on order', function (done) {
+			guestAgent.put('/api/orders/' + createdOrders[0]._id)
+				.expect(401)
+				.end(done);
+		});
+
+	});
 
 	xdescribe('Creating a new order',function() {
 
