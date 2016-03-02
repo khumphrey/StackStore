@@ -24,7 +24,7 @@ describe('Order model', function () {
         clearDB(done);
     });
 
-    xdescribe('pre save validation hook', function () {
+    describe('pre save validation hook', function () {
 
         var createProducts = function () {
 
