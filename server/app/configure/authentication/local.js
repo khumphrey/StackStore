@@ -43,9 +43,7 @@ module.exports = function (app) {
             req.logIn(user, function (loginErr) {
                 if (loginErr) return next(loginErr);
                 // We respond with a response object that has user with _id and email.
-                res.status(200).send({
-                    user: user.sanitize()
-                });
+                res.status(200).send(user.sanitize());
             });
 
         };
@@ -55,15 +53,14 @@ module.exports = function (app) {
     });
 
     app.post('/signup', function (req, res, next) {
+        if (!req.body.email || !req.body.password) return next({status: 400, message: "Email or password not provided"});
         delete req.body.admin;
         User.create(req.body)
         .then(function(createdUser){
             req.logIn(createdUser, function (loginErr) {
                 if (loginErr) return next(loginErr);
                 // We respond with a response object that has user with _id and email.
-                res.status(200).send({
-                    createdUser: createdUser.sanitize()
-                });
+                res.status(201).send(createdUser.sanitize());
             });
         })
         .then(null, next);   
