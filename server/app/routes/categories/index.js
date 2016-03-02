@@ -32,7 +32,7 @@ router.get('/:categoryId', function (req, res) {
 router.put('/:categoryId', Auth.ensureAdmin, function (req, res, next) {
     _.extend(req.requestedCategory, req.body);
     req.requestedCategory.save() 
-        .then(res.json)
+        .then(category => res.json(category))
         .then(null, next);
 });
 
