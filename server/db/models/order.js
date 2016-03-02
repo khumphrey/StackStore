@@ -25,4 +25,12 @@ var orderSchema = new mongoose.Schema({
 
 });
 
+// Needs method to change status
+
+// needs validation for correct products and quantities
+
+// needs a pre save hook that subtracts the purchased items quantities
+// from the inventory quantities in the database
+
+
 mongoose.model('Order', orderSchema);

@@ -27,7 +27,7 @@ router.post('/', function (req, res, next) {
 		shippingEmail : req.body.shippingEmail
 	};
 	// If a guest creates an order there won't be a user property on the order
-	if(req.user) newOrder.user = user._id; 
+	if(req.user) newOrder.user = user._id;
 
 	Order.create(newOrder)
 	.then(function(createdOrder) {
