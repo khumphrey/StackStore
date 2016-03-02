@@ -37,7 +37,7 @@ router.get('/', Auth.ensureAdmin, function (req, res, next) {
 });
 
 router.get('/:orderId', function (req, res, next) {
-	//make sure to ensure admin or user
+	//ensure admin or user (not all orders have users so this is difficult)
 	if (!Auth.isAdmin(req)) {
 		if (req.requestedOrder.user) {
 			req.requestedUser = req.requestedOrder.user;
@@ -52,7 +52,8 @@ router.get('/:orderId', function (req, res, next) {
 router.put('/:orderId', function (req, res, next) {
 	delete req.body.purchasedItems;
 
-	//user can change only status to
+	//user only change status to Cancelled
+	//currently admin and user can change shipping address/email
 	if (!Auth.isAdmin(req)) {
 		if (req.requestedOrder.user) {
 			req.requestedUser = req.requestedOrder.user;
