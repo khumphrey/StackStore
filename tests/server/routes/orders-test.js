@@ -25,6 +25,7 @@ describe('Orders Routes', function() {
 	var createdUsers;
 	var createdCategories;
 	var createdProducts;
+	var createdOrders;
 
 
 	beforeEach('Create mock order data', function(done) {
@@ -72,6 +73,35 @@ describe('Orders Routes', function() {
 		})
 		.then(function(products) {
 			createdProducts = products;
+
+			return Order.create([{
+					purchasedItems: [{
+						product: createdProducts[0],
+						quantity: 1
+					},
+					{
+						product: createdProducts[1],
+						quantity: 1
+					}],
+					user: createdUsers[0]._id,
+					shippingAddress: "123 ABC",
+					shippingEmail: "me@aol.com"
+				},
+				{
+					purchasedItems: [{
+						product: createdProducts[0],
+						quantity: 1
+					},
+					{
+						product: createdProducts[1],
+						quantity: 1
+					}],
+					shippingAddress: "456 DEF",
+					shippingEmail: "you@aol.com"
+				}]);
+		})
+		.then(function(orders) {
+			createdOrders = orders;
 			done();
 		})
 		.then(null, done);
@@ -83,28 +113,10 @@ describe('Orders Routes', function() {
 
 	describe('Unauthenticated user', function () {
 
-		var guestAgent, createdOrders;
+		var guestAgent;
 
 		beforeEach('Create guest agent', function () {
 			guestAgent = supertest.agent(app);
-		});
-
-		beforeEach('Create orders', function () {
-			Order.create([
-				{
-					purchasedItems: createdProducts,
-					shippingAddress: "123 ABC",
-					shippingEmail: "me@aol.com"
-				},
-				{
-					purchasedItems: createdProducts,
-					shippingAddress: "456 DEF",
-					shippingEmail: "you@aol.com"
-				}])
-				.then(function (orders) {
-					createdOrders = orders;
-					done();
-				});
 		});
 
 		it('should get 401 for get all orders', function (done) {
@@ -129,7 +141,7 @@ describe('Orders Routes', function() {
 
 	describe('Authenticated user', function () {
 
-		var loggedInAgent, createdOrders;
+		var loggedInAgent;
 
 		beforeEach('Create loggedIn user agent and authenticate', function (done) {
 			loggedInAgent = supertest.agent(app);
@@ -140,24 +152,6 @@ describe('Orders Routes', function() {
 			loggedInAgent.post('/login').send(user).end(done);
 		});
 
-		beforeEach('Create orders', function (done) {
-			Order.create([
-				{
-					user: createdUsers[0]._id,
-					purchasedItems: createdProducts,
-					shippingAddress: "123 ABC",
-					shippingEmail: "me@aol.com"
-				},
-				{
-					purchasedItems: createdProducts,
-					shippingAddress: "456 DEF",
-					shippingEmail: "you@aol.com"
-				}])
-				.then(function (orders) {
-					createdOrders = orders;
-					done();
-				});
-		});
 
 		it('should get 403 for get all orders', function (done) {
 			loggedInAgent.get('/api/orders')
@@ -201,7 +195,7 @@ describe('Orders Routes', function() {
 
 	describe('Authenticated Admin user', function () {
 
-		var loggedInAgent, createdOrders;
+		var loggedInAgent;
 
 		beforeEach('Create loggedIn user agent and authenticate', function (done) {
 			loggedInAgent = supertest.agent(app);
@@ -212,24 +206,6 @@ describe('Orders Routes', function() {
 			loggedInAgent.post('/login').send(adminUser).end(done);
 		});
 
-		beforeEach('Create orders', function (done) {
-			Order.create([
-				{
-					user: createdUsers[0]._id,
-					purchasedItems: createdProducts,
-					shippingAddress: "123 ABC",
-					shippingEmail: "me@aol.com"
-				},
-				{
-					purchasedItems: createdProducts,
-					shippingAddress: "456 DEF",
-					shippingEmail: "you@aol.com"
-				}])
-				.then(function (orders) {
-					createdOrders = orders;
-					done();
-				});
-		});
 
 		it('should get 200 for get all orders and the response should be an array', function (done) {
 			loggedInAgent.get('/api/orders')

@@ -100,6 +100,7 @@ router.post('/', function (req, res, next) {
 
 	Order.create(newOrder)
 	.then(function(createdOrder) {
+		// delete cart from the session TODO!!!
 		res.status(201).send(createdOrder);
 	})
 	// This should validation errors: Empty carts etc.
