@@ -20,6 +20,8 @@ router.param('userId', function (req, res, next, userId) {
     });
 });
 
+router.use(Auth.ensureAuthenticated);
+
 router.get('/', Auth.ensureAdmin, function (req, res, next) {
     User.find(req.query)
     .populate('cart history')
