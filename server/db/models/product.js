@@ -33,4 +33,6 @@ var productSchema = new mongoose.Schema({
 	}]
 });
 
+// TODO add method on that allows to subtract quantity from product on checkout? 
+
 mongoose.model('Product', productSchema);

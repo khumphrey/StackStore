@@ -1,12 +1,31 @@
-<div class='col-sm-9 col-sm-offset-3'>
+<div id="controlPanel" class='col-sm-2'>
+	<h3>Filter Boats</h3>
+	<h5>Title:</h5>
+	<input type="text" class="form-control" placeholder="title" ng-model="titleSearch"> 
+	<h5>Desciption:</h5>
+	<input type="text" class="form-control" placeholder="description" ng-model="descriptionSearch">
+	<h5>Categories:</h5>
+	{{categoryModel}}
+	{{categoryResults}}
+	<div class="btn-group">
+		<label class="btn btn-primary" ng-repeat="category in categories" ng-model="categoryModel[category]" uib-btn-checkbox>{{category}}</label>
+    </div>
+	<input type="text" class="form-control" placeholder="categories" ng-model="categoriesSearch">
+	<h5>Price:</h5>
+	<input type="range" min="400" max="900" class="form-control" placeholder="price" ng-model="priceSearch">
+	<h5>Quantity:</h5>
+	<input type="range" max="10" class="form-control" placeholder="quantity" ng-model="quantitySearch">
 	<!-- TODO add filter toolbar here -->
-	<div class='col-sm-3' ng-repeat="product in products">
+</div>
+<div class='col-sm-10'>
+	<div class='col-sm-3' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch}">
 	<a ui-sref="product({productId: product._id})">
 		<h2>{{product.title}}</h2>
-		<img width="100%" height="50%" ng-src="{{product.photoUrl}}">
+		<img width= "100%" height= "50%" class="prodImg" ng-src="{{product.photoUrl}}">
 	</a>	
 	<h4>description: {{product.description}}</h3>
 	<h4>price: {{product.price}}</h3>
 	<h4>quantity: {{product.quantity}}</h3>
+	<button class="btn" ng-click="addToCart">Quick Add To Cart</button>
 	</div>  
 </div>
