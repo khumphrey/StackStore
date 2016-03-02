@@ -48,7 +48,14 @@ describe('Users Route', function () {
 					password: "k"
 				})
 				.expect(201)
-				.end(done);
+			.end(function (err, res) {
+				if (err) return done(err);
+				User.findById(res.body._id, function (err, user) {
+					if (err) return done(err);
+					expect(user).to.not.be.null;
+					done();
+				});
+			});		
 		});
 
 		it('should get a 401 for login without all user data', function (done) {
@@ -157,21 +164,24 @@ describe('Users Route', function () {
 		});
 
 		it('should get a 200 response with a user as the body for a get by Id', function (done) {
-			loggedInAgent.get('/api/users/'+userId).expect(200).end(function (err, response) {
-				if (err) return done(err);
-				expect(response.body.email).to.equal(userInfo.email);
-				done();
-			});
+			loggedInAgent.get('/api/users/'+userId)
+				.expect(200)
+				.end(function (err, res) {
+					if (err) return done(err);
+					expect(res.body.email).to.equal(userInfo.email);
+					done();
+				});
 		});
 
 		it('should get a 200 response for put request with the updated user as the response', function (done) {
 			loggedInAgent.put('/api/users/'+userId)
 				.send({ fullname: "Kate" })
-				.expect(200).end(function (err, response) {
-				if (err) return done(err);
-				expect(response.body.fullname).to.equal("Kate");
-				done();
-			});
+				.expect(200)
+				.end(function (err, res) {
+					if (err) return done(err);
+					expect(res.body.fullname).to.equal("Kate");
+					done();
+				});
 		});
 
 		it('should get a 403 response for post request', function (done) {
@@ -241,10 +251,10 @@ describe('Users Route', function () {
 					admin: "true",
 					fullname: "Kate" 
 				})
-				.expect(200).end(function (err, response) {
+				.expect(200).end(function (err, res) {
 				if (err) return done(err);
-				expect(response.body.fullname).to.equal("Kate");
-				expect(response.body.admin).to.equal(true);
+				expect(res.body.fullname).to.equal("Kate");
+				expect(res.body.admin).to.equal(true);
 				done();
 			});
 		});
@@ -255,10 +265,14 @@ describe('Users Route', function () {
 					email: 'l@l.l',
 					password: 'l'
 				})
-				.expect(201).end(function (err, response) {
-				if (err) return done(err);
-				expect(response.body.email).to.equal("l@l.l");
-				done();
+				.expect(201)
+				.end(function (err, res) {
+					if (err) return done(err);
+					User.findById(res.body._id, function (err, user) {
+						if (err) return done(err);
+						expect(user).to.not.be.null;
+						done();
+					});
 			});
 		});
 	});

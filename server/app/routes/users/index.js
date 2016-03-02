@@ -26,9 +26,7 @@ router.get('/', Auth.ensureAdmin, function (req, res, next) {
     var search = req.query.name ? { fullname: req.query.name } : {}; //in case we want to be able to search the user on the user mgmt page of the admin
     User.find(search)
     .populate('cart history')
-    .then(function (allUsers) {
-        res.json(allUsers);
-    })
+    .then(allUsers => res.json(allUsers))
     .then(null, next);
 });
 
@@ -42,16 +40,12 @@ router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
     if (Auth.isSelf(req)) delete req.body.admin;
     _.extend(req.requestedUser, req.body); //should this be _.assignIn?
     req.requestedUser.save() //because we already pulled this to the server we can just save rather than update
-    .then(function (user) {
-        res.json(user.sanitize()); //will this have the cart and history populated? Do we need it?
-    })
+    .then(user => res.json(user.sanitize())) //will this have the cart and history populated? Do we need it?
     .then(null, next);
 });
 
 router.post('/', Auth.ensureAdmin, function (req, res, next) {
     User.create(req.body)
-    .then(function (createdUser) {
-        res.status(201).json(createdUser.sanitize());
-    })
+    .then(createdUser => res.status(201).json(createdUser.sanitize()))
     .then(null, next);
 });
