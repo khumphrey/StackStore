@@ -12,7 +12,7 @@ router.param('userId', function (req, res, next, userId) {
     .populate('cart history')
     .then(function (user) {
         if (!user) return next({status: 404, message:"user does not exist"});
-        req.requestedUser = user;
+        req.requestedUser = user.sanitize();
         next();
     })
     .then(null, function() {
