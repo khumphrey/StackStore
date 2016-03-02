@@ -1,6 +1,8 @@
 app.controller('ProductsController', function ($scope, products) {
 	$scope.products = products;
 	$scope.categories = ['motor boat', 'cruise ship', 'pirate ship'];
+	
+	
 	$scope.categoryModel = {};
 
 	$scope.categories.forEach(function(elem){

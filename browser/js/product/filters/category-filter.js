@@ -5,7 +5,12 @@ app.filter('filterCategories', function() {
         	return categories.some(function(elem){
 // product.categories =
 // [{"_id":"56d6211a41380ba6524bf3e7","name":"pirate ship","__v":0}],
-        		return elem === product.categories[0].name;
+				for (var i = 0; i < product.categories.length; i++) {
+					if(product.categories[i].name === elem) return true;
+				}
+
+				return false;
+        		// return elem === product.categories[0].name;
         	});
         });
     };
