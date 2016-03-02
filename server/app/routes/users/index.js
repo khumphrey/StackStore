@@ -12,7 +12,7 @@ router.param('userId', function (req, res, next, userId) {
     .populate('cart history')
     .then(function (user) {
         if (!user) return next({status: 404, message:"user does not exist"});
-        req.requestedUser = user.sanitize();
+        req.requestedUser = user;
         next();
     })
     .then(null, function() {
@@ -36,7 +36,7 @@ router.get('/', Auth.ensureAdmin, function (req, res, next) {
 //get all user info for a particular ID
 router.get('/:userId', Auth.ensureAdminOrSelf, function (req, res) {
     //if the user is logged, is either admin or the user it is requesting send back the user info
-    res.json(req.requestedUser);
+    res.json(req.requestedUser.sanitize());
 });
 
 router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
