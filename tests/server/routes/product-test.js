@@ -14,15 +14,52 @@ var supertest = require('supertest');
 var app = require('../../../server/app');
 
 describe('Product Routes', function () {
-	var testProduct = {
-              title: "Mu opzor hu.",
-              description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
-              price: 900,
-              quantity: 3,
-              photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
-            };
+	var category, product;
+	var testPrice = 900;
 
-    var testCategory = {name:"Test Boat"};
+	beforeEach(function(done){
+		Category.create({
+			name:"Test Boat"
+		}, function (err, c) {
+			if (err) return done(err);
+			category = c;
+			return Product.create({
+				title: "Mu opzor hu.",
+	            description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
+	            price: testPrice,
+	            categories: [category],
+	            quantity: 3,
+	            photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
+			});
+		}).then(function(p){
+			product = p; done();
+		});
+	});
+
+	// var productBase = {
+ //              title: "Mu opzor hu.",
+ //              description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
+ //              price: testPrice,
+ //              quantity: 3,
+ //              photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
+ //            };
+
+	// var testProduct = productBase;
+
+ //    var categoryBase = {name:"Test Boat"};
+
+ //    var testCategory;
+
+ //    var createProduct = function () {
+ //        return Category.create(categoryBase)
+ //        .then(function(createdCategory){
+ //        	testCategory = createdCategory;
+ //            testProduct.categories = createdCategory._id;
+ //            return Product.create(testProduct); 
+ //        });
+ //    };
+
+
 
 
 	beforeEach('Establish DB connection', function (done) {
@@ -34,23 +71,28 @@ describe('Product Routes', function () {
 		clearDB(done);
 	});
 
-	xdescribe('guest/user should be able to get', function () {
-		var guesTestProduct = testProduct;
 
-	    var createProduct = function () {
-	        return Category.create(testCategory)
-	        .then(function(createdCategory){
-	            guesTestProduct.categories = createdCategory._id;
-	            return Product.create(guesTestProduct); 
-	        });
-	    };
+	describe('guest/user should be able to get', function () {
+		var guestAgent, category, product;
+		var testPrice = 900;
 
-		var guestAgent;
-
-		beforeEach('Create a product', function (done) {
-			createProduct().then(function(createdProd){
-				guesTestProduct=createdProd;
-				done();
+		beforeEach(function(done){
+			Category.create({
+				name:"Test Boat"
+			}, function (err, c) {
+				if (err) return done(err);
+				category = c;
+				return Product.create({
+					title: "Mu opzor hu.",
+		            description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
+		            price: testPrice,
+		            categories: [category],
+		            quantity: 3,
+		            photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
+				}).then(function(p){
+					product = p; 
+					done();
+				});
 			});
 		});
 
@@ -59,17 +101,17 @@ describe('Product Routes', function () {
 		});
 
 		it('/api/products should return array of products', function (done) {
-			guestAgent.get('/api/products').expect(200).end(function (err, response) {
+			guestAgent.get('/api/products').expect(200).end(function (err, res) {
 				if (err) return done(err);
-				expect(response.body).to.be.an('array');
+				expect(res.body).to.be.an('array');
 				done();
 			});
 		});
 
 		it('/api/products/:id should return one product', function (done) {
-			guestAgent.get('/api/products/' + guesTestProduct._id).expect(200).end(function (err, response) {
+			guestAgent.get('/api/products/' + product._id).expect(200).end(function (err, res) {
 				if (err) return done(err);
-				expect(response.body.price).to.be.equal(guesTestProduct.price);
+				expect(res.body.price).to.be.equal(testPrice);
 				done();
 			});
 		});
@@ -77,10 +119,36 @@ describe('Product Routes', function () {
 	});
 
 	describe('Admin should be able to', function () {
+		var loggedInAgent, category, product;
+		var testPrice = 900;
 
-		var loggedInAgent;
+		beforeEach(function(done){
+			Category.create({
+				name:"Test Boat"
+			}, function (err, c) {
+				if (err) return done(err);
+				category = c;
+				return Product.create({
+					title: "Mu opzor hu.",
+		            description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
+		            price: testPrice,
+		            categories: [category],
+		            quantity: 3,
+		            photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
+				}).then(function(p){
+					product = p; 
+					done();
+				});
+			});
+		});
 
-		var adminTestProduct;
+		var adminTestProduct = {
+			title: "Pinto",
+	        description: "One of the first ships to land in the New World.",
+	        price: 2000,
+	        quantity: 1,
+	        photoUrl: "http://api.randomuser.me/portraits/thumb/men/6.jpg",
+		};
 
 		var adminInfo = {
 			email: 'joe@gmail.com',
@@ -88,21 +156,11 @@ describe('Product Routes', function () {
 			admin: true
 		};
 
-
-		before('Create a category', function (done) {
-			Category.create(testCategory)
-			.then(function(createdCat){
-				testCategory=createdCat;
-				testProduct.categories = [testCategory._id];
-				done();
-			});
-		});
-
-		before('Create the admin', function (done) {
+		beforeEach('Create the admin', function (done) {
 			User.create(adminInfo, done);
 		});
 
-		before('Create loggedIn admin and authenticate', function (done) {
+		beforeEach('Create loggedIn admin and authenticate', function (done) {
 			loggedInAgent = supertest.agent(app);
 			loggedInAgent.post('/login').send(adminInfo).end(done);
 		});
@@ -110,47 +168,54 @@ describe('Product Routes', function () {
 		it('create a new product', function (done) {
 			loggedInAgent
 			.post('/api/products')
-			.send(testProduct)
+			.send(adminTestProduct)
 			.expect(201)
 			.end(function (err, res) {
 				if (err) return done(err);
-				adminTestProduct = res.body;
-				expect(adminTestProduct.title).to.be.equal(testProduct.title);
-				done();
+				expect(res.body.title).to.be.equal(adminTestProduct.title);
+				Product.findById(res.body._id, function (err, b) {
+							if (err) return done(err);
+							expect(b).to.not.be.null;
+							done();
+						});
 			});
 		});
 
 		it('edit an existing product by id', function (done) {
-			// console.log("adminTestProduct: ", adminTestProduct);
 			loggedInAgent
-			.put('/api/products/' + adminTestProduct._id)
+			.put('/api/products/' + product._id)
 			.send({
 				title:'Santa Maria'
 			})
 			.expect(200)
 			.end(function (err, res) {
 				if (err) return done(err);
-			// 	expect(res.body.title).to.be.equal("Santa Maria");
+				expect(res.body.title).to.be.equal("Santa Maria");
 				done();
 			});
 		});
 
-		xit("not edit a product that doesn't exist", function (done) {
-			// console.log("adminTestProduct: ", adminTestProduct);
+		it("not edit a product that doesn't exist", function (done) {
 			loggedInAgent
 			.put('/api/products/som12thing23random')
 			.send({
-				title:'Santa Maria'
+				title:'This does not matter'
 			})
 			.expect(404)
 			.end(done);
 		});
 
 		it('delete an existing product by id', function (done) {
-			// console.log("adminTestProduct: ", adminTestProduct);
 			loggedInAgent
-			.delete('/api/products/' + adminTestProduct._id)
+			.delete('/api/products/' + product._id)
 			.expect(204)
+			.end(done);
+		});
+
+		it("not delete a product that doesn't exist", function (done) {
+			loggedInAgent
+			.delete('/api/products/som12thing23random')
+			.expect(404)
 			.end(done);
 		});
 

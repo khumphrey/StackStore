@@ -1,6 +1,5 @@
 'use strict';
 const router = require('express').Router();
-const _ = require('lodash');
 const Product = require('mongoose').model('Product');
 const Auth = require('../../../utils/auth.middleware');
 module.exports = router;
@@ -10,11 +9,13 @@ router.param('prodId', function(req, res, next, prodId) {
 	Product.findById(id)
 	.populate('categories')
 	.then(function (product){
-		if(!product) throw Error; 
+		if(!product) return next({status: 404, message: "Product not found"}); 
 		req.requestedProduct = product;
 		next();
 	})
-	.then(null, next);
+	.then(null, function(){ 
+		next({status: 404, message: "Product not found"});
+	});
 });
 
 router.get('/', function(req, res, next){
@@ -39,7 +40,9 @@ router.post('/', function(req, res, next){
 });
 
 router.put('/:prodId', function(req, res, next){
-	_.extend(req.requestedProduct, req.body);
+	for (var k in req.body) {
+		req.requestedProduct[k] = req.body[k];
+	}
 	req.requestedProduct.save()
 	.then(product => res.json(product))
 	.then(null, next);
