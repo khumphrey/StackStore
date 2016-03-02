@@ -42,3 +42,5 @@ router.post('/', Auth.ensureAdmin, function (req, res, next) {
         .then(createdCategory => res.status(201).json(createdCategory))
         .then(null, next);
 });
+
+module.exports = router;
