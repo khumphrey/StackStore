@@ -7,14 +7,16 @@ const User = mongoose.model('User');
 
 router.get('/', function (req, res, next) {
 	if(req.user) {
-		User.findById(req.user).exec()
+		User.findById(req.user._id).exec()
 		.then(function (user) {
+			console.log("HAY HAY")
 			res.status(200).json(user.cart);
 		})
 	}
 	else {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
-		res.status(200).json(req.session.cart);
+		res.status(200);
+		res.send(req.session.cart);
 	}
 });
 
@@ -27,7 +29,7 @@ router.get('/', function (req, res, next) {
 */
 router.post('/', function (req, res, next) {
 		if(req.user) {
-			User.findById(req.user).exec()
+			User.findById(req.user._id).exec()
 			.then(function (user) {
 				user.addOrModify(req.body.item);
 			})
@@ -36,11 +38,12 @@ router.post('/', function (req, res, next) {
 			});
 		}
 		else {
-			if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
-			else {
-				req.session.cart.push(req.body.item);
-				res.status(201).json(req.session.cart);
-			};
+			if(!req.session.cart) {
+				req.session.cart = []; //initialize a session cart if needed
+			}
+			req.session.cart.push(req.body.item);
+			res.status(201);
+			res.send(req.session.cart);
 		};
 });
 
@@ -53,7 +56,7 @@ router.post('/', function (req, res, next) {
 */
 router.put('/', function (req, res, next) {
 		if(req.user) {
-			User.findById(req.user).exec()
+			User.findById(req.user._id).exec()
 			.then(function (user) {
 				user.cart[req.body.index].quantity = req.body.quantity;
 				user.save();
@@ -72,7 +75,7 @@ router.put('/', function (req, res, next) {
 //req.body.index = index of item in cart(starting at 0)
 router.delete('/', function (req, res, next) {
 	if(req.user) {
-		User.findById(req.user).exec()
+		User.findById(req.user._id).exec()
 		.then(function (user) {
 			user.cart.splice(req.body.index, 1);
 			user.save();
