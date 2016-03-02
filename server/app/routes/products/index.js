@@ -27,21 +27,24 @@ router.get('/:id', function(req, res){
 	res.json(req.product);
 });
 
-//These will be admin functions:
-router.post('/', Auth.ensureAdmin, function(req, res, next){
+// These will be admin functions:
+// router.use(Auth.ensureAuthenticated);
+// router.use(Auth.ensureAdmin);
+
+router.post('/', function(req, res, next){
 	Product.create(req.body)
 	.then(product => res.status(201).json(product))
 	.then(null,next);
 });
 
-router.put('/:id', Auth.ensureAdmin, function(req, res, next){
+router.put('/:id', function(req, res, next){
 	_.extend(req.product, req.body);
 	req.product.save()
-	.then(products => res.json(products))
+	.then(product => res.json(product))
 	.then(null, next);
 });
 
-router.delete('/:id', Auth.ensureAdmin, function(req, res, next){
+router.delete('/:id', function(req, res, next){
 	req.product.remove()
 	.then(function(){
 		res.status(204).end();
