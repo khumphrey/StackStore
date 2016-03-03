@@ -6,6 +6,7 @@ const User = mongoose.model('User');
 const Product = mongoose.model('Product');
 const Promise = require('bluebird');
 
+
 //Get a user's cart
 router.get('/', function (req, res, next) {
 	if(req.user) {
@@ -30,7 +31,6 @@ router.get('/', function (req, res, next) {
 // router.post('/', function (req, res, next) {
 
 // })
-
 
 //Post a single item to the cart. Expect req.body.quantity = NUMBER
 router.post('/:productId', function (req, res, next) {
