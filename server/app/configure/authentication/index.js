@@ -39,6 +39,10 @@ module.exports = function (app) {
     // to a user found in the database.
     passport.deserializeUser(function (id, done) {
         User.findById(id, done);
+        // User.findById(id)
+        // .then(function (user) {
+        //     done(user.sanitize());
+        // });
     });
 
     // We provide a simple GET /session in order to get session information directly.
