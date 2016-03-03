@@ -11,18 +11,18 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('UserManagementCtrl', function($scope, UserFactory) {
+app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, users) {
 
-	UserFactory.fetchAll()
-		.then(function(users) {
-			console.log(users);
-			$scope.users = users;
+	$scope.users = users;
+	AuthService.getLoggedInUser()
+		.then(function(currentUser) {
+			$scope.currentUser = currentUser;
 		});
 	
 	$scope.promoteUserToAdmin = function(user) {
 		UserFactory.promoteToAdmin(user)
 			.then(function(updatedUser) {
-				console.log("Updated user: ", user);
+				// console.log("Updated user: ", user);
 			})
 			.then(null, function(err) {
 				console.log(err);
@@ -42,5 +42,13 @@ app.controller('UserManagementCtrl', function($scope, UserFactory) {
 		console.log('Password reset for user ' + user.username);
 		UserFactory.resetPassword(user);
 	};
-	$scope.deleteUser = UserFactory.deleteOne;
+	$scope.deleteUser = function(user) {
+		UserFactory.deleteOne(user)
+			.then(function() {
+				$scope.users.splice($scope.users.indexOf(user),1);
+			})
+			.then(null, function(err) {
+				console.log(err);
+			});	
+	};
 });

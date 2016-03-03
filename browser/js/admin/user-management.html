@@ -16,9 +16,9 @@
 		<td>{{user.fullname}}</td>
 		<td>{{user.email}}</td>
 		<td><button class="btn btn-primary btn-sm" ng-click="promoteUserToAdmin(user)" ng-if="!user.admin">Promote to Admin</button>
-		<button class="btn btn-primary btn-sm" ng-click="demoteAdminToUser(user)" ng-if="user.admin">Demote to User</button></td>
-		<td><button class="btn btn-primary btn-sm" ng-click="resetPassword(user)">Reset Password</button></td>
-		<td><button class="btn btn-warning btn-sm" ng-click="deleteUser(user)">Delete</button></td>
+		<button class="btn btn-primary btn-sm" ng-click="demoteAdminToUser(user)" ng-if="user.admin && user.email !== currentUser.email">Demote to User</button></td>
+		<td><button class="btn btn-primary btn-sm" ng-click="resetPassword(user)" ng-if="user.email !== currentUser.email">Reset Password</button></td>
+		<td><button class="btn btn-warning btn-sm" ng-click="deleteUser(user)" ng-if="user.email !== currentUser.email">Delete</button></td>
 	</tr>
 </table>
 </div>
