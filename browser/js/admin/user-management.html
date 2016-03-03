@@ -1,20 +1,20 @@
 <div class="container">
 <table class="table table-striped">
 	<tr>
+		<th></th>
 		<th>Username</th>
 		<th>Full Name</th>
 		<th>E-Mail</th>
-		<th>Admin Status</th>
 		<th></th>
 		<th></th>
 		<th></th>
 
 	</tr>
 	<tr ng-repeat="user in users">
+		<td><div ng-if="user.admin"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Admin</div></td>
 		<td>{{user.username}}</td>
 		<td>{{user.fullname}}</td>
 		<td>{{user.email}}</td>
-		<td>{{user.admin}}</td>
 		<td><button class="btn btn-primary btn-sm" ng-click="promoteUserToAdmin(user)" ng-if="!user.admin">Promote to Admin</button>
 		<button class="btn btn-primary btn-sm" ng-click="demoteAdminToUser(user)" ng-if="user.admin">Demote to User</button></td>
 		<td><button class="btn btn-primary btn-sm" ng-click="resetPassword(user)">Reset Password</button></td>
