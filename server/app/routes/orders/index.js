@@ -3,6 +3,9 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const Order = mongoose.model('Order');
+const User = mongoose.model('User');
+const Product = mongoose.model('Product');
+
 const _ = require('lodash');
 const Auth = require('../../../utils/auth.middleware');
 
@@ -22,9 +25,7 @@ router.param('orderId', function (req, res, next, orderId) {
     });
 });
 
-router.use(Auth.ensureAuthenticated);
-
-router.get('/', Auth.ensureAdmin, function (req, res, next) {
+router.get('/', Auth.ensureAuthenticated, Auth.ensureAdmin, function (req, res, next) {
 	Order.find(req.query)
 		.populate('user')
 		.then(function (allOrders) {
@@ -36,7 +37,7 @@ router.get('/', Auth.ensureAdmin, function (req, res, next) {
 		.then(null, next);
 });
 
-router.get('/:orderId', function (req, res, next) {
+router.get('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
 	//ensure admin or user (not all orders have users so this is difficult)
 	if (!Auth.isAdmin(req)) {
 		if (req.requestedOrder.user) {
@@ -49,7 +50,7 @@ router.get('/:orderId', function (req, res, next) {
 });
 
 
-router.put('/:orderId', function (req, res, next) {
+router.put('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
 	delete req.body.purchasedItems;
 
 	//user only change status to Cancelled
@@ -63,7 +64,6 @@ router.put('/:orderId', function (req, res, next) {
 		} else return next({status: 403, message:"Users can only change his/her own orders"});	
 	}
 
-	if (req.body.orderStatus) req.requestedOrder.status = req.body.orderStatus;
 	_.extend(req.requestedOrder, req.body);
 	req.requestedOrder.save()
 		.then(function (order) {
@@ -74,16 +74,6 @@ router.put('/:orderId', function (req, res, next) {
  
 });
 
-// req.body = {cart: cart, shippingAddress: xxxx, shippingEmail: xxx}
-// cart: [{ 
-//         product: {
-//             type: mongoose.Schema.Types.ObjectId, 
-//             ref: 'Product'
-//         }, 
-//         quantity: {type:Number, min:1, default:1}
-//     }]
-// The cart has to be populated with the products to make sure
-// prices etc. stay the same after the order has been created
 
 //---------------------------------------
 //vvvvvvvvvv I DON'T WORK YET vvvvvvvvvv
@@ -91,29 +81,65 @@ router.put('/:orderId', function (req, res, next) {
 router.post('/', function (req, res, next) {
 	// security consideration:
 	// what if someone spams us with orders via postman?
+	var shippingAddress = req.body.shippingAddress,
+		shippingEmail = req.body.shippingEmail;
 	
-
+	if (!shippingEmail || !shippingAddress) return next({status: 400, message: "Shipping address and email are required"});
 
 	var newOrder = {
-		//instead of getting the cart sent from the frontend
-		// we could also just use the one on the user or session
-		purchasedItems : req.body.cart, 
-		shippingAddress : req.body.shippingAddress,
-		shippingEmail : req.body.shippingEmail
+		purchasedItems: req.session.cart,
+		shippingAddress : shippingAddress,
+		shippingEmail : shippingEmail
 	};
-	// If a guest creates an order there won't be a user property on the order
-	if(req.user) newOrder.user = user._id;
+	
+	//if there is a logged in user, the cart should be on the user schema
+	if (req.user) {
+		User.findById(req.user._id)
+			.populate('cart.product')
+			.then(function (user) {
+				//if there is no cart, the schema will throw an error
+				newOrder.purchasedItems = user.cart;
+				newOrder[user] = user._id;
+				return Order.create(newOrder)
+			})
+			.then(order => res.status(201).json(order))
+			.then(null, function() {
+				next({status: 400, message: "Validation Error: Could not create order"});
+			});
+	} else {
 
-	Order.create(newOrder)
-	.then(function(createdOrder) {
-		// delete cart from the session TODO!!!
-		res.status(201).send(createdOrder);
-	})
-	// This should validation errors: Empty carts etc.
-	// so the frontend will receive an error
-	.then(null, function(err) {
-		next({status: 400, message: "Validation Error: Could not create order"});
-	});
+		//this is in the schema but we still might get an error if there is no req.session.cart 
+		//do we want to create a cart on each new session to prevent this?
+		if (!req.session.cart) return next({status: 400, message: "There are no items to create an order"});
+		
+		//populate req.session.cart so it has more than productId
+			var productsPromises = [];
+			newOrder.purchasedItems.forEach(function (item) {
+				productsPromises.push(Product.findById(item.product).exec())
+			});
+
+			Promise.all(productsPromises)
+				.then(function (products) {
+					newOrder.purchasedItems = products;
+					return Order.create(newOrder);
+				})
+				.then(order => res.status(201).json(order))
+				.then(null, function() {
+					next({status: 400, message: "Validation Error: Could not create order"});
+				});
+		
+		// req.body = {cart: cart, shippingAddress: xxxx, shippingEmail: xxx}
+		// cart: [{ 
+		//         product: {
+		//             type: mongoose.Schema.Types.ObjectId, 
+		//             ref: 'Product'
+		//         }, 
+		//         quantity: {type:Number, min:1, default:1}
+		//     }]
+		// The cart has to be populated with the products to make sure
+		// prices etc. stay the same after the order has been created
+	}
+
 });
 
 module.exports = router;

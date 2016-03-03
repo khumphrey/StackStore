@@ -5,18 +5,16 @@
 	<h5>Desciption:</h5>
 	<input type="text" class="form-control" placeholder="description" ng-model="descriptionSearch">
 	<h5>Categories:</h5>
-<!-- 	{{categoryModel}}
-	{{categoryResults}} -->
 	<div class="btn-group">
 		<label class="btn btn-primary" ng-repeat="category in categories" ng-model="categoryModel[category]" uib-btn-checkbox>{{category}}</label>
     </div>
-	<h5>Price: ${{priceSearch}}</h5>
-	<input type="range" value="400" min="400" step="50" max="900" class="form-control" placeholder="price" ng-model="priceSearch">
-	<h5>Quantity: {{quantitySearch}}</h5>
-	<input type="range" value="1" min="1" max="10" class="form-control" placeholder="quantity" ng-model="quantitySearch">
+	<h5>Max Price: ${{price.max}},000</h5>
+	<input type="range" min="400" step="50" max="900" class="form-control"  ng-model="price.max">
+	<h5>Min Quantity: {{quantity.min}}</h5>
+	<input type="range" value="1" min="1" max="10" class="form-control" ng-model="quantity.min">
 </div>
 <div class='col-sm-9'>
-	<div class='col-sm-3' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults">
+	<div class='col-sm-3' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
 	<a ui-sref="product({productId: product._id})">
 		<h2>{{product.title}}</h2>
 		<img width= "100%" height= "50%" class="prodImg" ng-src="{{product.photoUrl}}">
@@ -24,6 +22,7 @@
 	<h4>description: {{product.description}}</h4>
 	<h4>price: {{product.price}}</h4>
 	<h4>quantity: {{product.quantity}}</h4>
+	<h4>categories: <span ng-repeat="category in product.categories">{{category.name}}</span></h4>
 <!-- 	<h4>categories: {{product.categories}}</h4> -->
 	<button class="btn" ng-click="addToCart">Quick Add To Cart</button>
 	</div>  
