@@ -29,15 +29,23 @@ app.controller('ProductsController', function ($scope, products) {
 
 	$scope.$watchCollection('categoryModel', function () {
 		$scope.categoryResults = [];
-	    angular.forEach($scope.categoryModel, function (value, key) {
-	      if (value) {
-			$scope.categoryResults.push(key);
-	      }
-	    });
-	  });
-
+		angular.forEach($scope.categoryModel, function (value, key) {
+			if (value) {
+				$scope.categoryResults.push(key);
+			}
+		});
 	});
+});
 
 app.controller('ProductController', function ($scope, product) {
 	$scope.product = product;
+	$scope.quantity = 1;
+
+	$scope.addToCart = function(item){
+		console.log("item", item);
+		// add it to cart
+		// CartFactory.addItem(item);
+	};
+
+	// $scope.totalItems = 10;
 });

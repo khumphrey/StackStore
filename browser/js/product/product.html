@@ -1,9 +1,23 @@
 <div class='col-sm-8 col-sm-offset-2'>
 	<h2>{{product.title}}</h2>
 	<img width="100%" ng-src="{{product.photoUrl}}">
-	<h4>description: {{product.description}}</h3>
-	<h4>price: {{product.price}}</h3>
-	<h4>quantity: {{product.quantity}}</h3>
+	<h4>description: {{product.description}}</h4>
+	<h4>price: {{product.price}}</h4>
+	<h4>quantity: {{product.quantity}}</h4>
 
-	<button class="btn" ng-click="addToCart">Add To Cart</button>
+	<div class='row'> 
+		<!-- <div class='col-sm-2 col-sm-offset-2'>
+			<h4>quantity:  {{product.quantity}}</h4>
+		</div> -->
+		<div class='col-sm-8'>
+			<h4>quantity: </h4>
+			<uib-pagination direction-links="false" total-items="product.quantity" ng-model="quantity" items-per-page="1"></uib-pagination>
+		</div>
+		<div class='col-sm-2'>
+			<button class="btn" ng-click="addToCart({
+				'product': product._id,
+				'quantity': quantity
+			})">Add To Cart</button>
+		</div>
+	</div>
 </div>
