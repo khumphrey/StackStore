@@ -21,9 +21,12 @@ app.factory('ReviewFactory', function ($http){
 		fetchProdReviews: function (productId) {
 			return $http.get('/api/reviews?product=' + productId)
 			.then(reviews => reviews.data);
+		},
 
-		}
-
+		fetchUserReviews: function (userId) {
+			return $http.get('/api/reviews?user=' + userId)
+			.then(reviews => reviews.data);
+		},
 
 	};
 });
