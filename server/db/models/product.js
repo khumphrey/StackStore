@@ -24,7 +24,7 @@ var productSchema = new mongoose.Schema({
 			required: true
 	}],
 	photoUrl: {
-		type: String, //this can either be a local url (public folder) or to a website
+		type: String,
 		default: true 
 	},
 	reviews: [{
@@ -32,5 +32,7 @@ var productSchema = new mongoose.Schema({
 		ref: 'Review'
 	}]
 });
+
+// TODO add method on that allows to subtract quantity from product on checkout? 
 
 mongoose.model('Product', productSchema);

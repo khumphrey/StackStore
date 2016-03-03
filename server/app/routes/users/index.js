@@ -25,14 +25,18 @@ router.use(Auth.ensureAuthenticated);
 router.get('/', Auth.ensureAdmin, function (req, res, next) {
     User.find(req.query)
     .populate('cart history')
-    .then(allUsers => res.json(allUsers))
+    .then(function (allUsers) {
+        res.json(allUsers.map(function (user) {
+            user = user.sanitize();
+        }));
+    })
     .then(null, next);
 });
 
 //get all user info for a particular ID
 router.get('/:userId', Auth.ensureAdminOrSelf, function (req, res) {
     //if the user is logged, is either admin or the user it is requesting send back the user info
-    res.json(req.requestedUser);
+    res.json(req.requestedUser.sanitize());
 });
 
 router.put('/:userId', Auth.ensureAdminOrSelf, function (req, res, next) {
