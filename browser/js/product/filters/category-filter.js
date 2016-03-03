@@ -15,3 +15,12 @@ app.filter('filterCategories', function() {
         });
     };
 });
+
+app.filter('filterPropertyByRange', function(){
+    return function(products, prop, minRange, maxRange){
+        products = products.filter(function(product){
+            return  product[prop] > minRange && product[prop] < maxRange;
+        });
+        return products;
+    };
+});

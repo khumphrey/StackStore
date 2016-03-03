@@ -1,7 +1,23 @@
 app.controller('ProductsController', function ($scope, products) {
 	$scope.products = products;
-	$scope.categories = ['motor boat', 'cruise ship', 'pirate ship'];
-	
+	$scope.categories = [];
+	$scope.price = {
+		max: 0,
+		min: 400,
+	};
+	$scope.quantity= {
+		max: 1,
+		min: 1,
+	};
+	// product.categories =
+// [{"_id":"56d6211a41380ba6524bf3e7","name":"pirate ship","__v":0}],
+	products.forEach(function(elem){
+		elem.categories.forEach(function(categoryObj){
+			if ($scope.categories.indexOf(categoryObj.name)===-1)$scope.categories.push(categoryObj.name);
+		});
+		if(elem.price>$scope.price.max) $scope.price.max = elem.price;
+		if(elem.quantity>$scope.quantity.max) $scope.quantity.max= elem.quantity;
+	});
 	
 	$scope.categoryModel = {};
 
