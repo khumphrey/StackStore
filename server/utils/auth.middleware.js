@@ -6,6 +6,7 @@ Auth.isAdmin = function (req) {
 
 Auth.isSelf = function (req) {
 	// this only works if there is a requestedUser property
+    if (!req.requestedUser) return false;
     return req.user.equals(req.requestedUser);
 };
 

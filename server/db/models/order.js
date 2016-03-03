@@ -25,4 +25,48 @@ var orderSchema = new mongoose.Schema({
 
 });
 
+// Needs method to change status
+
+
+
+// needs validation for correct products and quantities
+// needs a pre save hook that subtracts the purchased items quantities
+// from the inventory quantities in the database
+orderSchema.pre('save', function(next) {
+	// Check if there are actually items in the car
+	if (!this.purchasedItems || !this.purchasedItems.length) {
+		return next(new Error('Need items in cart to create order'));
+	}
+
+	// check if none of the products are out of stock
+	this.purchasedItems.forEach(function(item) {
+		if (item.product.quantity < item.quantity) {
+			return next(new Error('Item is out of stock'));
+		}
+	});
+
+	// if everything is correct we subtract the items from the inventory
+	var productPromises = [];
+	// console.log(this.purchasedItems)
+	// you cant assume that the purchased items are actually products
+
+	if (this.isModified('purchasedItems')) {
+		this.purchasedItems.forEach(function(item) {
+			// console.log(item.product.save)
+			var product = item.product;
+			product.quantity -= item.quantity;
+			productPromises.push(product.save());
+		});
+    }
+	// continue after resolving the save operations on all the products
+	Promise.all(productPromises)
+	.then(function(products) {
+		next();
+	})
+	.then(null, function(err) {
+		next(new Error(err));
+	});
+});
+
+
 mongoose.model('Order', orderSchema);
