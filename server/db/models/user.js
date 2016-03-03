@@ -51,7 +51,7 @@ var schema = new mongoose.Schema({
 schema.methods.addOrModify = function (item) {
     var notAdded = true;
     for(var i=0; i<this.cart.length; i++) {
-        if(this.cart[i].product.toString() === item.product){
+        if(this.cart[i].product.equal(item.product)){
             this.cart[i].quantity += item.quantity;
             notAdded = false;
             break;
