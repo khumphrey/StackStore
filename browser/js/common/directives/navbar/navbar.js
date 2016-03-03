@@ -1,17 +1,25 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state) {
 
     return {
         restrict: 'E',
-        scope: {},
         templateUrl: 'js/common/directives/navbar/navbar.html',
         link: function (scope) {
+
+            scope.open = function () {
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: 'js/auth/auth.html',
+                    controller: 'AuthCtrl',
+                    size: 'md'
+                });
+            };
 
             scope.items = [
                 { label: 'Home', state: 'home' },
                 { label: 'About', state: 'about' },
                 { label: 'Documentation', state: 'docs' },
                 { label: 'Catalogue', state: 'products' },
-                { label: 'Members Only', state: 'membersOnly', auth: true }
+                { label: 'Account Management', state: 'user', auth: true }
             ];
 
             scope.user = null;
@@ -22,6 +30,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
 
             scope.logout = function () {
                 AuthService.logout().then(function () {
+                    removeUser();
                    $state.go('home');
                 });
             };
