@@ -137,6 +137,31 @@ describe('Orders Routes', function() {
 				.end(done);
 		});
 
+		//having trouble figuring out how to add on to the req.session.cart from testing 
+		xit('should get a 201 for a post with the order on the response body', function(done) {
+			guestAgent.post('/api/orders')
+				.send({
+					purchasedItems: [{
+						product: createdProducts[0],
+						quantity: 1
+					},
+					{
+						product: createdProducts[1],
+						quantity: 2
+					}],
+					shippingAddress: "My house",
+					shippingEmail: "me@email.com"
+				})
+				.expect(201)
+				.end(function (err, res) {
+					if (err) return done(err);
+					expect(res.body.orderStatus).to.be.an('Created');
+
+					done();
+				});
+
+		});
+
 	});
 
 	describe('Authenticated user', function () {
@@ -190,6 +215,63 @@ describe('Orders Routes', function() {
 				.send({ orderStatus: "Cancelled" })
 				.expect(200)
 				.end(done);
+		});
+
+		it('should get a 400 for incomplete post', function(done) {
+			loggedInAgent.post('/api/orders')
+				.send({
+					shippingAddress: "My house"
+				})
+				.expect(400)
+				.end();
+			
+			loggedInAgent.post('/api/orders')
+				.send({
+					shippingEmail: "me@email.com"
+				})
+				.expect(400)
+				.end();
+			
+			User.findByIdAndUpdate(createdUsers[0]._id, {
+				cart: []
+			})
+			.then(function () {
+				loggedInAgent.post('/api/orders')
+					.send({
+						shippingAddress: "My house",
+						shippingEmail: "me@email.com"
+					})
+					.expect(400)
+					.end(done);
+			});
+		});
+
+		it('should get a 201 for appropriate post', function(done) {
+			//add to User.cart
+			User.findByIdAndUpdate(createdUsers[0]._id, {
+				cart: [{
+						product: createdProducts[0],
+						quantity: 1
+					},
+					{
+						product: createdProducts[1],
+						quantity: 2
+					}]
+			})
+			.then(function () {
+				loggedInAgent.post('/api/orders')
+					.send({
+						shippingAddress: "My house",
+						shippingEmail: "me@email.com"
+					})
+					.expect(201)
+					.end(function (err, res) {
+						if (err) return done(err);
+						expect(res.body.orderStatus).to.equal('Created');
+						expect(res.body.purchasedItems[0].price).to.not.be.null;
+						done();
+					});
+			});
 		});
 	});
 
@@ -250,37 +332,6 @@ describe('Orders Routes', function() {
 		});
 
 		it('should fail if the cart does have incorrect products or quantities', function(done) {
-
-		});
-
-		describe('as a guest user', function() {
-
-			it('should create a new order and return the order with status 201', function(done) {
-				var guestAgent = supertest.agent(app);
-
-				guestAgent.post('/api/orders')
-					.send({
-						purchasedItems: [{
-							product: createdProducts[0],
-							quantity: 1
-						},
-						{
-							product: createdProducts[1],
-							quantity: 2
-						}],
-						shippingAddress: "My house",
-						shippingEmail: "me@email.com"
-					});
-
-			});
-
-		});
-
-		describe('as a logged in user', function() {
-
-			it('should create a new order and return the order with status 201', function(done) {
-
-			});
 
 		});
 
