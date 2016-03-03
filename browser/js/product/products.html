@@ -24,6 +24,8 @@
 	<h4>quantity: {{product.quantity}}</h4>
 	<h4>categories: <span ng-repeat="category in product.categories">{{category.name}}</span></h4>
 <!-- 	<h4>categories: {{product.categories}}</h4> -->
-	<button class="btn" ng-click="addToCart">Quick Add To Cart</button>
+	<button class="btn" ng-click="addToCart({
+				'product': product._id
+			})" >Quick Add 1 To Cart</button>
 	</div>  
 </div>

@@ -35,6 +35,13 @@ app.controller('ProductsController', function ($scope, products) {
 			}
 		});
 	});
+
+	$scope.addToCart = function(item){
+		if(!item.quantity || item.quantity<1) item.quantity=1;
+		console.log("item", item);
+		// add it to cart
+		// CartFactory.addItem(item);
+	};
 });
 
 app.controller('ProductController', function ($scope, product) {
