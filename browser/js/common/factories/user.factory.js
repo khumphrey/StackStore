@@ -27,8 +27,9 @@ app.factory('UserFactory', function($http) {
 	};
 
 	var resetPassword = function(user) {
-		// TBD
-		// Which route do we use to communicate this to the server?
+		user.requiresPasswordReset = true;
+		return $http.put('/api/users/' + user._id, user)
+			.then(res => res.data);
 	};
 
 	return {
