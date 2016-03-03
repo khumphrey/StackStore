@@ -3,16 +3,31 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Promise = require('bluebird');
+
 
 router.get('/', function (req, res, next) {
 	if(req.user) {
-		res.status(200).json(req.user.cart);
-		// We can populate the products here or make a new request from the return
+		User.findById(req.user._id)
+		.populate('cart.product')
+		.then(function (user) {
+			res.status(200).json(user.cart);
+		})
 	}
 	else {
+		//THIS DOESNT WORKAHDGFIHASDFUHOASDFOHa!!!!!!??????
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
-		res.status(200).json(req.session.cart);
-		// We can populate the products here or make a new request from the return
+		console.log("IM CURRENTLY HERE");
+		Promise.all(req.session.cart, function (item) {
+			console.log("IM NOW INSIDE HERE")
+			return findById(item.product)
+				.then(function (p) {
+					return item.product = p;
+				});
+		})
+		.then(function (array){
+			res.status(200).json(array);
+		})
 	}
 });
 
@@ -27,8 +42,8 @@ router.post('/', function (req, res, next) {
 		}
 		else {
 			//can be optimized later
-			var notAdded = true; //initialize a session cart if needed
-			if(!req.session.cart) req.session.cart = [req.body.item];
+			var notAdded = true;
+			if(!req.session.cart) req.session.cart = [req.body.item]; //initialize a session cart if needed
 			else{
 				for(var i=0; i<req.session.cart.length; i++) {
 					if(req.session.cart[i].product === req.body.item.product) {
@@ -37,7 +52,7 @@ router.post('/', function (req, res, next) {
 						break;
 					} 
 				}
-				if(notAdded) req.session.cart.push(req.body.item);
+				if(notAdded ) req.session.cart.push(req.body.item);
 			}
 			res.status(201).json(req.session.cart);
 		};
@@ -49,7 +64,7 @@ router.put('/', function (req, res, next) {
 		if(req.user) {
 			req.user.cart[req.body.index].quantity = req.body.quantity;
 			req.user.save().then(function(){
-			        res.status(200).json(req.user.cart);
+				res.status(200).json(req.user.cart);
 			})
 		}
 		else {
@@ -64,12 +79,12 @@ router.delete('/', function (req, res, next) {
 	if(req.user) {
 			req.user.cart.splice(req.body.index, 1);
 			req.user.save().then(function(){
-			         res.sendStatus(204);
+				res.sendStatus(204);
 			});
 	}
 	else {
 		if(!req.session.cart) {
-		        next({status:404, message:"Cart does not exist"});
+		    	next({status:404, message:"Cart does not exist"});
 		}
 		else{
 			req.session.cart.splice(req.body.index, 1);

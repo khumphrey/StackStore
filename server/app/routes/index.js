@@ -2,7 +2,6 @@
 var router = require('express').Router();
 module.exports = router;
 
-router.use('/checkout', require('./checkout'));
 router.use('/cart', require('./cart'));
 router.use('/users', require('./users'));
 router.use('/reviews', require('./reviews'));

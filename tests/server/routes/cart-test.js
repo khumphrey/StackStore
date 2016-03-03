@@ -53,6 +53,34 @@ describe('Cart Route', function () {
 
 
 		it('should have a GET request be an empty cart', function (done) {
+
+			var category, product;
+			var testPrice = 900;
+			
+			Category.create({
+				name:"Test Boat"
+			}, function (err, c) {
+				if (err) return done(err);
+				category = c;
+				return Product.create({
+					title: "Mu opzor hu.",
+		            description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
+		            price: testPrice,
+		            categories: [category],
+		            quantity: 3,
+		            photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
+				}).then(function(p){
+					product = p; 
+					guestAgent.post('/api/cart/')
+					.send({item: {product: p._id, quantity: 5}})
+					.expect(201)
+					.end(function (err, response) {
+						if(err) done(err);
+						expect(response.body[0].product).to.equal(p._id.toString());
+					})
+				});
+			});	
+			
 			guestAgent.get('/api/cart/')
 			.expect(200)
 			.end(function (err, response) {
@@ -123,6 +151,11 @@ describe('Cart Route', function () {
 			});
 		});
 
+		it('should error if no cart is found on a delete', function (done) {
+			guestAgent.delete('/api/cart/')
+			.expect(404, done);
+		});
+
 		it('should delete an item from a cart', function (done) {
 			guestAgent.post('/api/cart/')
 			.send({item: cartItems.item1})
@@ -144,13 +177,13 @@ describe('Cart Route', function () {
 						.send({index: 1})
 						.end(function (err, response) {
 							if(err) done(err);
-							expect(response.body.length).to.equal(2);
+							expect(204);
 							done();
 						})
 					});
 				});
 			});
-		})
+		});
 	});
 
 	describe('authenticated requests', function () {
@@ -175,18 +208,40 @@ describe('Cart Route', function () {
 		});
 
 		it('should have a GET request be an empty cart', function (done){
-			User.findOne({email: userInfo.email})
-			.then(function (user){
-				expect(user.cart).to.be.an('array');
-				loggedInAgent.get('/api/cart/')
-				.expect(200)
-				.end(function (err, response) {
-					if(err) done(err);
-					expect(response.body).to.be.an('array');
-					done();
+			var category, product;
+			var testPrice = 900;
+			
+			Category.create({
+				name:"Test Boat"
+			}, function (err, c) {
+				if (err) return done(err);
+				category = c;
+				return Product.create({
+					title: "Mu opzor hu.",
+		            description: "Wu vo cut daz kirommiw monasawe tembu atoclu hauhu fu rasehlu puuka zo mebip ce hilbu lar sevjobbak gi jovonilet uhokva uhtod imumaizo pis todta cosin fi borunsi ce janhog.",
+		            price: testPrice,
+		            categories: [category],
+		            quantity: 3,
+		            photoUrl: "http://api.randomuser.me/portraits/thumb/men/16.jpg",
+				}).then(function(p){
+					product = p; 
+					loggedInAgent.post('/api/cart/')
+					.send({item: {product: p._id, quantity: 5}})
+					.expect(201)
+					.end(function (err, response) {
+						if(err) done(err);
+						expect(response.body[0].product).to.equal(p._id.toString());
+						loggedInAgent.get('/api/cart/')
+						.expect(200)
+						.end(function (err, response) {
+							if(err) done(err);
+							expect(response.body.length).to.equal(1);
+							done();
+						})
+					})
 				});
-			})
-			.then(null, done)			
+			});	
+
 		});
 
 		it('should post an item to the cart', function (done) {
@@ -256,12 +311,7 @@ describe('Cart Route', function () {
 							product = p; 
 							loggedInAgent.post('/api/cart/')
 							.send({item: {product: p, quantity: 5}})
-							.expect(201)
-							.end(function (err, response) {
-								if(err) done(err);
-								expect(response.body.length).to.equal(2);
-								done();
-							})
+							.expect(201, done);
 						})
 					})
 				})	
@@ -333,12 +383,7 @@ describe('Cart Route', function () {
 						expect(response.body[0].product).to.equal(p._id.toString());
 						loggedInAgent.delete('/api/cart/')
 						.send({index: 0})
-						.expect(401)
-						.end(function (err, response) {
-							if(err) done(err);
-							expect(response.body.length).to.equal(0);
-							done();
-						})
+						.expect(204, done);
 					})
 				});
 			});	
