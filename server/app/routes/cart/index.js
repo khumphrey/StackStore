@@ -34,7 +34,7 @@ router.get('/', function (req, res, next) {
 
 //Post a single item to the cart. Expect req.body.quantity = NUMBER
 router.post('/:productId', function (req, res, next) {
-	var productItem = {product: req.params.productId, quantity: req.body.quantity}
+	var productItem = {product: req.params.productId, quantity: req.body.quantity};
 	if(req.user) {
 		req.user.addOrModify(productItem);
 		req.user.save()
@@ -76,7 +76,7 @@ router.post('/:productId', function (req, res, next) {
 router.put('/:productId', function (req, res, next) {
 	if (req.user) {
 		for (var i=0; i<req.user.cart.length; i++) {
-			if (req.user.cart[i].product === req.params.productId) {
+			if (req.user.cart[i].product.equal(req.params.productId)) {
 				req.user.cart[i].quantity = req.body.quantity;
 				break;
 			};
@@ -91,7 +91,7 @@ router.put('/:productId', function (req, res, next) {
 		}
 		for (var i=0; i<req.session.cart.length; i++) {
 			if(req.session.cart[i].product === req.params.productId) {
-				req.session.cart.splice(i,1);
+				req.session.cart[i].quantity = req.body.quantity;
 				break;
 			};
 		};
@@ -136,7 +136,7 @@ router.delete('/:productId', function (req, res, next) {
 		if (!req.session.cart) {
 		    var err = new Error(404)
 			err.message = "Cart does not exist";
-		    next(err);
+		    return next(err);
 		}
 		else{
 			for (var i=0; i<req.session.cart.length; i++) {
