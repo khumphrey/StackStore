@@ -50,6 +50,25 @@ app.controller('ProductController', function ($scope, product) {
 	$scope.addToCart = function(item){
 		if(!item.quantity || item.quantity<1) item.quantity=1;
 		console.log("item", item);
+		// Review.create([{
+		// 		product: "56d6211a41380ba6524bf3e8",
+		// 		user: "56d6211a41380ba6524bf41b",
+		// 		content: "This product is excellent",
+		// 		starRating: 5
+		// 	},
+		// 	{
+		// 		product: "56d6211a41380ba6524bf3e8",
+		// 		user: "56d6211a41380ba6524bf41b",
+		// 		content: "This product is average",
+		// 		starRating: 3
+		// 	},
+		// 	{
+		// 		product: "56d6211a41380ba6524bf3e8",
+		// 		user: "56d6211a41380ba6524bf41b",
+		// 		content: "This product is horrible",
+		// 		starRating: 1
+		// }]);
+		// add these to product.reviews array
 		// add it to cart
 		// CartFactory.addItem(item);
 	};

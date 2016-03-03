@@ -3,7 +3,7 @@
 	<img width="100%" ng-src="{{product.photoUrl}}">
 	<h4>description: {{product.description}}</h4>
 	<h4>price: {{product.price}} <span ng-show="quantitySelected()" style='float:right;'> total price: {{product.price*quantity}} </span> </h4>
-	<div class='col-sm-offset-0'> 
+	<div class='row'> 
 			<h4 style='display:inline; float:left;'> quantity: </h4>
 			<div class='col-sm-7'>
 				<uib-pagination style='display:inline;' direction-links="false" total-items="product.quantity" ng-model="quantity" items-per-page="1"></uib-pagination>
@@ -12,5 +12,8 @@
 				'product': product._id,
 				'quantity': quantity
 			})">Add To Cart</button>
+	</div>
+	<div class="row">
+		{{product}}
 	</div>
 </div>

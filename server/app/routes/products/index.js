@@ -19,7 +19,7 @@ router.param('prodId', function(req, res, next, prodId) {
 
 router.get('/', function(req, res, next){
 	Product.find({})
-	.populate('categories')
+	.populate('categories reviews')
 	.then(products => res.json(products))
 	.then(null, next);
 	// return .data?
