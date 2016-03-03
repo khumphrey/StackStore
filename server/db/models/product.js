@@ -26,11 +26,7 @@ var productSchema = new mongoose.Schema({
 	photoUrl: {
 		type: String,
 		default: true 
-	},
-	reviews: [{
-		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'Review'
-	}]
+	}
 });
 
 // TODO add method on that allows to subtract quantity from product on checkout? 

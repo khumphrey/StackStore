@@ -48,6 +48,18 @@ var schema = new mongoose.Schema({
     }
 });
 
+schema.methods.addOrModify = function (item) {
+    var notAdded = true;
+    for(var i=0; i<this.cart.length; i++) {
+        if(this.cart[i].product.toString() === item.product){
+            this.cart[i].quantity += item.quantity;
+            notAdded = false;
+            break;
+        }
+    }
+    if(notAdded) this.cart.push(item);
+}
+
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize = function () {
     return _.omit(this.toJSON(), ['password', 'salt', 'twitter', 'facebook', 'google']);

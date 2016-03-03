@@ -6,7 +6,7 @@ app.config(function ($stateProvider) {
         controller: 'ProductsController',
         templateUrl: 'js/product/products.html',
         resolve: {
-        	products: function(ProductsFactory){
+        	products: function (ProductsFactory){
         		return ProductsFactory.fetchAll();
         	}
         }
@@ -17,8 +17,17 @@ app.config(function ($stateProvider) {
         controller: 'ProductController',
         templateUrl: 'js/product/product.html',
         resolve: {
-            product: function(ProductsFactory, $stateParams){
-                return ProductsFactory.fetchById($stateParams.productId);
+            product: function (ProductsFactory, ReviewFactory,$stateParams){
+                return ProductsFactory.fetchById($stateParams.productId)
+                    .then(function(product){
+                        return ReviewFactory.fetchProdReviews($stateParams.productId)
+                        .then(function(reviews){
+                            console.log("REVIEWS", reviews);
+                            product.reviews = reviews;
+                            return product;
+                        });
+                    });
+            // making this two requests here is silly, should do this on the backend.
             }
         }
     });

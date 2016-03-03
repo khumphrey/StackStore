@@ -11,17 +11,17 @@ app.controller('ProductsController', function ($scope, products) {
 	};
 	// product.categories =
 // [{"_id":"56d6211a41380ba6524bf3e7","name":"pirate ship","__v":0}],
-	products.forEach(function(elem){
-		elem.categories.forEach(function(categoryObj){
+	products.forEach(function (elem){
+		elem.categories.forEach(function (categoryObj){
 			if ($scope.categories.indexOf(categoryObj.name)===-1)$scope.categories.push(categoryObj.name);
 		});
-		if(elem.price>$scope.price.max) $scope.price.max = elem.price;
-		if(elem.quantity>$scope.quantity.max) $scope.quantity.max= elem.quantity;
+		if (elem.price>$scope.price.max) $scope.price.max = elem.price;
+		if (elem.quantity>$scope.quantity.max) $scope.quantity.max= elem.quantity;
 	});
 	
 	$scope.categoryModel = {};
 
-	$scope.categories.forEach(function(elem){
+	$scope.categories.forEach(function (elem){
 			$scope.categoryModel[elem]=true;
 	});
 		
@@ -36,21 +36,49 @@ app.controller('ProductsController', function ($scope, products) {
 		});
 	});
 
-	$scope.addToCart = function(item){
-		if(!item.quantity || item.quantity<1) item.quantity=1;
+	$scope.addToCart = function (item){
+		if (!item.quantity || item.quantity<1) item.quantity=1;
 		console.log("item", item);
 		// add it to cart
 		// CartFactory.addItem(item);
 	};
 });
 
-app.controller('ProductController', function ($scope, product) {
+app.controller('ProductController', function ($scope, product, ReviewFactory) {
 	$scope.product = product;
 
-	$scope.addToCart = function(item){
-		if(!item.quantity || item.quantity<1) item.quantity=1;
-		console.log("item", item);
-		// Review.create([{
+	$scope.addToCart = function (){
+		if (!$scope.item) $scope.item = {quantity:1};
+		if ($scope.item.quantity<1) $scope.item.quantity=1;
+		$scope.item.product = $scope.product._id;
+
+		console.log("Item", $scope.item);
+		// $scope.item = {quantity: 1, product: "56d6211a41380ba6524bf3e9"}
+		// CartFactory.addItem(item);
+	};
+
+	$scope.quantitySelected = function (){
+		return $scope.quantity>1;
+	};
+
+	$scope.createReview = function (){
+		$scope.newReview.product = $scope.product._id;
+		ReviewFactory.addReview($scope.newReview)
+		.then(function(newReview){
+			console.log("return from factory", newReview);
+			// do something here to make this review show up
+		})
+		.then(null, function(err){
+			$scope.hasSubmitted = false;
+      		$scope.serverError = err.message || 'Something went wrong!';
+		});
+	};
+});
+
+
+
+
+		// return Review.create([{
 		// 		product: "56d6211a41380ba6524bf3e8",
 		// 		user: "56d6211a41380ba6524bf41b",
 		// 		content: "This product is excellent",
@@ -68,14 +96,4 @@ app.controller('ProductController', function ($scope, product) {
 		// 		content: "This product is horrible",
 		// 		starRating: 1
 		// }]);
-		// add these to product.reviews array
-		// add it to cart
-		// CartFactory.addItem(item);
-	};
 
-	$scope.quantitySelected = function(){
-		return $scope.quantity>1;
-	};
-
-	// $scope.totalItems = 10;
-});
