@@ -19,7 +19,10 @@ router.get('/', function (req, res, next) {
 	else {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
 		Promise.map(req.session.cart, function (item) {
-			return Product.findById(item.product);
+			return Product.findById(item.product)
+				.then(function (product) {
+					return product;
+				})
 		})
 		.then(function (productArray) {
 			res.json(productArray);
