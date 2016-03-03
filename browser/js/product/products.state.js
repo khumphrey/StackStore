@@ -27,7 +27,7 @@ app.config(function ($stateProvider) {
                             return product;
                         });
                     });
-            // making this two requests here is silly, should do this on the backend.
+            // we can save some latency by having the return from the backend for fetchById include the reviews already
             }
         }
     });
