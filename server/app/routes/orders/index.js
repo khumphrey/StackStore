@@ -84,10 +84,16 @@ router.put('/:orderId', function (req, res, next) {
 //     }]
 // The cart has to be populated with the products to make sure
 // prices etc. stay the same after the order has been created
+
+//---------------------------------------
+//vvvvvvvvvv I DON'T WORK YET vvvvvvvvvv
+//---------------------------------------
 router.post('/', function (req, res, next) {
 	// security consideration:
 	// what if someone spams us with orders via postman?
-		
+	
+
+
 	var newOrder = {
 		//instead of getting the cart sent from the frontend
 		// we could also just use the one on the user or session
