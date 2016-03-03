@@ -46,6 +46,7 @@ app.controller('ProductsController', function ($scope, products) {
 
 app.controller('ProductController', function ($scope, product, ReviewFactory) {
 	$scope.product = product;
+	$scope.isReadonly = true;
 
 	$scope.addToCart = function (){
 		if (!$scope.item) $scope.item = {quantity:1};

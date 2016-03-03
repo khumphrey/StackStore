@@ -38,7 +38,7 @@
 	</form>
 	<h3>Reviews of {{product.title}}</h3>
 	<div class='col-sm-10' ng-repeat="review in product.reviews">
-	<uib-rating ng-model="review.starRating" read-only="true" max="5" aria-labelledby="default-rating"></uib-rating>
+	<uib-rating ng-model="review.starRating" data-readonly="isReadonly" max="5" aria-labelledby="default-rating"></uib-rating>
 <!-- 	TODO Change these icons to boats -->
 	<h4>{{review.content}}</h4>
 	<a>

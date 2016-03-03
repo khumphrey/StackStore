@@ -1,9 +1,9 @@
 'use strict'
 
-var Review = require('mongoose').model('Review');
-var router = require('express').Router();
-var Auth = require('../../../utils/auth.middleware.js');
-var _ = require('lodash');
+const Review = require('mongoose').model('Review');
+const router = require('express').Router();
+const Auth = require('../../../utils/auth.middleware.js');
+const _ = require('lodash');
 
 router.param('reviewId', function (req, res, next, id) {
 	Review.findById(id).populate('user')
@@ -31,13 +31,19 @@ router.get('/', function (req, res, next) {
 		.populate('user product')
 		.then(function (reviews) {
 			res.json(reviews.map(function (rev) {
-				// var scrubberUser = 
-				rev.user = {
-					_id:rev.user._id,
-					username:rev.user.username
+				// We can not directly edit rev because they are mongo objects, POJOs. You have to use mongo methods on them.
+				var scrubberUser = {
+					user: {
+						_id:rev.user._id,
+						username:rev.user.username
+					}
 				};
-				return rev;
 				// we only need the user ID and username for products
+
+				rev = rev.toObject();
+				rev.user = scrubberUser.user;
+				
+				return rev;
 			}));	
 		})
 		.then(null, next);
