@@ -1,1 +1,36 @@
-Hello this is the order management
+<table class="table table-striped">
+    <tr>
+        <th>Nr</th>
+        <th>User Name</th>
+        <th>Full Name</th>
+        <th>Shipping Address</th>
+        <th>Shipping Email</th>
+        <th>Order Status</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="order in orders">
+        <td>{{$index}}</td>
+        <td>{{order.user.username}}</td>
+        <td>{{order.user.fullname}}</td>
+        <td>{{order.shippingAddress}}</td>
+        <td>{{order.shippingEmail}}</td>
+        <td>{{order.orderStatus}}</td>
+        <td>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Change Status <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div>
+        </td>
+        <!-- <button class="btn btn-primary btn-sm" ng-click="demoteAdminToUser(user)" ng-if="user.admin && user.email !== currentUser.email">Demote to User</button>
+		<td><button class="btn btn-primary btn-sm" ng-click="resetPassword(user)" ng-if="user.email !== currentUser.email">Reset Password</button></td>
+		<td><button class="btn btn-warning btn-sm" ng-click="deleteUser(user)" ng-if="user.email !== currentUser.email">Delete</button></td> -->
+    </tr>
+</table>

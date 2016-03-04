@@ -1,6 +1,7 @@
 <table class="table table-striped">
 	<tr>
 		<th></th>
+		<th>Nr</th>
 		<th>Username</th>
 		<th>Full Name</th>
 		<th>E-Mail</th>
@@ -11,6 +12,7 @@
 	</tr>
 	<tr ng-repeat="user in users">
 		<td><div ng-if="user.admin"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Admin</div></td>
+		<td>{{$index}}</td>
 		<td>{{user.username}}</td>
 		<td>{{user.fullname}}</td>
 		<td>{{user.email}}</td>

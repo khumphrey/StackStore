@@ -2,14 +2,6 @@ app.config(function ($stateProvider) {
     $stateProvider.state('admin', {
         url: '/admin',
         templateUrl: 'js/admin/admin-panel.html',
-        controller: function($scope) {
-            $scope.active = "active";
-        }
-        // resolve: {
-        //     users: function(UserFactory) {
-        //         return UserFactory.fetchAll();
-        //     }
-        // }
     });
 });
 
@@ -18,11 +10,11 @@ app.config(function ($stateProvider) {
         url: '/admin/order-management',
         templateUrl: 'js/admin/order-management.html',
         controller: 'OrderManagementCtrl',
-        // resolve: {
-        //     users: function(UserFactory) {
-        //         return UserFactory.fetchAll();
-        //     }
-        // }
+        resolve: {
+            orders: function(OrderFactory) {
+                return OrderFactory.fetchAll();
+            }
+        }
     });
 });
 

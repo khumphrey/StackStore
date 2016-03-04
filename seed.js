@@ -24,7 +24,9 @@ var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
 var Product = Promise.promisifyAll(mongoose.model('Product'));
 var Category = Promise.promisifyAll(mongoose.model('Category'));
+var Order = Promise.promisifyAll(mongoose.model('Order'));
 var chance = require('chance')(123);
+var _ = require('lodash');
 
 var seedUsers = function () {
 
@@ -73,16 +75,23 @@ function randProduct (catId){
         title: randWords(1,3),
         description: randWords(10,30),
         price: randInteger(400, 900),
-        quantity: randInteger(0, 10),
+        quantity: randInteger(5000, 100000),
         categories: [catId],
         photoUrl: randPhoto(),
         // this is photos of people for now
     });
 }
 
+var products;
+var users;
+
+function seedOrders() {
+
+}
+
 const clearDb = function () {
     console.log("clearing database");
-  return Promise.map(['User', 'Product', 'Category'], function (modelName) {
+  return Promise.map(['User', 'Product', 'Category', 'Order'], function (modelName) {
     return mongoose.model(modelName).remove();
   });
 };
@@ -107,6 +116,9 @@ function seedProdCat (numOfProducts){
     });
 }
 
+var users;
+var products;
+
 connectToDb.then(function () {
     clearDb()
     .then(function() {
@@ -121,7 +133,8 @@ connectToDb.then(function () {
             console.log(chalk.magenta('Seems to already be product data, exiting!'));
             process.kill(0);
         }
-    }).then(function(){
+    }).then(function(products){
+        createdProducts = products;
         return User.findAsync({}).then(function (users) {
             if (users.length === 0) {
                 return seedUsers();
@@ -130,7 +143,47 @@ connectToDb.then(function () {
                 process.kill(0);
             }
         });
-    }).then(function () {
+    })
+    .then(function() {
+        return seedOrders();
+    })
+    .then(function() {
+        return User.find({});
+    })
+    .then(function(createdUsers) {
+        users = createdUsers;
+        return Product.find({});
+    })
+    .then(function(createdProducts) {
+        products = createdProducts;
+
+        var purchasedItems = [];
+        var newOrders = [];
+        _.times(10, function() {
+            
+            _.times(10, function() {
+                var purchasedItem = {
+                    product: chance.pickone(products),
+                    quantity: chance.integer({min:1, max:3})
+               };
+               purchasedItems.push(purchasedItem);
+           });
+            var newOrder = {
+                purchasedItems: purchasedItems,
+                user: chance.pickone(users),
+                orderStatus: chance.pickone(['Created', 'Processing', 'Completed', 'Cancelled']),
+                shippingAddress: chance.address(),
+                shippingEmail: chance.email()
+            };
+            newOrders.push(newOrder);
+        });
+
+        return Promise.map(newOrders, function(newOrder) {
+            return Order.create(newOrder);
+        })
+
+    })
+    .then(function () {
         console.log(chalk.green('Seed successful!'));
         process.kill(0);
     }).catch(function (err) {
