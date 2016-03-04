@@ -3,27 +3,36 @@
     <div class="panel panel-info">
         <div class="panel-heading">Account Information</div>
         <div class="panel-body">
-            <form name="updateUserForm" ng-submit="updateAccountInfo(updatedUser)">
-            	<div class="form-group">
+            <form name="updateUserForm" ng-submit="updateAccountInfo(user)">
+                <div class="form-group">
                     <label>Name</label>
-                    <input class="form-control" ng-model="updatedUser.fullname" name="fullname" value="{{ user.fullname }}">
+                    <input class="form-control" ng-model="user.fullname" name="fullname" value="{{ user.fullname }}">
                 </div>
                 <div class="form-group">
                     <label>Username</label>
                     <!-- do these need to be unique? -->
-                    <input class="form-control" ng-model="updatedUser.username" name="username" value="{{ user.username }}">
+                    <input class="form-control" ng-model="user.username" required name="username" value="{{ user.username }}">
+                    <div ng-messages="updateUserForm.username.$error" role="alert">
+                        <div ng-message="required">Please enter a username before saving</div>
+                    </div>
                 </div>
                 <div class="form-group">
-                	<!-- how to do route so that they know that the email is already taken -->
+                    <!-- how to do route so that they know that the email is already taken -->
                     <label>Email</label>
-                    <input class="form-control" ng-model="updatedUser.email" required name="email" value="{{ user.email }}">
+                    <input class="form-control" ng-model="user.email" required name="email" value="{{ user.email }}">
+                    <div ng-messages="updateUserForm.username.$error" role="alert">
+                        <div ng-message="required">Please enter an email before saving</div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control" required ng-model="updatedUser.password" name="password" placeholder="Password">
+                    <input type="password" class="form-control" ng-model="user.password" name="password" placeholder="Password">
                 </div>
-                <button type="submit" class="btn btn-submit">Submit</button>
+                <button type="submit" class="btn btn-submit">Save Changes</button>
             </form>
+            <br>
+            <uib-alert ng-show="success" class="alert" type="success" role="alert">Your changes were saved successfully!</uib-alert>
+            <uib-alert ng-show="failure" class="alert" type="danger" role="alert">Your changes were NOT saved</uib-alert>
         </div>
     </div>
 </div>

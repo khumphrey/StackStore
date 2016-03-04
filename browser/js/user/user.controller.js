@@ -1,6 +1,9 @@
-app.controller('UserCtrl', function ($scope, $state, loggedInUser) {
+app.controller('UserCtrl', function ($scope, $state, loggedInUser, userReviews, UserFactory, ReviewFactory) {
     $scope.user = loggedInUser;
-    $scope.reviews = [];
+    $scope.reviews = userReviews;
+    $scope.success = false;
+    $scope.failure;
+
 
     //display --- 
         //all orders of user, 
@@ -10,15 +13,24 @@ app.controller('UserCtrl', function ($scope, $state, loggedInUser) {
     //navbar of orders, reviews and user info -- have user info as default?
     //cart should be on the regular navbar??
 
-    //INJECT REVIEW FACTORY
     //use reviews factory to get all reviews for one user
-    // var reviewPromise = ReviewFactory.fetchUserReviews($scope.user._id)
-    //     .then(function (userReviews) {
-    //         angular.copy(userReviews, $scope.reviews);
-    //     });
     
     $scope.updateAccountInfo = function (userInfo) {
+        $scope.success = false;
+        $scope.failure = false;
+        userInfo._id = $scope.user._id;
+        UserFactory.updateUser(userInfo)
+            .then(function (updatedUser) {
+                $scope.user.password = "";
+                $scope.success = true;
+            })
+            .then(null, function (err) {
+                $scope.failure = err;
+            });
+    };
 
+    $scope.areThereUserReviews = function () {
+        return $scope.reviews.length > 0;
     };
 
 });

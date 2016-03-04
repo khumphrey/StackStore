@@ -1,3 +1,14 @@
-	<div class="container">
-		reviews
-	</div>
+<div class="container">
+    <h2 class="text-center">Reviews by {{ user.fullname || user.username || user.email}}</h2>
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <ul ng-show="areThereUserReviews()">
+                <li ng-repeat="reviews in userReviews">
+                    <uib-rating ng-model="review.starRating" data-readonly="true" max="5" aria-labelledby="default-rating"></uib-rating>
+                    <h3>{{ review.product }}</h3>
+                    <h4>{{ review.content }}</h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

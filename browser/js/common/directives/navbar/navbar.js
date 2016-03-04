@@ -1,11 +1,11 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state) {
+app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state) {
 
     return {
         restrict: 'E',
         templateUrl: 'js/common/directives/navbar/navbar.html',
-        link: function (scope) {
+        link: function(scope) {
 
-            scope.open = function () {
+            scope.open = function() {
                 $uibModal.open({
                     animation: true,
                     templateUrl: 'js/auth/auth.html',
@@ -25,23 +25,23 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $uibModa
 
             scope.user = null;
 
-            scope.isLoggedIn = function () {
+            scope.isLoggedIn = function() {
                 return AuthService.isAuthenticated();
             };
 
-            var removeUser = function () {
+            var removeUser = function() {
                 scope.user = null;
             };
 
-            scope.logout = function () {
-                AuthService.logout().then(function () {
+            scope.logout = function() {
+                AuthService.logout().then(function() {
                     removeUser();
-                   $state.go('home');
+                    $state.go('home');
                 });
             };
 
-            var setUser = function () {
-                AuthService.getLoggedInUser().then(function (user) {
+            var setUser = function() {
+                AuthService.getLoggedInUser().then(function(user) {
                     scope.user = user;
                 });
             };
