@@ -2,7 +2,7 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('user', {
         url: '/user',
-        templateUrl: 'js/user/user.html',
+        templateUrl: 'js/user/templates/user.html',
         controller: 'UserCtrl',
         // The following data.authenticate is read by an event listener
         // that controls access to this state. Refer to app.js.
@@ -15,6 +15,30 @@ app.config(function ($stateProvider) {
             loggedInUser: function (AuthService) {
                 return AuthService.getLoggedInUser();
             }
+        }
+    })
+    .state('user.account', {
+        url: '/account',
+        templateUrl: 'js/user/templates/user.account.html',
+        controller: 'UserCtrl',
+        data: {
+            authenticate: true
+        }
+    })
+    .state('user.reviews', {
+        url: '/reviews',
+        templateUrl: 'js/user/templates/user.reviews.html',
+        controller: 'UserCtrl',
+        data: {
+            authenticate: true
+        }
+    })
+    .state('user.orders', {
+        url: '/orders',
+        templateUrl: 'js/user/templates/user.orders.html',
+        controller: 'UserCtrl',
+        data: {
+            authenticate: true
         }
     });
 

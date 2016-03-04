@@ -13,7 +13,8 @@ app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInsta
             })
             .then(function () {
                 $uibModalInstance.close();
-                //check if user.requiresPasswordReset === true
+
+                //check if user.requiresPasswordReset
                 //go to change password page
                 // if (user.requiresPasswordReset) $state.go('user');
                 $state.go('products');

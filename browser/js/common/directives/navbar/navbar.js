@@ -19,13 +19,17 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $uibModa
                 { label: 'About', state: 'about' },
                 { label: 'Documentation', state: 'docs' },
                 { label: 'Catalogue', state: 'products' },
-                { label: 'Account Management', state: 'user', auth: true }
+                { label: 'Account Management', state: 'user.account', auth: true }
             ];
 
             scope.user = null;
 
             scope.isLoggedIn = function () {
                 return AuthService.isAuthenticated();
+            };
+
+            var removeUser = function () {
+                scope.user = null;
             };
 
             scope.logout = function () {
@@ -39,10 +43,6 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $uibModa
                 AuthService.getLoggedInUser().then(function (user) {
                     scope.user = user;
                 });
-            };
-
-            var removeUser = function () {
-                scope.user = null;
             };
 
             setUser();

@@ -1,0 +1,29 @@
+<div class="container">
+    <h2 class="text-center">Welcome, {{ user.fullname || user.username || user.email}}</h2>
+    <div class="panel panel-info">
+        <div class="panel-heading">Account Information</div>
+        <div class="panel-body">
+            <form name="updateUserForm" ng-submit="updateAccountInfo(updatedUser)">
+            	<div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" ng-model="updatedUser.fullname" name="fullname" value="{{ user.fullname }}">
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <!-- do these need to be unique? -->
+                    <input class="form-control" ng-model="updatedUser.username" name="username" value="{{ user.username }}">
+                </div>
+                <div class="form-group">
+                	<!-- how to do route so that they know that the email is already taken -->
+                    <label>Email</label>
+                    <input class="form-control" ng-model="updatedUser.email" required name="email" value="{{ user.email }}">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" required ng-model="updatedUser.password" name="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
