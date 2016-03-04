@@ -74,7 +74,11 @@ app.controller('ProductController', function ($scope, product, ReviewFactory, Se
 				_id: newReview.user
 			};
 			$scope.product.reviews.push(newReview);
+
+
 		// scroll to bottom of page and clear form
+			$scope.newReview = {};
+			$scope.reviewForm.$setPristine();
 		})
 		.then(null, function(err){
 			$scope.hasSubmitted = false;
