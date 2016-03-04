@@ -1,21 +1,26 @@
 <div>
 	<p>This is a list of cart items</p>
-	<form>
+	<form name="ourCart">
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Item Title</th>
+ 					<th>Item Title</th>
 					<th>Quantity</t>
 					<th>Update</th>
 					<th>Remove</th>
 				</tr>
 			</thead>
 			<tbody>
-				<cart-item ng-repeat="item in cart" item="item" cart="cart"></cart-item>
+				<tr ng-repeat="item in cart" item="item" cart="cart">
+					<td>{{ item.product.title }}</td>
+					<td>{{ item.quantity }}</td>
+					<td>
+						<input ng-model="item.newQuantity"></input>
+						<button ng-click='update(item)'>Update Item</button>
+					</td>
+					<td><button ng-click="remove(item, $index)">Remove Item</button>
+				</tr>
 			</tbody>
 		</table>
-<!-- 		<ul>
-			<cart-item ng-repeat="item in cart" item="item" cart="cart"></cart-item>
-		</ul> -->
 	</form>
 </div>
