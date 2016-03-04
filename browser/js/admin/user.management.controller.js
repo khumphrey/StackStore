@@ -1,16 +1,3 @@
-app.config(function ($stateProvider) {
-    $stateProvider.state('userManagement', {
-        url: '/user-management',
-        templateUrl: 'js/admin/user-management.html',
-        controller: 'UserManagementCtrl',
-        resolve: {
-        	users: function(UserFactory) {
-        		return UserFactory.fetchAll();
-        	}
-        }
-    });
-});
-
 app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, users) {
 
 	$scope.users = users;

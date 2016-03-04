@@ -19,7 +19,6 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
                 { label: 'About', state: 'about' },
                 { label: 'Documentation', state: 'docs' },
                 { label: 'Catalogue', state: 'products' },
-                { label: 'Account Management', state: 'user.account', auth: true },
                 { label: 'Admin', state: 'userManagement', auth: true }
             ];
 
@@ -31,6 +30,16 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
 
             var removeUser = function() {
                 scope.user = null;
+            };
+
+            scope.isAdmin = function() {
+                return AuthService.isAdmin();
+            };
+
+            scope.logout = function () {
+                AuthService.logout().then(function () {
+                   $state.go('home');
+                });
             };
 
             scope.logout = function() {

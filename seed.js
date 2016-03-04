@@ -24,29 +24,28 @@ var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
 var Product = Promise.promisifyAll(mongoose.model('Product'));
 var Category = Promise.promisifyAll(mongoose.model('Category'));
+var Order = Promise.promisifyAll(mongoose.model('Order'));
 var chance = require('chance')(123);
+var _ = require('lodash');
 
-var seedUsers = function () {
+var seedUsers = function() {
 
-    var users = [
-        {
-            email: 'testing@fsa.com',
-            password: 'password'
-        },
-        {
-            email: 'obama@gmail.com',
-            fullname: "Barack Hussein Obama II",
-            password: 'potus',
-            admin: true
-        }
-    ];
+    var users = [{
+        email: 'testing@fsa.com',
+        password: 'password'
+    }, {
+        email: 'obama@gmail.com',
+        fullname: "Barack Hussein Obama II",
+        password: 'potus',
+        admin: true
+    }];
 
     return User.createAsync(users);
 
 };
 
 
-function randPhoto () {
+function randPhoto() {
     var n = chance.natural({
         min: 0,
         max: 20
@@ -54,87 +53,130 @@ function randPhoto () {
     return '/imgBoat/boatImg' + n + '.jpg';
 }
 
-function randWords (minWords, maxWords) {
+function randWords(minWords, maxWords) {
     var numWords = chance.natural({
         min: minWords,
         max: maxWords
     });
-    return chance.sentence({words: numWords});
+    return chance.sentence({ words: numWords });
 }
 
 var categories = ['motor boat', 'cruise ship', 'pirate ship'];
 
-function randInteger (minNum, maxNum){
-    return chance.integer({min: minNum, max: maxNum});
+function randInteger(minNum, maxNum) {
+    return chance.integer({ min: minNum, max: maxNum });
 }
 
-function randProduct (catId){
+function randProduct(catId) {
     return new Product({
-        title: randWords(1,3),
-        description: randWords(10,30),
+        title: randWords(1, 3),
+        description: randWords(10, 30),
         price: randInteger(400, 900),
-        quantity: randInteger(0, 10),
+        quantity: randInteger(60, 80),
         categories: [catId],
         photoUrl: randPhoto(),
         // this is photos of people for now
     });
 }
 
-const clearDb = function () {
+var products;
+var users;
+
+function seedOrders() {
+
+}
+
+const clearDb = function() {
     console.log("clearing database");
-  return Promise.map(['User', 'Product', 'Category'], function (modelName) {
-    return mongoose.model(modelName).remove();
-  });
+    return Promise.map(['User', 'Product', 'Category', 'Order'], function(modelName) {
+        return mongoose.model(modelName).remove();
+    });
 };
 
-function seedProdCat (numOfProducts){
+function seedProdCat(numOfProducts) {
     var productDocs = [],
         catIDs = [];
 
-    var categoriesObj = categories.map(function(elem){
-        return {name:elem};
+    var categoriesObj = categories.map(function(elem) {
+        return { name: elem };
     });
     return Category.createAsync(categoriesObj)
-    .then(function(categoryDocs){
-        catIDs = categoryDocs.map(elem => elem._id);
-        for (var i = 0; i < numOfProducts; i++) {
+        .then(function(categoryDocs) {
+            catIDs = categoryDocs.map(elem => elem._id);
+            for (var i = 0; i < numOfProducts; i++) {
 
-            console.log(chance.pickone(catIDs));
-            // TODO update this to allow for multiple catagories
-            productDocs.push(randProduct(chance.pickone(catIDs)));
-        }
-        return productDocs;
-    });
+                console.log(chance.pickone(catIDs));
+                // TODO update this to allow for multiple catagories
+                productDocs.push(randProduct(chance.pickone(catIDs)));
+            }
+            return productDocs;
+        });
 }
 
-connectToDb.then(function () {
+var users;
+var products;
+
+connectToDb.then(function() {
     clearDb()
-    .then(function() {
-        return Product.findAsync({});
-    })
-    .then(function (product) {
-        if (product.length === 0) {
-            return Promise.map(seedProdCat(50), function (productDoc) {
+        .then(function() {
+            return Product.findAsync({});
+        })
+        .then(function(product) {
+            return Promise.map(seedProdCat(50), function(productDoc) {
                 return productDoc.save();
-             });
-        } else {
-            console.log(chalk.magenta('Seems to already be product data, exiting!'));
-            process.kill(0);
-        }
-    }).then(function(){
-        return User.findAsync({}).then(function (users) {
-            if (users.length === 0) {
+            });
+        }).then(function(products) {
+            createdProducts = products;
+            return User.findAsync({}).then(function(users) {
                 return seedUsers();
-            } else {
-                console.log(chalk.magenta('Seems to already be user data, exiting!'));
-                process.kill(0);
-            }
+            });
+        })
+        .then(function() {
+            return seedOrders();
+        })
+        .then(function() {
+            return User.find({});
+        })
+        .then(function(createdUsers) {
+            users = createdUsers;
+            return Product.find({});
+        })
+        .then(function(createdProducts) {
+            products = createdProducts;
+
+
+            var newOrders = [];
+            _.times(20, function() {
+
+                var purchasedItems = [];
+                _.times(10, function() {
+                    var purchasedItem = {
+                        product: chance.pickone(products),
+                        quantity: chance.integer({ min: 1, max: 3 })
+                    };
+                    purchasedItems.push(purchasedItem);
+                });
+
+                var newOrder = {
+                    purchasedItems: purchasedItems,
+                    user: chance.pickone(users),
+                    orderStatus: chance.pickone(['Created', 'Processing', 'Completed', 'Cancelled']),
+                    shippingAddress: chance.address(),
+                    shippingEmail: chance.email()
+                };
+                newOrders.push(newOrder);
+            });
+
+            return Promise.map(newOrders, function(newOrder) {
+                return Order.create(newOrder);
+            })
+
+        })
+        .then(function() {
+            console.log(chalk.green('Seed successful!'));
+            process.kill(0);
+        }).catch(function(err) {
+            console.error(err);
+            process.kill(1);
         });
-    }).then(function () {
-        console.log(chalk.green('Seed successful!'));
-        process.kill(0);
-    }).catch(function (err) {
-        console.error(err);
-        process.kill(1);
-    });
 });
