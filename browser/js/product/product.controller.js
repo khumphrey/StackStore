@@ -1,4 +1,4 @@
-app.controller('ProductController', function ($scope, product, ReviewFactory, Session) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory) {
 	$scope.product = product;
 	$scope.item = {quantity:1};
 
@@ -11,11 +11,18 @@ app.controller('ProductController', function ($scope, product, ReviewFactory, Se
 		// CartFactory.addToCart($scope.item.product, $scope.item.quantity);
 	};
 
+	$scope.removeProduct = function () {
+		ProductsFactory.delete($scope.product._id)
+		.then(function(){
+			$state.go('products');
+		});
+	};
+
 	$scope.areThereProductReviews = function () {
 		return $scope.product.reviews.length>0;
 	};
 
-	$scope.quantitySelected = function (){
+	$scope.isQuantitySelected = function (){
 		return $scope.item.quantity>1;
 	};
 

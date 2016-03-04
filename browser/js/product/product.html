@@ -1,5 +1,5 @@
 <div class='col-sm-8 col-sm-offset-2'>
-    <h2>{{product.title}}</h2>
+    <h2>{{product.title}}</h2> <span class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
     <img width="100%" ng-src="{{product.photoUrl}}">
     <h4>description: {{product.description}}</h4>
     <h4>price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
