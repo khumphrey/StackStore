@@ -62,7 +62,7 @@ schema.methods.addOrModify = function (item) {
         }
     }
     if(notAdded) this.cart.push(item);
-}
+};
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize = function () {
