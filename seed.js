@@ -122,23 +122,13 @@ connectToDb.then(function() {
             return Product.findAsync({});
         })
         .then(function(product) {
-            if (product.length === 0) {
-                return Promise.map(seedProdCat(50), function(productDoc) {
-                    return productDoc.save();
-                });
-            } else {
-                console.log(chalk.magenta('Seems to already be product data, exiting!'));
-                process.kill(0);
-            }
+            return Promise.map(seedProdCat(50), function(productDoc) {
+                return productDoc.save();
+            });
         }).then(function(products) {
             createdProducts = products;
             return User.findAsync({}).then(function(users) {
-                if (users.length === 0) {
-                    return seedUsers();
-                } else {
-                    console.log(chalk.magenta('Seems to already be user data, exiting!'));
-                    process.kill(0);
-                }
+                return seedUsers();
             });
         })
         .then(function() {
@@ -154,7 +144,7 @@ connectToDb.then(function() {
         .then(function(createdProducts) {
             products = createdProducts;
 
-            
+
             var newOrders = [];
             _.times(20, function() {
 
