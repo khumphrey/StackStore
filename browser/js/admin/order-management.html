@@ -23,17 +23,7 @@
         <td>{{order.shippingEmail}}</td>
         <td>{{order.orderStatus}}</td>
         <td>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="item in createDropdownItems(order)"><a href="#">{{item}}</a></li>
-                </ul>
-            </div>
+        <order-action order="order"></order-action>
         </td>
-        <!-- <button class="btn btn-primary btn-sm" ng-click="demoteAdminToUser(user)" ng-if="user.admin && user.email !== currentUser.email">Demote to User</button>
-		<td><button class="btn btn-primary btn-sm" ng-click="resetPassword(user)" ng-if="user.email !== currentUser.email">Reset Password</button></td>
-		<td><button class="btn btn-warning btn-sm" ng-click="deleteUser(user)" ng-if="user.email !== currentUser.email">Delete</button></td> -->
     </tr>
 </table>

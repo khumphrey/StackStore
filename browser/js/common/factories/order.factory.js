@@ -5,7 +5,14 @@ app.factory('OrderFactory', function($http) {
 			.then(res => res.data);
 	};
 
+	var changeOrderStatus = function(order, newStatus) {
+		order.orderStatus = newStatus;
+		return $http.put('/api/orders/' + order._id, order)
+			.then(res => res.data);
+	}
+
 	return {
-		fetchAll: fetchAll
+		fetchAll: fetchAll,
+		changeOrderStatus: changeOrderStatus
 	};
 });
