@@ -18,10 +18,12 @@
 	    <div ng-show="serverError" class="alert alert-danger">
 	      {{ serverError }}
 	    </div>
-	    <div ng-messages="reviewForm.content.$error" ng-hide="reviewForm.content.$pristine" role="alert">
+	    <!-- <div ng-messages="reviewForm.content.$error" ng-hide="reviewForm.content.$pristine" role="alert">
 	      <div ng-message="minlength" class="alert alert-warning">Review must be at least 10 characters long</div>
 	      <div ng-message="maxlength" class="alert alert-warning">Content is too long</div>
-	    </div>
+	    </div> 
+		Need to make these alerts only show up when there problems with them?
+	    -->
 	    <div class="form-group">
 	     	<uib-rating ng-model="newReview.starRating" max="5"></uib-rating>
 	      <label for="content" class="col-xs-2 control-label">Content</label>
@@ -36,7 +38,7 @@
 	    </div>
 	  </fieldset>
 	</form>
-	<h3>Reviews of {{product.title}}</h3>
+	<h3 ng-show="areThereProductReviews()">Reviews of {{product.title}}</h3>
 	<div class='col-sm-4' ng-repeat="review in product.reviews">
 		<uib-rating ng-model="review.starRating" data-readonly="true" max="		5" aria-labelledby="default-rating"></uib-rating>
 			<!-- 	TODO Change these icons to boats -->

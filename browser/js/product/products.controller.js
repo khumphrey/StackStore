@@ -56,6 +56,10 @@ app.controller('ProductController', function ($scope, product, ReviewFactory, Se
 		// CartFactory.addToCart($scope.item.product, $scope.item.quantity);
 	};
 
+	$scope.areThereProductReviews = function () {
+		return $scope.product.reviews.length>0;
+	};
+
 	$scope.quantitySelected = function (){
 		return $scope.item.quantity>1;
 	};
@@ -70,10 +74,12 @@ app.controller('ProductController', function ($scope, product, ReviewFactory, Se
 				_id: newReview.user
 			};
 			$scope.product.reviews.push(newReview);
+		// scroll to bottom of page and clear form
 		})
 		.then(null, function(err){
 			$scope.hasSubmitted = false;
       		$scope.serverError = err.message || 'Something went wrong!';
 		});
+
 	};
 });
