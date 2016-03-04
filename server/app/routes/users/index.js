@@ -27,7 +27,7 @@ router.get('/', Auth.ensureAdmin, function (req, res, next) {
     .populate('cart history')
     .then(function (allUsers) {
         res.json(allUsers.map(function (user) {
-            user = user.sanitize();
+            return user.sanitize();
         }));
     })
     .then(null, next);
@@ -52,6 +52,14 @@ router.post('/', Auth.ensureAdmin, function (req, res, next) {
     User.create(req.body)
     .then(createdUser => res.status(201).json(createdUser.sanitize()))
     .then(null, next);
+});
+
+router.delete('/:userId', Auth.ensureAdmin, function (req, res, next) {
+    req.requestedUser.remove()
+        .then(function() {
+            res.status(204).end();
+        })
+        .then(null, next);
 });
 
 module.exports = router;
