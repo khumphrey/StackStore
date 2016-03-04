@@ -24,6 +24,8 @@ var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
 var Product = Promise.promisifyAll(mongoose.model('Product'));
 var Category = Promise.promisifyAll(mongoose.model('Category'));
+var Review = Promise.promisifyAll(mongoose.model('Review'));
+
 var Order = Promise.promisifyAll(mongoose.model('Order'));
 var chance = require('chance')(123);
 var _ = require('lodash');
@@ -82,8 +84,13 @@ function randProduct(catId) {
 var products;
 var users;
 
-function seedOrders() {
-
+function createReview (user, product) {
+    return Review.create({
+        user: user,
+        product: product,
+        content: randWords(5,10),
+        starRating: 4
+    });
 }
 
 const clearDb = function() {
@@ -132,9 +139,6 @@ connectToDb.then(function() {
             });
         })
         .then(function() {
-            return seedOrders();
-        })
-        .then(function() {
             return User.find({});
         })
         .then(function(createdUsers) {
@@ -146,10 +150,10 @@ connectToDb.then(function() {
 
 
             var newOrders = [];
-            _.times(20, function() {
+            _.times(10, function() {
 
                 var purchasedItems = [];
-                _.times(10, function() {
+                _.times(3, function() {
                     var purchasedItem = {
                         product: chance.pickone(products),
                         quantity: chance.integer({ min: 1, max: 3 })
@@ -169,13 +173,24 @@ connectToDb.then(function() {
 
             return Promise.map(newOrders, function(newOrder) {
                 return Order.create(newOrder);
-            })
+            });
 
         })
-        .then(function() {
+        .then(function () {
+            var reviewPromises = [
+                createReview(users[0], products[0]),
+                createReview(users[0], products[1]),
+                createReview(users[0], products[2]),
+                createReview(users[1], products[0]),
+                createReview(users[1], products[1]),
+                createReview(users[1], products[2]),
+            ];
+            return Promise.all(reviewPromises);
+        })
+        .then(function () {
             console.log(chalk.green('Seed successful!'));
             process.kill(0);
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error(err);
             process.kill(1);
         });

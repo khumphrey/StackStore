@@ -1,4 +1,4 @@
-app.controller('UserCtrl', function ($scope, $state, loggedInUser, userReviews, UserFactory, ReviewFactory) {
+app.controller('UserCtrl', function ($scope, $state, loggedInUser, userReviews, UserFactory) {
     $scope.user = loggedInUser;
     $scope.reviews = userReviews;
     $scope.success = false;
