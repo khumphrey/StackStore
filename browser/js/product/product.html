@@ -1,52 +1,48 @@
 <div class='col-sm-8 col-sm-offset-2'>
-	<h2>{{product.title}}</h2>
-	<img width="100%" ng-src="{{product.photoUrl}}">
-	<h4>description: {{product.description}}</h4>
-	<h4>price: {{product.price}} <span ng-show="quantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
-	<div class='row'> 
-			<h4 style='display:inline; float:left;'> Quantity: </h4>
-			<div class='col-sm-7'>
-				<uib-pagination style='display:inline;' direction-links="false" total-items="product.quantity" ng-model="item.quantity" items-per-page="1"></uib-pagination>
-			</div>
-			<button class="btn" style='display:inline; float:right' ng-click="addToCart()">Add To Cart</button>
-	</div>
-	<div class="row">
-	</div>
-	
-	<form class="form-horizontal" novalidate name="reviewForm" ng-submit="createReview()">
-	  <fieldset>
-	    <legend>New Review</legend>
-	    <div class="form-group">
-	     	<uib-rating name="rating" ng-model="newReview.starRating" required max="5"></uib-rating>
-	      <label for="content" class="col-xs-2 control-label">Content</label>
-	      <div class="col-xs-10">
-	        <textarea class="form-control" name="content"  ng-model="newReview.content" required ng-minlength="10" ng-maxlength="250"></textarea>
-	      </div>
-	    </div>
-	   	<div ng-messages="reviewForm.content.$error" ng-hide="reviewForm.content.$pristine" role="alert">
-	      <div ng-message="minlength" class="alert alert-warning">Review must be at least 10 characters long</div>
-	      <div ng-message="required" class="alert alert-warning">Review must be at least 10 characters long</div>
-	      <div ng-message="maxlength" class="alert alert-warning">Review must be less than 250 characters long</div>
-	    </div> 
-	    <div class="form-group">
-	      <div class="col-xs-10 col-xs-offset-2">
-	        <button type="submit" class="btn btn-success" ng-disabled="reviewForm.$invalid">Create Review</button>
-	      </div>
-	    </div>
-	  </fieldset>
-	</form>
-
-	<h3 ng-show="areThereProductReviews()">Reviews of {{product.title}}</h3>
-	<div class='col-sm-4' ng-repeat="review in product.reviews">
-		<uib-rating ng-model="review.starRating" data-readonly="true" max="5" aria-labelledby="default-rating"></uib-rating>
-			<!-- TODO Change these icons to boats  -->
-		<h4>{{review.content}}</h4>
-		<a>
-			<!-- 	Should this link to the users info? -->
-			<h5>{{review.user.username}}</h5>
-		</a>
-	</div>
-
-	<br>
-
+    <h2>{{product.title}}</h2>
+    <img width="100%" ng-src="{{product.photoUrl}}">
+    <h4>description: {{product.description}}</h4>
+    <h4>price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
+    <div class='row'>
+        <h4 style='display:inline; float:left;'> Quantity: </h4>
+        <div class='col-sm-7'>
+            <uib-pagination style='display:inline;' direction-links="false" total-items="product.quantity" ng-model="item.quantity" items-per-page="1"></uib-pagination>
+        </div>
+        <button class="btn" style='display:inline; float:right' ng-click="addToCart()">Add To Cart</button>
+    </div>
+    <div class="row">
+    </div>
+    <form class="form-horizontal" novalidate name="reviewForm" ng-submit="createReview()">
+        <fieldset>
+            <legend>New Review</legend>
+            <div class="form-group">
+                <uib-rating name="rating" ng-model="newReview.starRating" required max="5"></uib-rating>
+                <label for="content" class="col-xs-2 control-label">Content</label>
+                <div class="col-xs-10">
+                    <textarea class="form-control" name="content" ng-model="newReview.content" required ng-minlength="10" ng-maxlength="250"></textarea>
+                </div>
+            </div>
+            <div ng-messages="reviewForm.content.$error" ng-hide="reviewForm.content.$pristine" role="alert">
+                <div ng-message="minlength" class="alert alert-warning">Review must be at least 10 characters long</div>
+                <div ng-message="required" class="alert alert-warning">Review must be at least 10 characters long</div>
+                <div ng-message="maxlength" class="alert alert-warning">Review must be less than 250 characters long</div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-10 col-xs-offset-2">
+                    <button type="submit" class="btn btn-success" ng-disabled="reviewForm.$invalid">Create Review</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <h3 ng-show="areThereProductReviews()">Reviews of {{product.title}}</h3>
+    <div class='col-sm-4' ng-repeat="review in product.reviews">
+        <uib-rating ng-model="review.starRating" data-readonly="true" max="5" aria-labelledby="default-rating"></uib-rating>
+        <!-- TODO Change these icons to boats  -->
+        <h4>{{review.content}}</h4>
+        <a>
+            <!-- 	Should this link to the users info? -->
+            <h5>{{review.user.username}}</h5>
+        </a>
+    </div>
+    <br>
 </div>
