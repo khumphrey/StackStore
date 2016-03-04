@@ -1,5 +1,6 @@
 <div id="controlPanel" class='col-sm-3'>
 	<h3>Filter Boats</h3>
+	<!-- could add Typeahead to these filters -->
 	<h5>Title:</h5>
 	<input type="text" class="form-control" placeholder="title" ng-model="titleSearch"> 
 	<h5>Desciption:</h5>
@@ -14,16 +15,22 @@
 	<input type="range" value="1" min="1" max="10" class="form-control" ng-model="quantity.min">
 </div>
 <div class='col-sm-9'>
-	<div class='col-sm-3' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
-	<a ui-sref="product({productId: product._id})">
-		<h2>{{product.title}}</h2>
-		<img width= "100%" height= "50%" class="prodImg" ng-src="{{product.photoUrl}}">
-	</a>	
-	<h4>description: {{product.description}}</h4>
-	<h4>price: {{product.price}}</h4>
-	<h4>quantity: {{product.quantity}}</h4>
-	<h4>categories: <span ng-repeat="category in product.categories">{{category.name}}</span></h4>
-<!-- 	<h4>categories: {{product.categories}}</h4> -->
-	<button class="btn" ng-click="addToCart">Quick Add To Cart</button>
+<!-- can add row to class above and it will handle overflow -->
+	<div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
+		<div class="thumbnail">
+			<a ui-sref="product({productId: product._id})">
+				<h2>{{product.title}}</h2>
+				<img class="prodImg" ng-src="{{product.photoUrl}}">
+			</a>	
+			<div class="caption">
+				<p>Description: {{product.description}}</p>
+				<p>Price: {{product.price}}</p>
+				<p>Quantity: {{product.quantity}}</p>
+			<!-- possibly have Description and Quantity popover with template on Mouseenter -->
+				<p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p>
+
+				<button class="btn" ng-click="addToCart(product._id)" >Quick Add 1 To Cart</button>
+			</div>
+		</div>
 	</div>  
 </div>
