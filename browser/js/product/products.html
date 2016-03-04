@@ -1,3 +1,43 @@
+<form class="form-horizontal" novalidate name="productForm" ng-submit="createProduct()">
+    <fieldset>
+        <legend>New Product (for admins)</legend>
+            <div class="form-group">
+                <label for="title" class="col-xs-2 control-label">Title:</label>
+                <div class="col-xs-6">
+                  <input class="form-control" name="title" type="text" ng-model="newProduct.title" required ng-maxlength="16">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-xs-2 control-label">Description:</label>
+                <div class="col-xs-8">
+                    <textarea class="form-control" name="description" ng-model="newProduct.description" required ng-minlength="10" ng-maxlength="250"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="col-xs-2 control-label">Price:</label>
+                <div class="col-xs-2">
+                    <input type='number' class="form-control" name="price" ng-model="newProduct.price"></input>
+                </div>
+                <label for="quantity" class="col-xs-1 control-label">Quantity:</label>
+                <div class="col-xs-2">
+                    <input type='number' class="form-control" name="quantity" ng-model="newProduct.quantity"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="categories" class="col-xs-2 control-label">Catagories:</label>
+                <div class="btn-group">
+                    <label class="btn btn-primary" ng-repeat="category in newProduct.categoryIds" uib-btn-checkbox>{{category}}</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-10 col-xs-offset-2">
+                    <button type="submit" class="btn btn-success" ng-disabled="reviewForm.$invalid">Create Product</button>
+                </div>
+            </div>
+
+    </fieldset>
+</form>
+
 <div id="controlPanel" class='col-sm-3'>
     <h3>Filter Boats</h3>
     <!-- could add Typeahead to these filters -->

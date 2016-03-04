@@ -1,6 +1,8 @@
 app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory) {
 	$scope.product = product;
 	$scope.item = {quantity:1};
+	$scope.isAdmin = true;
+	// this should equal if the user is actuall an admin
 
 	$scope.addToCart = function (){
 		if ($scope.item.quantity<1) $scope.item.quantity=1;
