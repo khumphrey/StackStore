@@ -7,7 +7,7 @@ app.config(function ($stateProvider) {
 
 app.config(function ($stateProvider) {
     $stateProvider.state('admin.orderManagement', {
-        url: '/admin/order-management',
+        url: '/order-management',
         templateUrl: 'js/admin/order-management.html',
         controller: 'OrderManagementCtrl',
         resolve: {
@@ -20,7 +20,7 @@ app.config(function ($stateProvider) {
 
 app.config(function ($stateProvider) {
     $stateProvider.state('admin.userManagement', {
-        url: '/admin/user-management',
+        url: '/user-management',
         templateUrl: 'js/admin/user-management.html',
         controller: 'UserManagementCtrl',
         resolve: {
