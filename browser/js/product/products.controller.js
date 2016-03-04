@@ -1,4 +1,14 @@
-app.controller('ProductsController', function ($scope, products, ProductsFactory) {
+app.factory('CategoriesFactory', function ($http) {
+	return {
+		fetchAll: function () {
+			return $http.get('/api/categories')
+			.then(categories => categories.data);
+		}
+	};
+});
+
+
+app.controller('ProductsController', function ($scope, products, ProductsFactory, CategoriesFactory) {
 	// Code for the filtering of items:
 	$scope.products = products;
 	$scope.categories = [];
@@ -36,35 +46,50 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 	});
 
 
-	$scope.isAdmin = true;
-	$scope.categoriesIds = ["56d6211a41380ba6524bf3e7", "56d6211a41380ba6524bf3e5"];
-	// this should be an object that maps names to ids and show the admins the names gotten from the server
+		
 	// Code for admin functions:
+	$scope.isAdmin = true;
+	// These are to make the category select checkbox/buttons
+
+	$scope.categoryBools = {};
+	$scope.categoriesToIDs = {};
+	CategoriesFactory.fetchAll()
+	.then(categories => 
+		{
+			// $scope.newProduct.categories = categories;
+			$scope.allCategories = categories;
+			categories.forEach(function (elem){
+				$scope.categoryBools[elem.name]=true;
+				$scope.categoriesToIDs[elem.name]=elem._id;
+			});
+			
+		});
+
+	$scope.$watchCollection('categoryBools', function () {
+		$scope.newProduct.categories = [];
+		angular.forEach($scope.categoryBools, function (value, key) {
+			if (value) {
+				$scope.newProduct.categories.push($scope.categoriesToIDs[key]);
+				// need these to be the Id's not the names..
+			}
+		});
+	});
 
 	$scope.newProduct = {
-			title: "",
-			description: "",
-			price: 1,
-			quantity: 1,
-			categories: $scope.categoriesIds,
+			categories: [],
 			// photoUrl: url??
 			// should we let them upload an image?
 	};
 
-	$scope.removeProduct = function (id) {
-		ProductsFactory.delete(id)
-		.then(function(){
-			for (var i = 0; i < $scope.products.length; i++) {
-				if ($scope.products[i]._id===id) {
-					$scope.products.splice(i,1);
-					break;
-				}
-			}
+	$scope.createProduct = function () {
+		ProductsFactory.addProduct($scope.newProduct)
+		.then(function(newProduct){
+			$scope.products.unshift(newProduct);
 		});
 	};
 
-	$scope.createProduct = function () {
-		ProductsFactory.addProduct()
+	$scope.removeProduct = function (id) {
+		ProductsFactory.delete(id)
 		.then(function(){
 			for (var i = 0; i < $scope.products.length; i++) {
 				if ($scope.products[i]._id===id) {

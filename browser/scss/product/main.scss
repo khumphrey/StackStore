@@ -1,6 +1,23 @@
-/* .prodImg {
- 	max-height: 150px;
- }*/
+.prodImgBox {
+	position: relative;
+	width: 100px;		/* desired width */
+}
+
+.prodImgBox:before{
+	content: "";
+	display: block;
+	padding-top: 100%; 	/* ratio of 1:1*/
+}
+
+.prodImg {
+ 	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+ 	background-size: contain;
+ 	background-repeat: no-repeat;
+ }
 /*
 .thumbnail {
 	height: 525px;
