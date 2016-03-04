@@ -35,7 +35,9 @@ var seedUsers = function () {
         },
         {
             email: 'obama@gmail.com',
-            password: 'potus'
+            fullname: "Barack Hussein Obama II",
+            password: 'potus',
+            admin: true
         }
     ];
 
@@ -78,6 +80,13 @@ function randProduct (catId){
     });
 }
 
+const clearDb = function () {
+    console.log("clearing database");
+  return Promise.map(['User', 'Product', 'Category'], function (modelName) {
+    return mongoose.model(modelName).remove();
+  });
+};
+
 function seedProdCat (numOfProducts){
     var productDocs = [],
         catIDs = [];
@@ -99,12 +108,15 @@ function seedProdCat (numOfProducts){
 }
 
 connectToDb.then(function () {
-    Product.findAsync({})
+    clearDb()
+    .then(function() {
+        return Product.findAsync({});
+    })
     .then(function (product) {
         if (product.length === 0) {
             return Promise.map(seedProdCat(50), function (productDoc) {
                 return productDoc.save();
-            });
+             });
         } else {
             console.log(chalk.magenta('Seems to already be product data, exiting!'));
             process.kill(0);
