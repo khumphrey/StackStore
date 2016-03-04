@@ -1,4 +1,21 @@
 <div>
-	<p>How's it going?</p>
-	{{test}}
+	<p>This is a list of cart items</p>
+	<form>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Item Title</th>
+					<th>Quantity</t>
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+			</thead>
+			<tbody>
+				<cart-item ng-repeat="item in cart" item="item" cart="cart"></cart-item>
+			</tbody>
+		</table>
+<!-- 		<ul>
+			<cart-item ng-repeat="item in cart" item="item" cart="cart"></cart-item>
+		</ul> -->
+	</form>
 </div>
