@@ -12,6 +12,7 @@
 	</div>
 	<div class="row">
 	</div>
+	
 	<form class="form-horizontal" novalidate name="reviewForm" ng-submit="createReview()">
 	  <fieldset>
 	    <legend>New Review</legend>
@@ -34,7 +35,6 @@
 	    </div>
 	  </fieldset>
 	</form>
-
 
 	<h3 ng-show="areThereProductReviews()">Reviews of {{product.title}}</h3>
 	<div class='col-sm-4' ng-repeat="review in product.reviews">
