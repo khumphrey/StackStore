@@ -18,7 +18,7 @@
     <!-- can add row to class above and it will handle overflow -->
     <div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
         <div class="thumbnail">
-        	<span class="glyphicon glyphicon-remove" ng-click="removeProduct(product._id)"></span>
+        	<span ng-show="isAdmin" class="glyphicon glyphicon-remove" ng-click="removeProduct(product._id)"></span>
             <a ui-sref="product({productId: product._id})">
                 <h3>{{product.title}} </h3>
                 <img class="prodImg" ng-src="{{product.photoUrl}}">

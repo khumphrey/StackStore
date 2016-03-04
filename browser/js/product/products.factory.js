@@ -15,7 +15,7 @@ app.factory('ProductsFactory', function ($http) {
 			.then(product => product.data);
 		},
 
-		create: function (data) {
+		addProduct: function (data) {
 			return $http.post('/api/products')
 			.then(product => product.data);
 		},
