@@ -40,6 +40,15 @@ var seedUsers = function() {
         admin: true
     }];
 
+    _.times(30, function() {
+        users.push({
+           email: chance.email(),
+           password: chance.string({length: 10}),
+           fullname: chance.name(),
+           admin: chance.bool({likelihood: 5}) 
+        });
+    })
+
     return User.createAsync(users);
 
 };
