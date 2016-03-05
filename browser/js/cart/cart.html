@@ -4,23 +4,45 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
- 					<th>Item Title</th>
-					<th>Quantity</t>
-					<th>Update</th>
-					<th>Remove</th>
+ 					<th>
+ 						Item Title
+ 					</th>
+ 					<th>
+ 						<button class="btn" ng-click='updateCart()'>Remove Selected</button>
+ 					</th>
+ 					<th>
+ 						<button class="btn" ng-click='updateCart()'>Update Cart</button>
+ 					<th>
+
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="item in cart" item="item" cart="cart">
-					<td>{{ item.product.title }}</td>
-					<td>{{ item.quantity }}</td>
 					<td>
-						<input ng-model="item.newQuantity"></input>
-						<button ng-click='update(item)'>Update Item</button>
+						<div>
+							<input type="checkbox"></input>
+							<div style="background-image:url('{{item.product.photoUrl}}'); height:150px; width:150px">
+							</div>
+							<a ui-sref="product({productId: item.product._id})">{{ item.product.title }}<a>
+						</div>
 					</td>
-					<td><button ng-click="remove(item, $index)">Remove Item</button>
+					<td>
+						<div>
+							qty<input class="form-control" ng-model="item.newQuantity" style="width:50px"></input><p>{{ item.quantity }}</p>
+							<br>
+							<p>LIMIT {{ item.product.quantity }}</p>
+						<div>
+					</td>
+					<td>
+						<p>Price: ${{ item.product.price }}</p>
+						<button class="btn" ng-click='update(item)'>Update Item</button>
+					</td>
+<!-- 					<td>
+						<button ng-click="remove(item, $index)">Remove Item</button>
+					</td> -->
 				</tr>
 			</tbody>
 		</table>
 	</form>
+	<button class="btn" ui-sref="products">Continue Shopping</button>
 </div>

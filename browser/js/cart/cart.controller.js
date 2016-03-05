@@ -3,6 +3,8 @@
 app.controller('CartController', function ($scope, cart, CartFactory) {
 	$scope.cart = cart;
 
+	
+
 	$scope.update = function (item) {
 		CartFactory.updateItem(item.product._id, item.newQuantity)
 		.then(function () {
