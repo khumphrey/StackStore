@@ -14,7 +14,7 @@ var clearDB = require('mocha-mongoose')(dbURI);
 var supertest = require('supertest');
 var app = require('../../../server/app');
 
-describe('Recommendation Engine', function() {
+describe('Recommendation Engine:', function() {
 
 	beforeEach('Establish DB connection', function(done) {
 		if (mongoose.connection.db) return done();
@@ -118,6 +118,30 @@ describe('Recommendation Engine', function() {
 					}],
 					shippingAddress: "456 DEF",
 					shippingEmail: "you@aol.com"
+				},
+				{
+					purchasedItems: [{
+						product: createdProducts[0],
+						quantity: 1
+					},
+					{
+						product: createdProducts[2],
+						quantity: 1
+					}],
+					shippingAddress: "456 DEF",
+					shippingEmail: "you@aol.com"
+				},
+				{
+					purchasedItems: [{
+						product: createdProducts[0],
+						quantity: 1
+					},
+					{
+						product: createdProducts[2],
+						quantity: 1
+					}],
+					shippingAddress: "456 DEF",
+					shippingEmail: "you@aol.com"
 				}
 				]);
 		})
@@ -132,15 +156,15 @@ describe('Recommendation Engine', function() {
 		clearDB(done);
 	});
 
-	it('basic test', function (done) {
+	it('returns most commenly ordered products together with queried product', function (done) {
 		let guestAgent = supertest(app);
 
 		guestAgent.get('/api/recommendations/?productId=' + createdProducts[0]._id)
 			.end(function(err, response) {
 				if (err) done(err);
-				console.log("recommended items: ", response.body[0].purchasedItems, 
-					response.body[1].purchasedItems,
-					response.body[2].purchasedItems);
+				// top recommendation for product 0 should be product 2
+				console.log(response.body[0], createdProducts[2]._id)
+				expect(response.body[0]).to.equal(createdProducts[2]._id.toString());
 				done();
 			})
 	});

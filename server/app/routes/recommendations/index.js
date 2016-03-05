@@ -7,50 +7,40 @@ module.exports = router;
 // req.query has a product id on it
 // req.query.product 
 router.get('/', function(req, res, next) {
-	// look through all orders
-	let productId = req.query.productId;
+	// productId has to be a object id for the query to work
+	let productId = new mongoose.Types.ObjectId(req.query.productId);
 
-	// the hash with other products also ordered
+	// the hash with other products also ordered together with the queried product
+	// connectedProducts: {
+	// 	product1: {3}, how often product1 has been in the same order as the queried product
+	// 	product3: {7},
+	// 	...
+	// }
 	let connectedProducts = {};
 
-	console.log("i am in the recommendation route", req.query.productId);
-
-	// purchasedItems: {
-	// 	[ {
-	// 		product: id,
-	// 		quantity: num
-	// 	},
-	// 	{
-
-	// 	}
-	// 	]
-	// }
-	let id = new mongoose.Types.ObjectId(productId);
-	console.log(id)
-	// Go through all the orders that contain productId
+	// Get all the orders that contain productId
 	// correct mongo db query:
 	// db.orders.find({ purchasedItems: { $elemMatch: { "product._id":ObjectId("56d9c562bbc8920425ea0d47")}}})
-	Order.find({ purchasedItems: { $elemMatch: { "product._id": id}}})
+	Order.find({ purchasedItems: { $elemMatch: { "product._id": productId}}})
 		.then(function(orders) {
-			console.log("i am in the orders promise");
-			console.log("purchased items", orders[0].purchasedItems, orders[1].purchasedItems)
-			res.json(orders);
+			orders.forEach(function(order) {
+				order.purchasedItems.forEach(function(item) {
+					//item is an object with product&quantity
+					if (!item.product._id.equals(productId)) {
+						if(!connectedProducts[item.product._id]) connectedProducts[item.product._id] = 1;
+						else {
+							connectedProducts[item.product._id] += 1;
+						}
+					}
+				})
+			})
+			// console.log(connectedProducts);
 
-			// orders.forEach(function(order) {
-			// 	order.purchsedItems.forEach(function(item) {
-			// 		//item is an object with product&quantity
-
-			// 	})
-			// })
-			// find most common other products
-			// let recommendedProducts = max(connectedProducts)
-
-			// response has 3 (populated) products
-			// [product1, product2, product3]
-			// res.json(recommendedProducts)
+			// find the 3 products that have been order most often together with the queried product
+			let recommendedProducts = Object.keys(connectedProducts).sort(function(a, b) {
+			    return connectedProducts[b] - connectedProducts[a];
+			}).slice(0, 3);
+			res.json(recommendedProducts);
 		})
 		.then(null, next);
-
-
-
 });
