@@ -126,7 +126,7 @@ describe('Recommendation Engine:', function() {
 					},
 					{
 						product: createdProducts[2],
-						quantity: 1
+						quantity: 2
 					}],
 					shippingAddress: "456 DEF",
 					shippingEmail: "you@aol.com"
@@ -138,7 +138,7 @@ describe('Recommendation Engine:', function() {
 					},
 					{
 						product: createdProducts[2],
-						quantity: 1
+						quantity: 2
 					}],
 					shippingAddress: "456 DEF",
 					shippingEmail: "you@aol.com"
@@ -163,8 +163,21 @@ describe('Recommendation Engine:', function() {
 			.end(function(err, response) {
 				if (err) done(err);
 				// top recommendation for product 0 should be product 2
-				console.log(response.body[0], createdProducts[2]._id)
-				expect(response.body[0]).to.equal(createdProducts[2]._id.toString());
+				// console.log(response.body[0], createdProducts[2]._id)
+				expect(response.body[0]._id).to.equal(createdProducts[2]._id.toString());
+				done();
+			})
+	});
+
+	it('returns top 3 products', function (done) {
+		let guestAgent = supertest(app);
+
+		guestAgent.get('/api/recommendations/top')
+			.end(function(err, response) {
+				if (err) done(err);
+				// top product should be product 2
+				// console.log(response.body);
+				expect(response.body[0]._id).to.equal(createdProducts[2]._id.toString());
 				done();
 			})
 	});
