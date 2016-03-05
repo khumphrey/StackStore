@@ -1,4 +1,4 @@
-app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll) {
 	$scope.product = product;
 	$scope.item = {quantity:1};
 	$scope.isAdmin = true;
@@ -39,6 +39,8 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 			};
 			$scope.product.reviews.push(newReview);
 
+    		$location.hash('bottomReview');
+    		$anchorScroll();
 
 		// scroll to bottom of page and clear form
 			$scope.newReview = {};
