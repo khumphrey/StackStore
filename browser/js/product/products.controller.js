@@ -1,4 +1,4 @@
-app.controller('ProductsController', function ($scope, products) {
+app.controller('ProductsController', function ($scope, products, CartFactory) {
 	$scope.products = products;
 	$scope.categories = [];
 	$scope.price = {
@@ -38,7 +38,7 @@ app.controller('ProductsController', function ($scope, products) {
 
 	$scope.addToCart = function (productId){
 		// add 1 of item to cart.
-		// CartFactory.addToCart(productId, 1);	
+		CartFactory.addToCart(productId, 1);	
 	};
 });
 
