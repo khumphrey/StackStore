@@ -2,13 +2,25 @@
     <h2 class="text-center">Reviews by {{ user.fullname || user.username || user.email}}</h2>
     <div class="panel panel-info">
         <div class="panel-body">
-            <ul ng-show="areThereUserReviews()">
-                <li ng-repeat="reviews in userReviews">
-                    <uib-rating ng-model="review.starRating" data-readonly="true" max="5" aria-labelledby="default-rating"></uib-rating>
-                    <h3>{{ review.product }}</h3>
-                    <h4>{{ review.content }}</h4>
-                </li>
-            </ul>
+            <div class="list-group" ng-show="areThereUserReviews()">
+                <!-- want to add functionality so that you will be asked if you try to leave the page without saving changes -->
+                <span class="list-group-item" ng-repeat="review in reviews">
+                    <a ui-sref="product({productId: review.product._id})">
+                    	<h4 class="list-group-item-heading">{{ review.product.title }}</h4> 
+                    </a>
+ 					<form ng-submit="updateReview(review)">
+						<uib-rating ng-model="review.starRating" name="starRating" data-readonly="false" max="5"></uib-rating>
+	                    <div>
+		                    <input class="list-group-item-text" style="width: 90%" required ng-model="review.content" name="content"></input>
+	                    </div>
+	                    <br>
+	                    <button type="submit" class="btn btn-submit">Save Changes</button>
+ 					</form>
+                </span>
+            </div>
+            <uib-alert ng-show="reviewSuccess" class="alert" type="success" role="alert">Your changes were saved successfully!</uib-alert>
+            <!-- still need to add functionality to say which thing exactly went wrong -->
+            <uib-alert ng-show="reviewFailure" class="alert" type="danger" role="alert">Your changes were NOT saved</uib-alert>
         </div>
     </div>
 </div>

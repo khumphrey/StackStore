@@ -19,7 +19,7 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
                 { label: 'About', state: 'about' },
                 { label: 'Documentation', state: 'docs' },
                 { label: 'Catalogue', state: 'products' },
-                { label: 'Admin', state: 'userManagement', auth: true }
+                { label: 'User Management', state: 'user.account' }
             ];
 
             scope.user = null;
