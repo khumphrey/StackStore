@@ -2,7 +2,7 @@
 	<p>This is a list of cart items</p>
 	<form name="ourCart">
 		<table class="table table-striped">
-			<thead>
+<!-- 			<thead>
 				<tr>
  					<th>
  						Item Title
@@ -15,9 +15,9 @@
  					<th>
 
 				</tr>
-			</thead>
+			</thead> -->
 			<tbody>
-				<tr ng-repeat="item in cart" item="item" cart="cart">
+				<tr ng-repeat="item in cart">
 					<td>
 						<div>
 							<input type="checkbox"></input>
@@ -28,21 +28,23 @@
 					</td>
 					<td>
 						<div>
-							qty<input class="form-control" ng-model="item.newQuantity" style="width:50px"></input><p>{{ item.quantity }}</p>
+							qty<br>
+							<button class="btn" ng-click='change(item, -1)'>-</button>
+							<input class="form-control" ng-model="item.quantity" style="width:50px" ng-change="update(item)"></input>
+							<button class="btn" ng-click='change(item, 1)'>+</button>
 							<br>
-							<p>LIMIT {{ item.product.quantity }}</p>
+							<p>LIMIT IN STOCK {{ item.product.quantity }}</p>
 						<div>
 					</td>
 					<td>
-						<p>Price: ${{ item.product.price }}</p>
-						<button class="btn" ng-click='update(item)'>Update Item</button>
+						Price: ${{ item.product.price }}
+						<br>
+						<button class="btn" ng-click='remove(item, $index)'>Remove Item</button>
 					</td>
-<!-- 					<td>
-						<button ng-click="remove(item, $index)">Remove Item</button>
-					</td> -->
 				</tr>
 			</tbody>
 		</table>
 	</form>
 	<button class="btn" ui-sref="products">Continue Shopping</button>
+	Total: ${{ total }}
 </div>
