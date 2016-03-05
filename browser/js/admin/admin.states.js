@@ -30,3 +30,16 @@ app.config(function ($stateProvider) {
         }
     });
 });
+
+app.config(function ($stateProvider) {
+    $stateProvider.state('admin.productManagement', {
+        url: '/product-management',
+        templateUrl: 'js/admin/product-management.html',
+        controller: 'ProductManagementCtrl',
+        resolve: {
+            products: function(ProductsFactory) {
+                return ProductsFactory.fetchAll();
+            }
+        }
+    });
+});
