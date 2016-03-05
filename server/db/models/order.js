@@ -7,6 +7,9 @@ var orderSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
+	totalPrice: {
+		type: Number
+	},
 	orderStatus: {
 		type: String,
 		enum: ['Created', 'Processing', 'Completed', 'Cancelled'],
@@ -58,7 +61,15 @@ orderSchema.pre('save', function(next) {
 			product.quantity -= item.quantity;
 			productPromises.push(product.save());
 		});
-    }
+
+		// Calculate the total price
+		this.totalPrice = this.purchasedItems.reduce(function(sum, item) {
+		    return item.product.price * item.quantity + sum;
+		}, 0)
+	}
+
+
+
 
 	// continue after resolving the save operations on all the products
 	Promise.all(productPromises)

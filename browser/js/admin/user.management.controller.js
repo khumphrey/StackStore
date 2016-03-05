@@ -1,16 +1,3 @@
-app.config(function ($stateProvider) {
-    $stateProvider.state('userManagement', {
-        url: '/user-management',
-        templateUrl: 'js/admin/user-management.html',
-        controller: 'UserManagementCtrl',
-        resolve: {
-        	users: function(UserFactory) {
-        		return UserFactory.fetchAll();
-        	}
-        }
-    });
-});
-
 app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, users) {
 
 	$scope.users = users;
@@ -32,7 +19,7 @@ app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, 
 	$scope.demoteAdminToUser = function(user) {
 		UserFactory.demoteToUser(user)
 			.then(function(updatedUser) {
-				console.log("Updated user: ", user);
+				// console.log("Updated user: ", user);
 			})
 			.then(null, function(err) {
 				console.log(err);

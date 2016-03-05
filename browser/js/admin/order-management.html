@@ -1,0 +1,32 @@
+<table class="table table-striped table-hover">
+    <tr>
+        <th>Nr</th>
+        <th>User Name</th>
+        <th>Full Name</th>
+        <th>Shipping Address</th>
+        <th>Shipping Email</th>
+        <th>
+            <div class="dropdown">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><strong>Order Status:</strong> {{currentFilter}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="filter in availableFilters"><a ng-click="setCurrentFilter(filter)">{{filter}}</a></li>
+                </ul>
+            </div>
+        </th>
+        <th></th>
+    </tr>
+    <div>
+        <tr ng-repeat="order in orders | filter : ordersFilter">
+            <td ng-click="openOrderDetail(order)">{{$index}}</td>
+            <td ng-click="openOrderDetail(order)">{{order.user.username}}</td>
+            <td ng-click="openOrderDetail(order)">{{order.user.fullname}}</td>
+            <td ng-click="openOrderDetail(order)">{{order.shippingAddress}}</td>
+            <td ng-click="openOrderDetail(order)">{{order.shippingEmail}}</td>
+            <td ng-click="openOrderDetail(order)">{{order.orderStatus}}</td>
+            <td>
+                <order-action order="order"></order-action>
+            </td>
+        </tr>
+    </div>
+</table>
