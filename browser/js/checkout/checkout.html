@@ -7,7 +7,7 @@
             <th>Quantity</th>
             <th>Total</th>
         </tr>
-        <tr ng-repeat="item in cart">
+        <tr ng-repeat="item in newOrder.purchasedItems">
             <td>
                 <h3>{{item.product.title}}</h3><img ng-src="{{item.product.photoUrl}}" style="width:100%"></td>
             <td>{{item.product.description}}</td>
@@ -24,5 +24,7 @@
         </tr>
     </table>
 
-<button type="button" class="btn btn-primary" style="float:right">Buy</button>
+    <form></form>
+
+<button type="button" ng-click="checkout()" class="btn btn-primary" style="float:right">Buy</button>
 </div>

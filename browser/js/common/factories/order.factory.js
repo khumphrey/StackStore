@@ -11,8 +11,14 @@ app.factory('OrderFactory', function($http) {
 			.then(res => res.data);
 	}
 
+	var createOrder = function(order) {
+		return $http.post('/api/orders', order)
+			.then(res => res.data);
+	}
+
 	return {
 		fetchAll: fetchAll,
-		changeOrderStatus: changeOrderStatus
+		changeOrderStatus: changeOrderStatus,
+		createOrder: createOrder
 	};
 });
