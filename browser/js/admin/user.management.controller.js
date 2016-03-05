@@ -19,7 +19,7 @@ app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, 
 	$scope.demoteAdminToUser = function(user) {
 		UserFactory.demoteToUser(user)
 			.then(function(updatedUser) {
-				console.log("Updated user: ", user);
+				// console.log("Updated user: ", user);
 			})
 			.then(null, function(err) {
 				console.log(err);

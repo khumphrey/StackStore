@@ -1,0 +1,31 @@
+<table class="table table-striped">
+    <tr>
+        <th>Nr</th>
+        <th>Name</th>
+        <th>
+            <div class="dropdown">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><strong>Category:</strong> {{currentFilter}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="filter in availableFilters"><a ng-click="setCurrentFilter(filter)">{{filter}}</a></li>
+                </ul>
+            </div>
+        </th>
+        <th>Price</th>
+        <th>Inventory</th>
+        <th></th>
+    </tr>
+    <div>
+        <tr ng-repeat="product in products | filter : productsFilter">
+            <td>{{$index}}</td>
+            <td>{{product.title}}</td>
+            <td> <span ng-repeat="category in product.categories">{{category.name}} </span>
+            </td>
+            <td>${{product.price}}</td>
+            <td>{{product.quantity}}</td>
+            <td>
+                <a ui-sref="product({productId: product._id})">Edit Details</a>
+            </td>
+        </tr>
+    </div>
+</table>
