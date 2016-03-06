@@ -19,10 +19,13 @@ router.get('/', function (req, res, next) {
 	else {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
 		Promise.map(req.session.cart, function (item) {
-			return Product.findById(item.product)
+			return Product.findById(item.product);
+
 		})
 		.then(function (productArray) {
-			res.json(productArray);
+			res.json(productArray.map(function (product, index) {
+				return {product: product, quantity: req.session.cart[index].quantity}
+			}))
 		});
 	};
 });
@@ -76,8 +79,9 @@ router.post('/:productId', function (req, res, next) {
 router.put('/:productId', function (req, res, next) {
 	if (req.user) {
 		for (var i=0; i<req.user.cart.length; i++) {
-			if (req.user.cart[i].product.equal(req.params.productId)) {
+			if (req.user.cart[i].product.equals(req.params.productId)) {
 				req.user.cart[i].quantity = req.body.quantity;
+				req.user.save()
 				break;
 			};
 		};
@@ -125,8 +129,9 @@ router.delete('/', function (req, res, next) {
 router.delete('/:productId', function (req, res, next) {
 	if (req.user) {
 		for (var i=0; i<req.user.cart.length; i++) {
-			if (req.user.cart[i].product === req.params.productId) {
+			if (req.user.cart[i].product.equals(req.params.productId)) {
 				req.user.cart.splice(i,1);
+				req.user.save()
 				break;
 			};
 		};
