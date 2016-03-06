@@ -8,6 +8,8 @@ router.use('/reviews', require('./reviews'));
 router.use('/products', require('./products'));
 router.use('/orders', require('./orders'));
 router.use('/categories', require('./categories'));
+router.use('/recommendations', require('./recommendations'));
+
 
 
 // Make sure this is after all of
