@@ -1,4 +1,4 @@
-app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory) {
 	$scope.product = product;
 	$scope.item = {quantity:1};
 		$scope.isAdmin = function() {
@@ -54,4 +54,48 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 		});
 
 	};
+
+
+	//Edit product panel
+	$scope.categoryBools = {};
+	$scope.categoriesToIDs = {};
+	CategoryFactory.fetchAll()
+	.then(categories => 
+		{
+			$scope.allCategories = categories;
+			categories.forEach(function (elem){
+				$scope.categoryBools[elem.name]=true;
+				$scope.categoriesToIDs[elem.name]=elem._id;
+			});
+			
+		});
+
+	$scope.$watchCollection('categoryBools', function () {
+		$scope.newProduct.categories = [];
+		angular.forEach($scope.categoryBools, function (value, key) {
+			if (value) {
+				$scope.newProduct.categories.push($scope.categoriesToIDs[key]);
+				// need these to be the Id's not the names..
+			}
+		});
+	});
+
+	$scope.newProduct = $scope.product;
+	// should be able to pass this in to the directive
+
+	$scope.submitProductForm = function () {
+		ProductsFactory.editById($scope.product._id, $scope.product)
+		.then(function(updatedProduct){
+			console.log("Boat has been edited in db", updatedProduct);
+		});
+	};
+
+	$scope.openPanel = {
+    	templateUrl: '/js/product/product-form.html',
+    	title: 'Edit This Boat'
+    };
+
+
+
+
 });

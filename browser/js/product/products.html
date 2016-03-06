@@ -1,45 +1,6 @@
-<!-- <form ng-show="isAdmin()" class="form-horizontal col-sm-8" novalidate name="productForm" ng-submit="createProduct()">
-    <fieldset>
-        <legend>New Product (for admins)</legend>
-            <div class="form-group">
-                <label for="title" class="col-xs-2 control-label">Title:</label>
-                <div class="col-xs-8">
-                  <input class="form-control" name="title" type="text" ng-model="newProduct.title" required ng-maxlength="16">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="description" class="col-xs-2 control-label">Description:</label>
-                <div class="col-xs-8">
-                    <textarea class="form-control" name="description" ng-model="newProduct.description" required ng-minlength="10" ng-maxlength="250"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="price" class="col-xs-2 control-label">Price:</label>
-                <div class="col-xs-2">
-                    <input type='number' min='1' class="form-control" name="price" ng-model="newProduct.price"></input>
-                </div>
-                <label for="quantity" class="col-xs-1 control-label">Quantity:</label>
-                <div class="col-xs-2">
-                    <input type='number' min='1' class="form-control" name="quantity" ng-model="newProduct.quantity"></input>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="categories" class="col-xs-2 control-label">Catagories:</label>
-                <div class="btn-group">
-                    <label class="btn btn-primary" ng-repeat="category in allCategories" ng-model="categoryBools[category.name]" uib-btn-checkbox>{{category.name}}</label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-10 col-xs-offset-2">
-                    <button type="submit" class="btn btn-success" ng-disabled="reviewForm.$invalid">Create Product</button>
-                </div>
-            </div>
-
-    </fieldset>
-</form> -->
 <div id="controlPanel" class='col-sm-3'>
     <br>
-    <button ng-show="isAdmin()" uib-popover-template="openAddProducts.templateUrl" popover-title="{{openAddProducts.title}}:" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openAddProducts.title}}</button>
+    <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openPanel.title}}</button>
     <br>
     <h3>Filter Boats</h3>
     <!-- could add Typeahead to these filters -->

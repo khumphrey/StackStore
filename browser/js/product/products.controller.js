@@ -48,7 +48,6 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 	CategoryFactory.fetchAll()
 	.then(categories => 
 		{
-			// $scope.newProduct.categories = categories;
 			$scope.allCategories = categories;
 			categories.forEach(function (elem){
 				$scope.categoryBools[elem.name]=true;
@@ -62,7 +61,6 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 		angular.forEach($scope.categoryBools, function (value, key) {
 			if (value) {
 				$scope.newProduct.categories.push($scope.categoriesToIDs[key]);
-				// need these to be the Id's not the names..
 			}
 		});
 	});
@@ -74,7 +72,7 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 	};
 
 	// I would make this panel a seperate directive if I could have it update the products in this view and while adding. How is that usually done? event emitter? or storing the products on a the factory and then syncing with that?
-	$scope.createProduct = function () {
+	$scope.submitProductForm = function () {
 		ProductsFactory.addProduct($scope.newProduct)
 		.then(function(newProduct){
 			console.log("Boat has been created in db", newProduct);
@@ -83,7 +81,7 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 		});
 	};
 
-	$scope.openAddProducts = {
+	$scope.openPanel = {
     	templateUrl: '/js/product/product-form.html',
     	title: 'Add A New Boat'
     };
