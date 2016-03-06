@@ -34,7 +34,7 @@ app.config(function($stateProvider) {
         .state('user.reviews', {
             url: '/reviews',
             templateUrl: 'js/user/templates/user.reviews.html',
-            controller: 'UserCtrl',
+            controller: 'UserReviewCtrl',
             data: {
                 authenticate: true
             }
@@ -42,7 +42,7 @@ app.config(function($stateProvider) {
         .state('user.orders', {
             url: '/orders',
             templateUrl: 'js/user/templates/user.orders.html',
-            controller: 'UserCtrl',
+            controller: 'UserOrderCtrl',
             data: {
                 authenticate: true
             }

@@ -1,24 +1,37 @@
 <div class="container">
     <h2 class="text-center">Order History for {{ user.fullname || user.username || user.email}}</h2>
-    <div class="panel panel-info">
-        <uib-alert ng-show="!areThereUserOrders()" class="alert " type="info" role="alert">You do not have any orders</uib-alert>
-        <!-- ng-show="areThereUserOrders()" -->
-        <div class="panel-body list-group" >
-            <!-- want to add functionality so that you will be asked if you try to leave the page without saving changes -->
-            <uib-alert ng-show="success" class="alert" type="success" role="alert">Your changes were saved successfully!</uib-alert>
-            <br>
-            <span class="list-group-item" ng-repeat="order in orders">
-            	<span ng-repeat="product in orders.purchasedItems">
-                <a ui-sref="product({productId: product._id})">
-                	<h4>{{ product.title }}</h4>
-                	<h6>{{ product.price }}</h6> 
-                </a>
-                <div>
-                    <h5>{{ order.totalPrice }}</h5>
-                    <button>{{ order.orderStatus }}</button>
-                </div>
-            </span>
-			<uib-alert ng-show="failure" class="alert" type="danger" role="alert">Your changes were NOT saved</uib-alert>
-        </div>
+    <uib-alert ng-show="!areThereUserOrders()" class="alert" type="info" role="alert">You do not have any orders</uib-alert>
+    <div class="panel panel-primary" ng-show="areThereUserOrders()">
+        <table class="panel-body table table-striped">
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Shipping Address</th>
+                <th>Shipping Email</th>
+                <th>
+                    <div class="dropdown">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><strong>Order Status:</strong> {{currentFilter}}
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="filter in availableFilters"><a ng-click="setCurrentFilter(filter)">{{filter}}</a></li>
+                        </ul>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+            <div>
+                <tr ng-repeat="order in orders | filter : ordersFilter">
+                    <td ng-click="openOrderDetail(order)">{{$index}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.user.fullname}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.shippingAddress}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.shippingEmail}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.orderStatus}}</td>
+                    <td>
+                        <button class="btn btn-info" ng-click="cancelOrder(order)" ng-show="order.orderStatus !== 'Cancelled'">Cancel Order
+                        </button>
+                    </td>
+                </tr>
+            </div>
+        </table>
     </div>
 </div>

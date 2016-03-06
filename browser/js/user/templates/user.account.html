@@ -1,6 +1,6 @@
 <div class="container">
     <h2 class="text-center">Welcome, {{ user.fullname || user.username || user.email}}</h2>
-    <div class="panel panel-info">
+    <div class="panel panel-primary">
         <div class="panel-heading">Account Information</div>
         <div class="panel-body">
             <form name="updateUserForm" ng-submit="updateAccountInfo(user)">
@@ -13,7 +13,7 @@
                     <label>Username</label>
                     <!-- do these need to be unique? -->
                     <input class="form-control" ng-model="user.username" required name="username" value="{{ user.username }}">
-                    <div ng-messages="updateUserForm.username.$error" role="alert">
+                    <div ng-messages="updateUserForm.username.$error" role="alert" class="text-danger">
                         <div ng-message="required">Please enter a username before saving</div>
                     </div>
                 </div>
