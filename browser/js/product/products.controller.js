@@ -1,4 +1,4 @@
-app.controller('ProductsController', function ($scope, products, ProductsFactory, CategoryFactory) {
+app.controller('ProductsController', function ($scope, products, ProductsFactory, CategoryFactory, AuthService, CartFactory) {
 	// Code for the filtering of items:
 	$scope.products = products;
 	$scope.categories = [];
@@ -38,7 +38,9 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 		
 	// Code for admin functions:
-	$scope.isAdmin = true;
+	$scope.isAdmin = function() {
+		return AuthService.isAdmin();
+	};
 	// These are to make the category select checkbox/buttons
 
 	$scope.categoryBools = {};
@@ -71,6 +73,7 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 			// Still working on uploading images
 	};
 
+	// I would make this panel a seperate directive if I could have it update the products in this view and while adding. How is that usually done? event emitter? or storing the products on a the factory and then syncing with that?
 	$scope.createProduct = function () {
 		ProductsFactory.addProduct($scope.newProduct)
 		.then(function(newProduct){
@@ -79,6 +82,11 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 			// for some reason this wont update the view...
 		});
 	};
+
+	$scope.openAddProducts = {
+    	templateUrl: '/js/product/product-form.html',
+    	title: 'Add A New Boat'
+    };
 
 	$scope.removeProduct = function (id) {
 		ProductsFactory.delete(id)
@@ -95,6 +103,6 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 	// Quick add 1 to cart
 	$scope.addToCart = function (productId){
-		// CartFactory.addToCart(productId, 1);	
+		CartFactory.addToCart(productId, 1);	
 	};
 });

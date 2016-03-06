@@ -1,7 +1,9 @@
-app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService) {
 	$scope.product = product;
 	$scope.item = {quantity:1};
-	$scope.isAdmin = true;
+		$scope.isAdmin = function() {
+		return AuthService.isAdmin();
+	};
 	// this should equal if the user is actuall an admin
 
 	$scope.addToCart = function (){

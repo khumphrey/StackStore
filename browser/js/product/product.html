@@ -1,8 +1,10 @@
 <div class='col-sm-8 col-sm-offset-2'>
-    <h2>{{product.title}}</h2> <span ng-show="isAdmin" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
+    <button ng-show="isAdmin()" uib-popover-template="openAddProducts.templateUrl" popover-title="{{openAddProducts.title}}:" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openAddProducts.title}}</button>
+    <h2>{{product.title}}</h2> <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
     <img width="100%" ng-src="{{product.photoUrl}}">
-    <h4>description: {{product.description}}</h4>
+    <h4>description: {{product.description}} <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span></h4>
     <h4>price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
+    <p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p>
     <div class='row'>
         <h4 style='display:inline; float:left;'> Quantity: </h4>
         <div class='col-sm-7'>
@@ -40,7 +42,7 @@
         <!-- TODO Change these icons to boats  -->
         <h4>{{review.content}}</h4>
         <a>
-            <!-- 	Should this link to the users info? -->
+            <!--    Should this link to the users info? -->
             <h5>{{review.user.username}}</h5>
         </a>
     </div>
