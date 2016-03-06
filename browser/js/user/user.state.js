@@ -17,6 +17,9 @@ app.config(function($stateProvider) {
                 },
                 userReviews: function(ReviewFactory, loggedInUser) {
                     return ReviewFactory.fetchUserReviews(loggedInUser._id);
+                },
+                userOrders: function (OrderFactory, loggedInUser) {
+                    return OrderFactory.fetchAll("?user="+loggedInUser._id);
                 }
             }
         })

@@ -1,50 +1,68 @@
-app.controller('UserCtrl', function ($scope, $state, loggedInUser, userReviews, UserFactory, ReviewFactory) {
+app.controller('UserCtrl', function ($scope, $state, loggedInUser, userReviews, UserFactory, ReviewFactory, OrderFactory, userOrders) {
     $scope.user = loggedInUser;
     $scope.reviews = userReviews;
-    $scope.userInfoSuccess = false;
-    $scope.userInfoFailure = false;
-    $scope.reviewSuccess = false;
-    $scope.reviewFailure = false;
+    $scope.orders = userOrders;
+    $scope.success = false;
+    $scope.failure = false;
+    $scope.editing = false;
 
     //display --- 
         //all orders of user, 
         //all reviews by user, 
         //basic user info (have an editable button and all the user to edit)
-    
-    //navbar of orders, reviews and user info -- have user info as default?
-    //cart should be on the regular navbar??
 
-    //use reviews factory to get all reviews for one user
-    
+    $scope.clearAlertMessages = function () {
+        $scope.success = false;
+        $scope.failure = false;
+    };
+
     $scope.updateAccountInfo = function (userInfo) {
-        $scope.userInfoSuccess = false;
-        $scope.userInfoFailure = false;
+        $scope.success = false;
+        $scope.failure = false;
         UserFactory.updateUser(userInfo)
             .then(function (updatedUser) {
                 $scope.user.password = "";
-                $scope.userInfoSuccess = true;
+                $scope.success = true;
             })
             .then(null, function (err) {
-                $scope.userInfoFailure = err;
+                $scope.failure = err;
             });
     };
 
     $scope.areThereUserReviews = function () {
-        // console.log('reviews', $scope.reviews[0])
         return $scope.reviews.length > 0;
     };
 
+    $scope.editReview = function (review) {
+        $scope.clearAlertMessages();
+        $scope.editing = true;
+        $scope.review = review;
+    };
+
+    $scope.isReviewEditable = function () {
+        return $scope.editing;
+    };
+
     $scope.updateReview = function (reviewInfo) {
-        console.log(reviewInfo)
-        $scope.reviewSuccess = false;
-        $scope.reviewFailure = false;
+        $scope.clearAlertMessages();
         ReviewFactory.updateReview(reviewInfo)
             .then(function (updatedReview) {
-                $scope.reviewSuccess = true;
+                $scope.success = true;
+                $scope.editing = false;
             })
             .then(null, function (err) {
-                $scope.reviewFailure = err;
+                $scope.failure = err;
             });
     }; 
+
+    $scope.allReviews = function () {
+        $scope.clearAlertMessages();
+        $scope.editing = false;
+    };
+
+    $scope.areThereUserOrders = function () {
+        console.log($scope.orders);
+        return $scope.orders.length > 0;
+    };
 
 });

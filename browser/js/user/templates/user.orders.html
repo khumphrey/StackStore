@@ -1,4 +1,24 @@
-
-	<div class="container">
-		orders
-	</div>
+<div class="container">
+    <h2 class="text-center">Order History for {{ user.fullname || user.username || user.email}}</h2>
+    <div class="panel panel-info">
+        <uib-alert ng-show="!areThereUserOrders()" class="alert " type="info" role="alert">You do not have any orders</uib-alert>
+        <!-- ng-show="areThereUserOrders()" -->
+        <div class="panel-body list-group" >
+            <!-- want to add functionality so that you will be asked if you try to leave the page without saving changes -->
+            <uib-alert ng-show="success" class="alert" type="success" role="alert">Your changes were saved successfully!</uib-alert>
+            <br>
+            <span class="list-group-item" ng-repeat="order in orders">
+            	<span ng-repeat="product in orders.purchasedItems">
+                <a ui-sref="product({productId: product._id})">
+                	<h4>{{ product.title }}</h4>
+                	<h6>{{ product.price }}</h6> 
+                </a>
+                <div>
+                    <h5>{{ order.totalPrice }}</h5>
+                    <button>{{ order.orderStatus }}</button>
+                </div>
+            </span>
+			<uib-alert ng-show="failure" class="alert" type="danger" role="alert">Your changes were NOT saved</uib-alert>
+        </div>
+    </div>
+</div>
