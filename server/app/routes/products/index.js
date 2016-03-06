@@ -5,9 +5,7 @@ const Auth = require('../../../utils/auth.middleware');
 module.exports = router;
 
 router.param('prodId', function(req, res, next, prodId) {
-	var id = prodId.toString();
-	Product.findById(id)
-	// I would rather avoid doing this search altogether when going to individual product views
+	Product.findById(prodId)
 	.populate('categories')
 	.then(function (product){
 		if(!product) return next({status: 404, message: "Product not found"}); 
@@ -28,6 +26,7 @@ router.get('/', function(req, res, next){
 });
 
 router.get('/:prodId', function(req, res){
+	console.log("Router", req.requestedProduct.categories);
 	res.json(req.requestedProduct);
 });
 

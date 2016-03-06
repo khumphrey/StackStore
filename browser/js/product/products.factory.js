@@ -7,7 +7,10 @@ app.factory('ProductsFactory', function ($http) {
 
 		fetchById: function (id) {
 			return $http.get('/api/products/' + id)
-			.then(product => product.data);
+			.then((product) => {
+				console.log("FACTORY", product.data.categories);
+				return product.data;
+			});
 		},
 
 		editById: function (id, data) {

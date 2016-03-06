@@ -1,15 +1,19 @@
 <div class='col-sm-8 col-sm-offset-2'>
-    {{product}}
     <h2>{{product.title}}</h2> <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
     <img width="100%" ng-src="{{product.photoUrl}}">
     <br>
     <div class=row>
         <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openPanel.title}}</button>
     </div>
-    <h4>description: {{product.description}}</h4>
-    <h4>price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
     <div class="row">
-        <p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p>
+    <h4>Description: {{product.description}}</h4>
+    </div>
+    <div class="row">
+    <h4>Price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
+    </div>
+    <div class="row">
+        <!-- Using populatingCategories should be uneccessary -->
+        <h4>Categories: <span ng-repeat="category in populatingCategories">{{category.name}}   </span></h4>
     </div>
     <div class='row'>
         <h4 style='display:inline; float:left;'> Quantity: </h4>

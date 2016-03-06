@@ -1,5 +1,8 @@
 app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory) {
 	$scope.product = product;
+	// assigning this way does not keep the categories objects?
+	$scope.populatingCategories = product.categories;
+
 	$scope.item = {quantity:1};
 		$scope.isAdmin = function() {
 		return AuthService.isAdmin();
@@ -63,9 +66,14 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 	.then(categories => 
 		{
 			$scope.allCategories = categories;
-			categories.forEach(function (elem){
-				$scope.categoryBools[elem.name]=true;
-				$scope.categoriesToIDs[elem.name]=elem._id;
+			categories.forEach(function (dbCat){
+
+				$scope.categoriesToIDs[dbCat.name]=dbCat._id;
+
+				$scope.categoryBools[dbCat.name] = $scope.populatingCategories.some(function(prodCat){
+					return prodCat.name===dbCat.name;
+				});
+
 			});
 			
 		});
@@ -81,12 +89,13 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 	});
 
 	$scope.newProduct = $scope.product;
-	// should be able to pass this in to the directive
+	// should be able to pass this directly to the panel
 
 	$scope.submitProductForm = function () {
 		ProductsFactory.editById($scope.product._id, $scope.product)
 		.then(function(updatedProduct){
 			console.log("Boat has been edited in db", updatedProduct);
+			$scope.populatingCategories = updatedProduct.categories;
 		});
 	};
 
@@ -94,8 +103,5 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
     	templateUrl: '/js/product/product-form.html',
     	title: 'Edit This Boat'
     };
-
-
-
 
 });

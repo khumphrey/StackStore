@@ -22,8 +22,8 @@ app.config(function ($stateProvider) {
                     .then(function(product){
                         return ReviewFactory.fetchProdReviews($stateParams.productId)
                         .then(function(reviews){
-                            console.log("REVIEWS", reviews);
                             product.reviews = reviews;
+                            console.log("STATE", product.categories);
                             return product;
                         });
                     });
