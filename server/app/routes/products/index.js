@@ -33,6 +33,7 @@ router.get('/:prodId', function(req, res){
 router.use(Auth.ensureAdmin);
 
 router.post('/', function(req, res, next){
+	console.log('post',req.body);
 	Product.create(req.body)
 	.then(product => res.status(201).json(product))
 	.then(null,next);

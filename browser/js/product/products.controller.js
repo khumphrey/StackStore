@@ -67,14 +67,16 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 	$scope.newProduct = {
 			categories: [],
-			// photoUrl: url??
-			// should we let them upload an image?
+			photoUrl: '/imgBoat/boatImg5.jpg'
+			// Still working on uploading images
 	};
 
 	$scope.createProduct = function () {
 		ProductsFactory.addProduct($scope.newProduct)
 		.then(function(newProduct){
+			console.log("Boat has been created in db", newProduct);
 			$scope.products.unshift(newProduct);
+			// for some reason this wont update the view...
 		});
 	};
 
