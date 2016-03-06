@@ -1,14 +1,4 @@
-app.factory('CategoriesFactory', function ($http) {
-	return {
-		fetchAll: function () {
-			return $http.get('/api/categories')
-			.then(categories => categories.data);
-		}
-	};
-});
-
-
-app.controller('ProductsController', function ($scope, products, ProductsFactory, CategoriesFactory) {
+app.controller('ProductsController', function ($scope, products, ProductsFactory, CategoryFactory) {
 	// Code for the filtering of items:
 	$scope.products = products;
 	$scope.categories = [];
@@ -53,7 +43,7 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 	$scope.categoryBools = {};
 	$scope.categoriesToIDs = {};
-	CategoriesFactory.fetchAll()
+	CategoryFactory.fetchAll()
 	.then(categories => 
 		{
 			// $scope.newProduct.categories = categories;
