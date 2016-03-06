@@ -95,7 +95,7 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 		ProductsFactory.editById($scope.product._id, $scope.product)
 		.then(function(updatedProduct){
 			console.log("Boat has been edited in db", updatedProduct);
-			$scope.populatingCategories = updatedProduct.categories;
+			// update the $scope.populatingCategories;
 		});
 	};
 
