@@ -1,4 +1,4 @@
-app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, order) {
+app.controller('OrderDetailCtrl', function($scope, $uibModalInstance, order) {
 
     $scope.order = order;
 

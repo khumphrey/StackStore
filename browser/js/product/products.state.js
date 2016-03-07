@@ -17,13 +17,13 @@ app.config(function ($stateProvider) {
         controller: 'ProductController',
         templateUrl: 'js/product/product.html',
         resolve: {
-            product: function (ProductsFactory, ReviewFactory,$stateParams){
+            product: function (ProductsFactory, ReviewFactory, $stateParams){
                 return ProductsFactory.fetchById($stateParams.productId)
                     .then(function(product){
                         return ReviewFactory.fetchProdReviews($stateParams.productId)
                         .then(function(reviews){
-                            console.log("REVIEWS", reviews);
                             product.reviews = reviews;
+                            console.log("STATE", product.categories);
                             return product;
                         });
                     });
