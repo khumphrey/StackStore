@@ -1,4 +1,4 @@
-<form id="auth-form" name="authForm" ng-submit="authForm.$valid && sendAuth(auth)">
+<form id="auth-form" name="authForm" ng-submit="sendAuth(auth)">
 
     <div class="modal-header">
         <h3 class="modal-title"> Login or Signup </h3>
@@ -6,20 +6,25 @@
     <div class="modal-body">
     <!-- have alert show for empty input as well -->
         
-        <alert type="danger" ng-show="error">
-            {{ error }}
-        </alert>
+        <uib-alert ng-show="error" class="alert" type="danger" role="alert"> {{ error }}</uib-alert>
 
         <div class="form-group">
             <label for="email">Email address</label>
-            <input type="text" type="email" ng-model="auth.email" required class="form-control" id="email" placeholder="Enter email">
+            <input type="email" ng-model="auth.email" required class="form-control" name="email" placeholder="Enter email">
+            <div ng-messages="authForm.email.$error" ng-show="authForm.email.$touched" role="alert" class="text-danger">
+                <div ng-message="required">Please enter an email before saving</div>
+                <div ng-message="email">Please enter a valid email address before saving</div>
+            </div>
         </div>
         <div class="form-group">
             <label for="auth-password">Password</label>
-            <input type="password" ng-model="auth.password" required class="form-control" id="auth-password" placeholder="Password">
+            <input type="password" ng-model="auth.password" required class="form-control" name="password" placeholder="Enter Password">
+            <div ng-messages="authForm.password.$error" ng-show="authForm.password.$touched" role="alert" class="text-danger">
+                <div ng-message="required">Please enter a password before saving</div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default" ng-disabled="authForm.$invalid">Submit</button>
     </div>
 </form>

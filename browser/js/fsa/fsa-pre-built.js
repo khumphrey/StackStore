@@ -54,7 +54,6 @@
             var data = response.data;
             Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-            if (!data.user) data.user = data; //ugly hack for now
             return data.user;
         }
 
@@ -66,7 +65,7 @@
 
         this.isAdmin = function() {
             return this.isAuthenticated() && Session.user.admin;
-        }
+        };
 
         this.getLoggedInUser = function (fromServer) {
             // If an authenticated session exists, we
@@ -94,7 +93,7 @@
             return $http.post('/login', credentials)
                 .then(onSuccessfulLogin)
                 .catch(function () {
-                    return $q.reject({ message: 'Invalid login credentials.' });
+                    return $q.reject({ message: 'Invalid credentials.' });
                 });
         };
 
@@ -102,7 +101,7 @@
             return $http.post('/signup', credentials)
                 .then(onSuccessfulLogin)
                 .catch(function () {
-                    return $q.reject({ message: 'Invalid signup credentials.' });
+                    return $q.reject({ message: 'Invalid credentials.' });
                 });
         };
 
@@ -111,6 +110,13 @@
                 Session.destroy();
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
             });
+        };
+
+        this.persistCart = function () {
+            return $http.post('/api/cart')
+                .catch(function () {
+                    return $q.reject({ message: 'Cart persistence error'});
+                });
         };
 
     });
