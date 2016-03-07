@@ -17,8 +17,6 @@
     <h5>Min Quantity: {{quantity.min}}</h5>
     <input type="range" value="1" min="1" max="10" class="form-control" ng-model="quantity.min">
 </div>
-<!-- {{products}} -->
-<!-- BUG, TODO: For some reason not all of the products are being rendered below -->
 <div class='col-sm-9'>
     <!-- can add row to class above and it will handle overflow -->
     <div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
@@ -40,3 +38,8 @@
         </div>
     </div>
 </div>
+<!-- {{quantity}}
+{{price}}
+{{products}} <br>
+Total Number: {{products.length}}  -->
+<!-- BUG, TODO: For some reason not all of the products are being rendered below -->

@@ -11,12 +11,18 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 		min: 1,
 	};
 	products.forEach(function (elem){
-	elem.categories.forEach(function (categoryObj){
-		if ($scope.categories.indexOf(categoryObj.name)===-1)$scope.categories.push(categoryObj.name);
+		updateFilters (elem);
 	});
-	if (elem.price>$scope.price.max) $scope.price.max = elem.price;
-	if (elem.quantity>$scope.quantity.max) $scope.quantity.max= elem.quantity;
-	});
+
+	function updateFilters (elem) {
+		elem.categories.forEach(function (categoryObj){
+			if ($scope.categories.indexOf(categoryObj.name)===-1)$scope.categories.push(categoryObj.name);
+		});
+		if (elem.price>$scope.price.max) $scope.price.max = elem.price; 
+		else if (elem.price<$scope.price.min) $scope.price.min = elem.price; 
+		if (elem.quantity>$scope.quantity.max) $scope.quantity.max = elem.quantity;
+	}
+
 	
 	$scope.categoryModel = {};
 
@@ -76,8 +82,11 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 		ProductsFactory.addProduct($scope.newProduct)
 		.then(function(newProduct){
 			console.log("Boat has been created in db", newProduct);
-			$scope.products.unshift(newProduct);
+			updateFilters (newProduct);
+
+			$scope.products.push(newProduct);
 			// for some reason this wont update the view...
+			$scope.$apply();
 		});
 	};
 
