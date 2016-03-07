@@ -98,6 +98,7 @@ router.post('/', function (req, res, next) {
 	// we have to populate the cart again
 	// cart is 
 	var productPromises = [];
+	req.body.purchasedItems = req.body.purchasedItems || [];
 	req.body.purchasedItems.forEach(function(item) {
 		productPromises.push(Product.findById(item.product._id));
 	})
@@ -115,9 +116,12 @@ router.post('/', function (req, res, next) {
 				req.user.save();
 			}
 			req.session.cart = [];
-			res.json(createdOrder);
+			res.status(201).json(createdOrder);
 		})
-		.then(null, next);
+		.then(null, function(err) {
+			err.status = 400;
+			next(err);
+		});
 });
 
 module.exports = router;
