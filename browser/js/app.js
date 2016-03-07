@@ -6,6 +6,10 @@ app.config(function ($urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
     // If we go to a URL that ui-router doesn't have registered, go to the "/" url.
     $urlRouterProvider.otherwise('/');
+    //this is needed for oauth; with a SPA we need to reload the page so that it will go to the oauth url
+    $urlRouterProvider.when('/auth/:provider', function () {
+        window.location.reload();
+    });
 });
 
 // This app.run is for controlling access to specific states.

@@ -15,7 +15,7 @@ app.controller('UserCtrl', function ($scope, loggedInUser, UserFactory) {
         $scope.failure = false;
         UserFactory.updateUser(userInfo)
             .then(function () {
-                $scope.user.password = "";
+                delete $scope.user.password;
                 $scope.success = true;
             })
             .then(null, function (err) {
