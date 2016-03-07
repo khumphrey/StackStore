@@ -25,7 +25,12 @@ router.param('orderId', function (req, res, next, orderId) {
     });
 });
 
-router.get('/', Auth.ensureAuthenticated, Auth.ensureAdmin, function (req, res, next) {
+router.get('/', Auth.ensureAuthenticated, function (req, res, next) {
+	//if it is a person trying to get their orders that is okay; otherwise needs to be admin
+	if (req.query.user !== req.user._id.toString()) {
+		if (!Auth.isAdmin (req)) return next({status: 403, message:"not authorized"});
+	}
+
 	Order.find(req.query)
 		.populate('user')
 		.then(function (allOrders) {
