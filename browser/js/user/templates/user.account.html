@@ -29,6 +29,11 @@
                     <label>Password</label>
                     <input type="password" class="form-control" ng-model="user.password" name="password" placeholder="Password">
                 </div>
+
+                <div>
+                    <uib-alert ng-show="user.requiresPasswordReset" class="alert" type="danger" role="alert">You are required to change your password</uib-alert>
+                </div>
+
                 <button type="submit" class="btn btn-submit">Save Changes</button>
             </form>
             <br>

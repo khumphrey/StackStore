@@ -14,10 +14,9 @@ app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInsta
             .then(function () {
                 $uibModalInstance.close();
 
-                //check if user.requiresPasswordReset
-                //go to change password page
-                // if (user.requiresPasswordReset) $state.go('user');
-                $state.go('products');
+                //if password reset is required go to user account page 
+                if (user.requiresPasswordReset) $state.go('user.account');
+                else $state.go('products');
             })
             .then(null, function () {
                 $scope.error = 'Invalid credentials.';
