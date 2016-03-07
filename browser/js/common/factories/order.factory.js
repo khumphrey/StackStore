@@ -1,4 +1,8 @@
-app.factory('OrderFactory', function($http) {
+app.factory('OrderFactory', function($http, $uibModal) {
+
+	var availableFilters = ['Show All', 'Created', 'Processing', 'Completed', 'Cancelled'],
+		currentFilter = availableFilters[0];
+
 	return {
 		fetchAll: function(queryStr) {
 			queryStr = queryStr || "";
@@ -17,33 +21,37 @@ app.factory('OrderFactory', function($http) {
 				.then(res => res.data);
 		},
 
-		availableFilters: ['Show All', 'Created', 'Processing', 'Completed', 'Cancelled'],
+		getAvailableFilters: function () {
+			return availableFilters;
+		},
 
-		
+		getCurrentFilter: function () {
+			return currentFilter;
+		},
 
+	    ordersFilter: function(order) {
+	        if (currentFilter === "Show All") return true;
+	        else return order.orderStatus === currentFilter;
+	    },
+
+	    setCurrentFilter: function (filter) {
+	    	currentFilter = filter;
+	    },
+
+	    openOrderDetail: function(order) {
+	        var modalInstance = $uibModal.open({
+	            templateUrl: '/js/common/controllers/order.detail.html',
+	            controller: 'OrderDetailCtrl',
+	            size: 'lg',
+	            resolve: {
+	                order: function() {
+	                    return order;
+	                }
+	            }
+	        });
+	    }
 		
 	};
 
 });
 
-    // $scope.ordersFilter = function(order) {
-    //     if ($scope.currentFilter === "Show All") return true;
-    //     else return order.orderStatus === $scope.currentFilter;
-    // }
-
-    // $scope.setCurrentFilter = function (filter) {
-    // 	$scope.currentFilter = filter;
-    // }
-
-    // $scope.openOrderDetail = function(order) {
-    //     var modalInstance = $uibModal.open({
-    //         templateUrl: '/js/admin/order-detail.html',
-    //         controller: 'OrderDetailCtrl',
-    //         size: 'lg',
-    //         resolve: {
-    //             order: function() {
-    //                 return order;
-    //             }
-    //         }
-    //     });
-    // }
