@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Product = mongoose.model('Product');
 const Promise = require('bluebird');
-const _ = require('lodash');
 
 
 //Get a user's cart
@@ -15,7 +14,7 @@ router.get('/', function (req, res) {
 		.populate('cart.product')
 		.then(function (user) {
 			res.json(user.cart);
-		})
+		});
 	}
 	else {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
@@ -26,7 +25,7 @@ router.get('/', function (req, res) {
 		.then(function (productArray) {
 			res.json(productArray.map(function (product, index) {
 				return {product: product, quantity: req.session.cart[index].quantity}
-			}))
+			}));
 		});
 	};
 });
@@ -55,7 +54,7 @@ router.post('/:productId', function (req, res, next) {
 		.then(function() {
 			res.status(201).json(req.user.cart);			
 		})
-		.then(null, next)
+		.then(null, next);
 	}
 	else {
 		//can be optimized later
