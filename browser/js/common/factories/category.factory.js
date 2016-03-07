@@ -8,9 +8,12 @@ app.factory('CategoryFactory', function($http) {
 			return $http.post('/api/categories', data)
 			.then(res => res.data);
 		},
+<<<<<<< HEAD
 		deleteCategory: function(category) {
 			return $http.delete('/api/categories/' + category._id)
 				.then(res => res.data);
 		}
+=======
+>>>>>>> master
 	};
 });

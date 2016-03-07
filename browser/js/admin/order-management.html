@@ -5,13 +5,14 @@
         <th>Full Name</th>
         <th>Shipping Address</th>
         <th>Shipping Email</th>
-        <th>Order Status
-            <select ng-model="filteredStatus">
-                <option value="All" ng-selected="true">Show All</option>
-                <option value="Processing">Processing</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-            </select>
+        <th>
+            <div class="dropdown">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><strong>Order Status:</strong> {{currentFilter}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="filter in availableFilters"><a ng-click="setCurrentFilter(filter)">{{filter}}</a></li>
+                </ul>
+            </div>
         </th>
         <th></th>
     </tr>

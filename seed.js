@@ -24,9 +24,13 @@ var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
 var Product = Promise.promisifyAll(mongoose.model('Product'));
 var Category = Promise.promisifyAll(mongoose.model('Category'));
+var Review = Promise.promisifyAll(mongoose.model('Review'));
+
 var Order = Promise.promisifyAll(mongoose.model('Order'));
 var chance = require('chance')(123);
 var _ = require('lodash');
+
+var boatData = require('./boat-data/all_boats.json');
 
 var seedUsers = function() {
 
@@ -39,6 +43,15 @@ var seedUsers = function() {
         password: 'potus',
         admin: true
     }];
+
+    _.times(30, function() {
+        users.push({
+           email: chance.email(),
+           password: chance.string({length: 10}),
+           fullname: chance.name(),
+           admin: chance.bool({likelihood: 5}) 
+        });
+    })
 
     return User.createAsync(users);
 
@@ -61,20 +74,24 @@ function randWords(minWords, maxWords) {
     return chance.sentence({ words: numWords });
 }
 
-var categories = ['motor boat', 'cruise ship', 'pirate ship'];
+var categories = ['motor boat', 'cruise ship', 'pirate ship', 'party boat'];
 
 function randInteger(minNum, maxNum) {
     return chance.integer({ min: minNum, max: maxNum });
 }
 
+
+
+
 function randProduct(catId) {
+    var boat = boatData.pop();
     return new Product({
-        title: randWords(1, 3),
+        title: boat.title,
         description: randWords(10, 30),
         price: randInteger(400, 900),
         quantity: randInteger(60, 80),
         categories: [catId],
-        photoUrl: randPhoto(),
+        photoUrl: boat.photoUrl
         // this is photos of people for now
     });
 }
@@ -82,8 +99,13 @@ function randProduct(catId) {
 var products;
 var users;
 
-function seedOrders() {
-
+function createReview (user, product) {
+    return Review.create({
+        user: user,
+        product: product,
+        content: randWords(5,10),
+        starRating: 4
+    });
 }
 
 const clearDb = function() {
@@ -122,7 +144,7 @@ connectToDb.then(function() {
             return Product.findAsync({});
         })
         .then(function(product) {
-            return Promise.map(seedProdCat(50), function(productDoc) {
+            return Promise.map(seedProdCat(boatData.length), function(productDoc) {
                 return productDoc.save();
             });
         }).then(function(products) {
@@ -130,9 +152,6 @@ connectToDb.then(function() {
             return User.findAsync({}).then(function(users) {
                 return seedUsers();
             });
-        })
-        .then(function() {
-            return seedOrders();
         })
         .then(function() {
             return User.find({});
@@ -146,10 +165,10 @@ connectToDb.then(function() {
 
 
             var newOrders = [];
-            _.times(20, function() {
+            _.times(10, function() {
 
                 var purchasedItems = [];
-                _.times(10, function() {
+                _.times(3, function() {
                     var purchasedItem = {
                         product: chance.pickone(products),
                         quantity: chance.integer({ min: 1, max: 3 })
@@ -169,13 +188,24 @@ connectToDb.then(function() {
 
             return Promise.map(newOrders, function(newOrder) {
                 return Order.create(newOrder);
-            })
+            });
 
         })
-        .then(function() {
+        .then(function () {
+            var reviewPromises = [
+                createReview(users[0], products[0]),
+                createReview(users[0], products[1]),
+                createReview(users[0], products[2]),
+                createReview(users[1], products[0]),
+                createReview(users[1], products[1]),
+                createReview(users[1], products[2]),
+            ];
+            return Promise.all(reviewPromises);
+        })
+        .then(function () {
             console.log(chalk.green('Seed successful!'));
             process.kill(0);
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error(err);
             process.kill(1);
         });

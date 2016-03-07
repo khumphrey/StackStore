@@ -1,24 +1,21 @@
 app.controller('OrderManagementCtrl', function($scope, $uibModal, orders) {
     $scope.orders = orders;
-    $scope.availableOptions = [
-        { value: 'All', name: 'Show All' },
-        { value: 'Created', name: 'Created' },
-        { value: 'Processing', name: 'Processing' },
-        { value: 'Completed', name: 'Completed' },
-        { value: 'Cancelled', name: 'Cancelled' }
-    ]
-    $scope.filteredStatus = "All";
+    $scope.availableFilters = ['Show All', 'Created', 'Processing', 'Completed', 'Cancelled'];
+    $scope.currentFilter = $scope.availableFilters[0];
 
     $scope.ordersFilter = function(order) {
-        if ($scope.filteredStatus === "All") return true;
-        else return order.orderStatus === $scope.filteredStatus;
+        if ($scope.currentFilter === "Show All") return true;
+        else return order.orderStatus === $scope.currentFilter;
+    }
+
+    $scope.setCurrentFilter = function (filter) {
+    	$scope.currentFilter = filter;
     }
 
     $scope.openOrderDetail = function(order) {
         var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
             templateUrl: '/js/admin/order-detail.html',
-            controller: 'ModalInstanceCtrl',
+            controller: 'OrderDetailCtrl',
             size: 'lg',
             resolve: {
                 order: function() {

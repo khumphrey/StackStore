@@ -8,29 +8,42 @@ const Promise = require('bluebird');
 
 
 //Get a user's cart
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
 	if(req.user) {
 		User.findById(req.user._id)
 		.populate('cart.product')
 		.then(function (user) {
 			res.json(user.cart);
-		})
+		});
 	}
 	else {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
 		Promise.map(req.session.cart, function (item) {
-			return Product.findById(item.product)
+			return Product.findById(item.product);
+
 		})
 		.then(function (productArray) {
-			res.json(productArray);
+			res.json(productArray.map(function (product, index) {
+				return {product: product, quantity: req.session.cart[index].quantity}
+			}));
 		});
 	};
 });
 
 //Post a new cart
-// router.post('/', function (req, res, next) {
-
-// })
+router.post('/', function (req, res) {
+	if(req.user){
+		req.session.cart.forEach(function (seshItem) {
+			req.user.addOrModify(seshItem);
+		});
+		req.user.save()
+		.then(function () {			
+			req.session.cart = [];
+			res.status(201).json(req.user.cart); 
+		})
+		.then(null, next);
+	}
+})
 
 //Post a single item to the cart. Expect req.body.quantity = NUMBER
 router.post('/:productId', function (req, res, next) {
@@ -41,6 +54,7 @@ router.post('/:productId', function (req, res, next) {
 		.then(function() {
 			res.status(201).json(req.user.cart);			
 		})
+		.then(null, next);
 	}
 	else {
 		//can be optimized later
@@ -50,11 +64,19 @@ router.post('/:productId', function (req, res, next) {
 			for(var i=0; i<req.session.cart.length; i++) {
 				if(req.session.cart[i].product === productItem.product) {
 					req.session.cart[i].quantity += productItem.quantity;
+					if(req.session.cart[i].quantity <= 0){
+						req.session.cart.splice(i,1);
+					}
 					notAdded = false;
 					break;
 				} 
 			}
-			if (notAdded) req.session.cart.push(productItem);
+			if (notAdded && productItem.quantity > 0) req.session.cart.push(productItem);
+			else {
+				var err = new Error("No negative quantities");
+				err.status = 404;
+				return next(err);
+			}
 		}
 		res.status(201).json(req.session.cart);
 	};
@@ -76,8 +98,9 @@ router.post('/:productId', function (req, res, next) {
 router.put('/:productId', function (req, res, next) {
 	if (req.user) {
 		for (var i=0; i<req.user.cart.length; i++) {
-			if (req.user.cart[i].product.equal(req.params.productId)) {
+			if (req.user.cart[i].product.equals(req.params.productId)) {
 				req.user.cart[i].quantity = req.body.quantity;
+				req.user.save()
 				break;
 			};
 		};
@@ -87,7 +110,7 @@ router.put('/:productId', function (req, res, next) {
 		if (!req.session.cart) {
 			var err = new Error(404)
 			err.message = "Cart does not exist";
-		    next(err);
+			next(err);
 		}
 		for (var i=0; i<req.session.cart.length; i++) {
 			if(req.session.cart[i].product === req.params.productId) {
@@ -112,7 +135,7 @@ router.delete('/', function (req, res, next) {
 		if (!req.session.cart) {
 			var err = new Error(404)
 			err.message = "Cart does not exist";
-		    next(err);
+			next(err);
 		}
 		else {
 			req.session.cart = [];
@@ -125,8 +148,9 @@ router.delete('/', function (req, res, next) {
 router.delete('/:productId', function (req, res, next) {
 	if (req.user) {
 		for (var i=0; i<req.user.cart.length; i++) {
-			if (req.user.cart[i].product === req.params.productId) {
+			if (req.user.cart[i].product.equals(req.params.productId)) {
 				req.user.cart.splice(i,1);
+				req.user.save()
 				break;
 			};
 		};
@@ -134,9 +158,9 @@ router.delete('/:productId', function (req, res, next) {
 	}
 	else {
 		if (!req.session.cart) {
-		    var err = new Error(404)
+			var err = new Error(404)
 			err.message = "Cart does not exist";
-		    return next(err);
+			return next(err);
 		}
 		else{
 			for (var i=0; i<req.session.cart.length; i++) {

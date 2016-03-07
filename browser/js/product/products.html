@@ -1,38 +1,46 @@
 <div class="container">
 <div id="controlPanel" class='col-sm-3'>
-	<h3>Filter Boats</h3>
-	<!-- could add Typeahead to these filters -->
-	<h5>Title:</h5>
-	<input type="text" class="form-control" placeholder="title" ng-model="titleSearch"> 
-	<h5>Desciption:</h5>
-	<input type="text" class="form-control" placeholder="description" ng-model="descriptionSearch">
-	<h5>Categories:</h5>
-	<div class="btn-group">
-		<label class="btn btn-primary" ng-repeat="category in categories" ng-model="categoryModel[category]" uib-btn-checkbox>{{category}}</label>
+    <br>
+    <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openPanel.title}}</button>
+    <br>
+    <h3>Filter Boats</h3>
+    <!-- could add Typeahead to these filters -->
+    <h5>Title:</h5>
+    <input type="text" class="form-control" placeholder="title" ng-model="titleSearch">
+    <h5>Desciption:</h5>
+    <input type="text" class="form-control" placeholder="description" ng-model="descriptionSearch">
+    <h5>Categories:</h5>
+    <div class="btn-group">
+        <label class="btn btn-primary" ng-repeat="category in categories" ng-model="categoryModel[category]" uib-btn-checkbox>{{category}}</label>
     </div>
-	<h5>Max Price: ${{price.max}},000</h5>
-	<input type="range" min="400" step="50" max="900" class="form-control"  ng-model="price.max">
-	<h5>Min Quantity: {{quantity.min}}</h5>
-	<input type="range" value="1" min="1" max="10" class="form-control" ng-model="quantity.min">
+    <h5>Max Price: ${{price.max}},000</h5>
+    <input type="range" min="400" step="50" max="900" class="form-control" ng-model="price.max">
+    <h5>Min Quantity: {{quantity.min}}</h5>
+    <input type="range" value="1" min="1" max="10" class="form-control" ng-model="quantity.min">
 </div>
 <div class='col-sm-9'>
-<!-- can add row to class above and it will handle overflow -->
-	<div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
-		<div class="thumbnail">
-			<a ui-sref="product({productId: product._id})">
-				<h2>{{product.title}}</h2>
-				<img class="prodImg" ng-src="{{product.photoUrl}}">
-			</a>	
-			<div class="caption">
-				<p>Description: {{product.description}}</p>
-				<p>Price: {{product.price}}</p>
-				<p>Quantity: {{product.quantity}}</p>
-			<!-- possibly have Description and Quantity popover with template on Mouseenter -->
-				<p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p>
-
-				<button class="btn" ng-click="addToCart(product._id)" >Quick Add 1 To Cart</button>
-			</div>
-		</div>
-	</div>  
+    <!-- can add row to class above and it will handle overflow -->
+    <div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max ">
+        <div class="thumbnail">
+            <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct(product._id)"></span>
+            <!-- I would like to pass the whole product object in here so I don't have to get it from the server again -->
+            <a ui-sref="product({productId: product._id})">
+                <h3>{{product.title}} </h3>
+                <div class="prodImg" style="background-image:url('{{product.photoUrl}}')"></div>
+            </a>
+            <div class="caption">
+                <p>Price: {{product.price}}</p>
+                <!-- <p>Description: {{product.description}}</p> -->
+                <!-- <p>Quantity: {{product.quantity}}</p> -->
+                <!-- possibly have Title and Description popover with template on Mouseenter -->
+                <!-- <p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p> -->
+                <button class="btn" ng-click="addToCart(product._id)">Quick Add 1 To Cart</button>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+<!-- {{quantity}}
+{{price}}
+{{products}} <br>
+Total Number: {{products.length}}  -->
+<!-- BUG, TODO: For some reason not all of the products are being rendered below -->

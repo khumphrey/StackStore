@@ -1,24 +1,38 @@
 <table class="table table-striped">
-	<tr>
-		<th></th>
-		<th>Nr</th>
-		<th>Username</th>
-		<th>Full Name</th>
-		<th>E-Mail</th>
-		<th></th>
-		<th></th>
-		<th></th>
-
-	</tr>
-	<tr ng-repeat="user in users">
-		<td><div ng-if="user.admin"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Admin</div></td>
-		<td>{{$index}}</td>
-		<td>{{user.username}}</td>
-		<td>{{user.fullname}}</td>
-		<td>{{user.email}}</td>
-		<td><button class="btn btn-primary btn-sm" ng-click="promoteUserToAdmin(user)" ng-if="!user.admin">Promote to Admin</button>
-		<button class="btn btn-primary btn-sm" ng-click="demoteAdminToUser(user)" ng-if="user.admin && user.email !== currentUser.email">Demote to User</button></td>
-		<td><button class="btn btn-primary btn-sm" ng-click="resetPassword(user)" ng-if="user.email !== currentUser.email">Reset Password</button></td>
-		<td><button class="btn btn-warning btn-sm" ng-click="deleteUser(user)" ng-if="user.email !== currentUser.email">Delete</button></td>
-	</tr>
+    <tr>
+        <th></th>
+        <th>Nr</th>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>E-Mail</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="user in users">
+        <td>
+            <div ng-if="user.admin"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Admin</div>
+        </td>
+        <td>{{$index}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.fullname}}</td>
+        <td>{{user.email}}</td>
+        <td>
+            <div class="btn-group" ng-if="user.email !== currentUser.email">
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Edit User <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-if="!user.admin">
+                        <a ng-click="promoteUserToAdmin(user)">Promote to Admin</a>
+                    </li>
+                    <li ng-if="user.admin && user.email !== currentUser.email">
+                        <a ng-click="demoteAdminToUser(user)">Demote to User</a>
+                    </li>
+                    <li>
+                    <a ng-click="resetPassword(user)">Reset Password</a>
+                    </li>
+                    <li><a ng-click="deleteUser(user)">Delete User</a></li>
+                </ul>
+            </div>
+        </td>
+    </tr>
 </table>
