@@ -15,7 +15,8 @@ module.exports = function (app) {
     };
 
     var verifyCallback = function (accessToken, refreshToken, profile, done) {
-
+        // console.log('facebook profile', profile)
+        var name = profile.displayName.split(" ");
         UserModel.findOne({ 'facebook.id': profile.id }).exec()
             .then(function (user) {
 
@@ -23,6 +24,8 @@ module.exports = function (app) {
                     return user;
                 } else {
                     return UserModel.create({
+                        fullname: profile.displayName,
+                        email: name + "@yahoo.com", //FB doesn't provide an email, so just making one for now
                         facebook: {
                             id: profile.id
                         }
