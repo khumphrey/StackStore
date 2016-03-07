@@ -40,15 +40,21 @@ var schema = new mongoose.Schema({
     },
     twitter: {
         id: String,
-        username: String,
-        token: String,
-        tokenSecret: String
+        name: String,
+        email: String,
+        token: String
     },
     facebook: {
-        id: String
+        id: String,
+        name: String,
+        email: String,
+        token: String
     },
     google: {
-        id: String
+        id: String,
+        name: String,
+        email: String,
+        token: String
     }
 });
 
@@ -66,7 +72,7 @@ schema.methods.addOrModify = function (item) {
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize = function () {
-    return _.omit(this.toJSON(), ['password', 'salt', 'twitter', 'facebook', 'google']);
+    return _.omit(this.toJSON(), ['password', 'salt']);
 };
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
