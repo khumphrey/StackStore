@@ -86,8 +86,8 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 			$scope.products.push(newProduct);
 			// for some reason this wont update the view...
-			$scope.$apply();
 		});
+		
 	};
 
 	$scope.openPanel = {

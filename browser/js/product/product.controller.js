@@ -1,21 +1,17 @@
-app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory, CartFactory) {
 	$scope.product = product;
 	// assigning this way does not keep the categories objects?
 	$scope.populatingCategories = product.categories;
 
 	$scope.item = {quantity:1};
-		$scope.isAdmin = function() {
+
+	$scope.isAdmin = function() {
 		return AuthService.isAdmin();
 	};
 	// this should equal if the user is actuall an admin
 
 	$scope.addToCart = function (){
-		if ($scope.item.quantity<1) $scope.item.quantity=1;
-		$scope.item.product = $scope.product._id;
-
-		// $scope.item = {quantity: 1, product: "56d6211a41380ba6524bf3e9"}
-
-		// CartFactory.addToCart($scope.item.product, $scope.item.quantity);
+		CartFactory.addToCart($scope.product._id, $scope.item.quantity);
 	};
 
 	$scope.removeProduct = function () {
