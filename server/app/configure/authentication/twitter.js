@@ -16,19 +16,16 @@ module.exports = function (app) {
     };
 
     var createNewUser = function (token, tokenSecret, profile) {
-        console.log('twitter profile', profile)
+        //twitter does not provide emails so one is made for it
         return UserModel.create({
+            email: profile.username + "@aol.com", 
             twitter: {
-                id: profile.id,
-                username: profile.username,
-                token: token,
-                tokenSecret: tokenSecret
+                id: profile.id
             }
         });
     };
 
     var updateUserCredentials = function (user, token, tokenSecret, profile) {
-
         user.twitter.token = token;
         user.twitter.tokenSecret = tokenSecret;
         user.twitter.username = profile.username;
@@ -38,7 +35,6 @@ module.exports = function (app) {
     };
 
     var verifyCallback = function (token, tokenSecret, profile, done) {
-
         UserModel.findOne({'twitter.id': profile.id}).exec()
             .then(function (user) {
                 if (user) { // If a user with this twitter id already exists.
@@ -62,8 +58,8 @@ module.exports = function (app) {
 
     app.get('/auth/twitter/callback',
         passport.authenticate('twitter', {
-            successRedirect: 'api/products',
-            failureRedirect: '/login'
+            successRedirect: '/#/products',
+            failureRedirect: '/'
         }),
         function (req, res) {
             res.redirect('/');
