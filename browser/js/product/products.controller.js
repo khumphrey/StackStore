@@ -79,20 +79,29 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 	// I would make this panel a seperate directive if I could have it update the products in this view and while adding. How is that usually done? event emitter? or storing the products on a the factory and then syncing with that?
 	$scope.submitProductForm = function () {
-		ProductsFactory.addProduct($scope.newProduct)
+		return ProductsFactory.addProduct($scope.newProduct)
 		.then(function(newProduct){
 			console.log("Boat has been created in db", newProduct);
 			updateFilters (newProduct);
 
 			$scope.products.push(newProduct);
+
 			// for some reason this wont update the view...
 		});
 		
 	};
 
-	$scope.openPanel = {
+    $scope.openPanel = {
+		isOpen: false,
     	templateUrl: '/js/product/product-form.html',
-    	title: 'Add A New Boat'
+    	title: 'Add A New Boat',
+    	open: function open() {
+          $scope.openPanel.isOpen = true;
+        },
+
+        close: function close() {
+          $scope.openPanel.isOpen = false;
+        }
     };
 
 	$scope.removeProduct = function (id) {
@@ -111,5 +120,17 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 	// Quick add 1 to cart
 	$scope.addToCart = function (productId){
 		CartFactory.addToCart(productId, 1);	
+	};
+
+	$scope.showCaption = function (e) {
+		console.log("hovering");
+		console.log(e);
+		$(e.target).find('.caption').slideDown(250); //.fadeIn(250)
+	};
+
+	$scope.hideCaption = function (e) {
+		console.log("hovering");
+		console.log(e);
+		$(e.target).find('.caption').slideUp(250); //.fadeIn(250)
 	};
 });

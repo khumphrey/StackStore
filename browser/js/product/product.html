@@ -1,4 +1,3 @@
- {{recProds}}
 <div class="container">
     <div class='col-sm-4'>
         <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
@@ -6,7 +5,14 @@
         <br>
         <br>
         <div class=row>
-            <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="right" type="button" class="btn btn-default pull-right">{{openPanel.title}}</button>
+            <button class="btn btn-default pull-right"
+                    ng-show="isAdmin()" 
+                    uib-popover-template="openPanel.templateUrl" 
+                    popover-title="{{openPanel.title}}:" 
+                    popover-placement="right" 
+                    type="button" 
+                    popover-is-open="openPanel.isOpen"
+                    >{{openPanel.title}}</button>
         </div>
     </div>
     <div class='col-sm-7 col-sm-offset-1'>

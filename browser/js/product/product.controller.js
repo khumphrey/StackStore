@@ -97,8 +97,16 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 	};
 
 	$scope.openPanel = {
+		isOpen: false,
     	templateUrl: '/js/product/product-form.html',
-    	title: 'Edit This Boat'
+    	title: 'Edit This Boat',
+    	open: function open() {
+          $scope.openPanel.isOpen = true;
+        },
+
+        close: function close() {
+          $scope.openPanel.isOpen = false;
+        }
     };
 
 });

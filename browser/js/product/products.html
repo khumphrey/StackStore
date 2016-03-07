@@ -1,6 +1,6 @@
 <div id="controlPanel" class='col-sm-3'>
     <br>
-    <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openPanel.title}}</button>
+    <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-is-open="openPanel.isOpen" popover-placement="bottom-right" type="button" class="btn btn-default pull-left">{{openPanel.title}}</button>
     <br>
     <h3>Filter Boats</h3>
     <!-- could add Typeahead to these filters -->
@@ -17,31 +17,28 @@
     <h5>Min Quantity: {{quantity.min}}</h5>
     <input type="range" value="1" min="1" max="10" class="form-control" ng-model="quantity.min">
 </div>
+
 <div class="containes">
     <div class='col-sm-9'>
-        <!-- can add row to class above and it will handle overflow -->
         <div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max">
-            <div class="thumbnail prodImg" style="background-image:url('{{product.photoUrl}}')">
-                <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct(product._id)"></span>
-                <!-- I would like to pass the whole product object in here so I don't have to get it from the server again -->
-                <a ui-sref="product({productId: product._id})">
-                    <h3>{{product.title}} </h3>
+                <div class="thumbnail" style="background-image:url('{{product.photoUrl}}')" ng-mouseenter="showCaption($event)" ng-mouseleave="hideCaption($event)">
+                    <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct(product._id)"></span>
+            <a ui-sref="product({productId: product._id})">
                     <!-- <div class="prodImg" style="background-image:url('{{product.photoUrl}}')"></div> -->
-                </a>
-                <div class="caption">
-                    <p>Price: {{product.price}}</p>
-                    <!-- <p>Description: {{product.description}}</p> -->
-                    <!-- <p>Quantity: {{product.quantity}}</p> -->
-                    <!-- possibly have Title and Description popover with template on Mouseenter -->
-                    <!-- <p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p> -->
+            </a>
+                    <div class="caption">
+                        <h3>{{product.title}} </h3>
+
+                        <p>Price: {{product.price}}</p>
+                        <!-- <p>Description: {{product.description}}</p> -->
+                        <!-- <p>Quantity: {{product.quantity}}</p> -->
+                        <!-- possibly have Title and Description popover with template on Mouseenter -->
+                        <!-- <p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p> -->
+                    </div>
+                    <div class="quickAdd">
+                        <button class="btn" ng-click="addToCart(product._id)">Quick Add 1 To Cart</button>
+                    </div>
                 </div>
-                <button class="btn" ng-click="addToCart(product._id)">Quick Add 1 To Cart</button>
-            </div>
         </div>
     </div>
 </div>
-<!-- {{quantity}}
-{{price}}
-{{products}} <br>
-Total Number: {{products.length}}  -->
-<!-- BUG, TODO: For some reason not all of the products are being rendered below -->

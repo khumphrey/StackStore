@@ -16,15 +16,10 @@
     }
 }
 
-
-.prodImg {
- 	height: 150px;
+.thumbnail {
+    height: 300px;
  	background-size: cover;
  	background-repeat: no-repeat;
- }
-
-.thumbnail {
-	height: 300px;
 }
 
 .glyphicon-remove {
@@ -35,4 +30,24 @@
 .popover {
     max-width: 600px;
     width: 400px;
+}
+
+.quickAdd {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+}
+
+.caption {
+    position:absolute;
+    top:0;
+    right:0;
+    background:rgba(50, 50, 50, 0.50);
+    width:100%;
+    height:30%;
+    padding:2%;
+    display: none;
+    text-align:center;
+    color:#fff !important;
+    z-index:2;
 }
