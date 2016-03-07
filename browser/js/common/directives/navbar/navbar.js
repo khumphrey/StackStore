@@ -20,7 +20,7 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
                 { label: 'Documentation', state: 'docs' },
                 { label: 'Catalogue', state: 'products' },
                 { label: 'Cart', state: 'cart' },
-                { label: 'Checkout', state: 'checkout'}
+                { label: 'Checkout', state: 'checkout'},
                 { label: 'Account', state: 'user.account', auth: true }
             ];
 
