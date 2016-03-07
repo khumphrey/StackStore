@@ -1,6 +1,6 @@
-app.controller('OrderManagementCtrl', function($scope, $uibModal, orders) {
+app.controller('OrderManagementCtrl', function($scope, $uibModal, orders, OrderFactory) {
     $scope.orders = orders;
-    $scope.availableFilters = ['Show All', 'Created', 'Processing', 'Completed', 'Cancelled'];
+    $scope.availableFilters = OrderFactory.availableFilters;
     $scope.currentFilter = $scope.availableFilters[0];
 
     $scope.ordersFilter = function(order) {

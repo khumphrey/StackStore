@@ -1,4 +1,4 @@
-app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInstance, Session) {
+app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInstance) {
 
     $scope.login = {};
     $scope.error = null;
@@ -14,7 +14,6 @@ app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInsta
             .then(function (user) {
                 $uibModalInstance.close();
 
-                //is this fine here or should it just go on the back when I login/signup? I wasn't sure how to do that
                 AuthService.persistCart()
                     .then(function () {
                         //if password reset is required go to user account page 

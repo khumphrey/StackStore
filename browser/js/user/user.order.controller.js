@@ -1,4 +1,8 @@
-app.controller('UserOrderCtrl', function ($scope, OrderFactory, userOrders) {
+app.controller('UserOrderCtrl', function ($scope, OrderFactory, userOrders, $controller) {
+
+    angular.extend(this, $controller('OrderManagementCtrl', { $scope: $scope }));
+
+    console.log($scope.openOrderDetail)
 
     $scope.orders = userOrders;
     $scope.success = false;

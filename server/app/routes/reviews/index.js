@@ -18,7 +18,7 @@ router.param('reviewId', function (req, res, next, id) {
 			req.requestedUser = review.user;
 			next();
 		})
-		.then(null, function (err){
+		.then(null, function (){
 			next({status: 404, message: "Review not found"});
 		})
 		.then(null, next);
@@ -50,7 +50,7 @@ router.get('/', function (req, res, next) {
 });
 
 // Return one specific review by ID
-router.get('/:reviewId', function (req, res, next) {
+router.get('/:reviewId', function (req, res) {
 	res.status(200).json(req.review);
 });
 

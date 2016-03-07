@@ -42,10 +42,6 @@ module.exports = function (app) {
             // req.logIn will establish our session.
             req.logIn(user, function (loginErr) {
                 if (loginErr) return next(loginErr);
-                //if there is alredy a cart on the session send a post to persist it to the db
-                // if (req.session.cart.length > 0) {
-
-                // }
                 res.send({ user: user.sanitize(), id: req.sessionId });
             });
 
@@ -62,10 +58,6 @@ module.exports = function (app) {
         .then(function(createdUser){
             req.logIn(createdUser, function (loginErr) {
                 if (loginErr) return next(loginErr);
-                //if there is alredy a cart on the session send a post to persist it to the db
-                // if (req.session.cart.length > 0) {
-
-                // }
                 res.status(201).send({ user: createdUser.sanitize(), id: req.sessionId });
             });
         })

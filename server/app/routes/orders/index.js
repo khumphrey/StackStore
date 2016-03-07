@@ -3,7 +3,6 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const Order = mongoose.model('Order');
-const User = mongoose.model('User');
 const Product = mongoose.model('Product');
 
 const _ = require('lodash');
