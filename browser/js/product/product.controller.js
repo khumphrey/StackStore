@@ -1,5 +1,6 @@
-app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory, CartFactory) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory, CartFactory, recs) {
 	$scope.product = product;
+	$scope.recProds = recs;
 	// assigning this way does not keep the categories objects?
 	$scope.populatingCategories = product.categories;
 
@@ -96,8 +97,30 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 	};
 
 	$scope.openPanel = {
+		isOpen: false,
     	templateUrl: '/js/product/product-form.html',
-    	title: 'Edit This Boat'
+    	title: 'Edit This Boat',
+    	open: function open() {
+          $scope.openPanel.isOpen = true;
+        },
+
+        close: function close() {
+          $scope.openPanel.isOpen = false;
+        }
     };
+
+
+    // Quick add 1 to cart
+	$scope.quickAddToCart = function (productId){
+		CartFactory.addToCart(productId, 1);	
+	};
+
+	$scope.showCaption = function (e) {
+		$(e.target).find('.caption').slideDown(250); //.fadeIn(250)
+	};
+
+	$scope.hideCaption = function (e) {
+		$(e.target).find('.caption').slideUp(250); //.fadeIn(250)
+	};
 
 });
