@@ -36,6 +36,7 @@
     position: absolute;
     bottom: 25px;
     left: 25px;
+    margin: auto;
 }
 
 .caption {
@@ -43,11 +44,20 @@
     top:0;
     right:0;
     background:rgba(50, 50, 50, 0.50);
-    width:100%;
+    width:90%;
+    margin-right: 5%;
     height:30%;
     padding:2%;
     display: none;
     text-align:center;
     color:#fff !important;
     z-index:2;
+}
+
+.thumbnail > a:link {
+    color: white;
+}
+
+.thumbnail > a:visited {
+    color: white;
 }

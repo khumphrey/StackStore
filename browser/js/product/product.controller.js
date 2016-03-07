@@ -109,4 +109,18 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
         }
     };
 
+
+    // Quick add 1 to cart
+	$scope.quickAddToCart = function (productId){
+		CartFactory.addToCart(productId, 1);	
+	};
+
+	$scope.showCaption = function (e) {
+		$(e.target).find('.caption').slideDown(250); //.fadeIn(250)
+	};
+
+	$scope.hideCaption = function (e) {
+		$(e.target).find('.caption').slideUp(250); //.fadeIn(250)
+	};
+
 });

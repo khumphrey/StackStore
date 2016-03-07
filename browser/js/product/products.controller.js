@@ -123,14 +123,10 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 	};
 
 	$scope.showCaption = function (e) {
-		console.log("hovering");
-		console.log(e);
 		$(e.target).find('.caption').slideDown(250); //.fadeIn(250)
 	};
 
 	$scope.hideCaption = function (e) {
-		console.log("hovering");
-		console.log(e);
 		$(e.target).find('.caption').slideUp(250); //.fadeIn(250)
 	};
 });
