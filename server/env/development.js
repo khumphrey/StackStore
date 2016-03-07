@@ -6,7 +6,7 @@ module.exports = {
   "TWITTER": {
     "consumerKey": "dH1cEGorTHqLvxSeaHp2uWig0",
     "consumerSecret": secrets.twitterSecret,
-    "callbackUrl": "http://127.0.0.1:8080/auth/twitter/callback"
+    "callbackUrl": "http://127.0.0.1:1337/auth/twitter/callback"
   },
   "FACEBOOK": {
     "clientID": "591275987704682",
@@ -16,6 +16,6 @@ module.exports = {
   "GOOGLE": {
     "clientID": "904557065956-n0beojtbnuvk707l1nku6gm82vuib4n1.apps.googleusercontent.com",
     "clientSecret": secrets.googleSecret,
-    "callbackURL": "http://127.0.0.1:8080/auth/google/callback"
+    "callbackURL": "http://127.0.0.1:1337/auth/google/callback"
   }
 };

@@ -16,6 +16,7 @@ module.exports = function (app) {
     };
 
     var createNewUser = function (token, tokenSecret, profile) {
+        console.log('twitter profile', profile)
         return UserModel.create({
             twitter: {
                 id: profile.id,
@@ -42,6 +43,7 @@ module.exports = function (app) {
             .then(function (user) {
                 if (user) { // If a user with this twitter id already exists.
                     return updateUserCredentials(user, token, tokenSecret, profile);
+                    // return user.sanitize();
                 } else { // If this twitter id has never been seen before and no user is attached.
                     return createNewUser(token, tokenSecret, profile);
                 }
@@ -59,7 +61,10 @@ module.exports = function (app) {
     app.get('/auth/twitter', passport.authenticate('twitter'));
 
     app.get('/auth/twitter/callback',
-        passport.authenticate('twitter', {failureRedirect: '/login'}),
+        passport.authenticate('twitter', {
+            successRedirect: 'api/products',
+            failureRedirect: '/login'
+        }),
         function (req, res) {
             res.redirect('/');
         });

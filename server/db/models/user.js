@@ -28,8 +28,7 @@ var schema = new mongoose.Schema({
         default: false
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     requiresPasswordReset: {
         type: Boolean,
@@ -40,21 +39,15 @@ var schema = new mongoose.Schema({
     },
     twitter: {
         id: String,
-        name: String,
-        email: String,
+        username: String,
+        tokenSecret: String,
         token: String
     },
     facebook: {
-        id: String,
-        name: String,
-        email: String,
-        token: String
+        id: String
     },
     google: {
-        id: String,
-        name: String,
-        email: String,
-        token: String
+        id: String
     }
 });
 
