@@ -42,8 +42,7 @@ module.exports = function (app) {
             // req.logIn will establish our session.
             req.logIn(user, function (loginErr) {
                 if (loginErr) return next(loginErr);
-                // We respond with a response object that has user with _id and email.
-                res.status(200).send(user.sanitize());
+                res.send({ user: user.sanitize(), id: req.sessionId });
             });
 
         };
@@ -59,8 +58,7 @@ module.exports = function (app) {
         .then(function(createdUser){
             req.logIn(createdUser, function (loginErr) {
                 if (loginErr) return next(loginErr);
-                // We respond with a response object that has user with _id and email.
-                res.status(201).send(createdUser.sanitize());
+                res.status(201).send({ user: createdUser.sanitize(), id: req.sessionId });
             });
         })
         .then(null, next);   

@@ -1,4 +1,4 @@
-app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInstance, Session) {
+app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInstance) {
 
     $scope.login = {};
     $scope.error = null;
@@ -13,10 +13,16 @@ app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInsta
             })
             .then(function (user) {
                 $uibModalInstance.close();
-                // debugger;
-                //if password reset is required go to user account page 
-                if (user.requiresPasswordReset) $state.go('user.account');
-                else $state.go('products');
+
+                AuthService.persistCart()
+                    .then(function () {
+                        //if password reset is required go to user account page 
+                        if (user.requiresPasswordReset) $state.go('user.account');
+                        else $state.go('products');  
+                    })
+                    .then(null, function (err) {
+                        $scope.error = err.message || 'Cart persistence error';
+                    });
             })
             .then(null, function (err) {
                 $scope.error = err.message || 'Invalid credentials.';

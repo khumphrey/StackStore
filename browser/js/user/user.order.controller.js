@@ -1,29 +1,33 @@
-app.controller('UserOrderCtrl', function ($scope, OrderFactory, userOrders) {
+app.controller('UserOrderCtrl', function ($scope, OrderFactory, userOrders, $controller) {
 
     $scope.orders = userOrders;
     $scope.success = false;
     $scope.failure = false;
 
-    $scope.availableFilters = ['Show All', 'Created', 'Processing', 'Completed', 'Cancelled'];
-    $scope.currentFilter = $scope.availableFilters[0];
+    $scope.availableFilters = OrderFactory.getAvailableFilters();
+    $scope.currentFilter = OrderFactory.getCurrentFilter();
 
     $scope.areThereUserOrders = function () {
         return $scope.orders.length > 0;
     };
 
     $scope.ordersFilter = function(order) {
-        if ($scope.currentFilter === "Show All") return true;
-        else return order.orderStatus === $scope.currentFilter;
+        return OrderFactory.ordersFilter(order);
     };
 
     $scope.setCurrentFilter = function (filter) {
-        $scope.currentFilter = filter;
+        OrderFactory.setCurrentFilter(filter);
+    };
+
+    $scope.openOrderDetail = function(order) {
+        OrderFactory.openOrderDetail(order);
     };
 
     $scope.clearAlertMessages = function () {
         $scope.success = false;
         $scope.failure = false;
     };
+
 
     $scope.cancelOrder = function (order) {
         $scope.clearAlertMessages();
