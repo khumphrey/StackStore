@@ -63,7 +63,7 @@ function randPhoto() {
         min: 0,
         max: 20
     });
-    return '/imgBoat/boatImg' + n + '.jpg';
+    return 'https://s3.amazonaws.com/the-dock/images/boatImg' + n + '.jpg';
 }
 
 function randWords(minWords, maxWords) {

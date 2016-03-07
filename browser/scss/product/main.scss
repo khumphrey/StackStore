@@ -16,18 +16,48 @@
     }
 }
 
-
-.prodImg {
- 	height: 150px;
- 	background-size: contain;
- 	background-repeat: no-repeat;
- }
-/*
 .thumbnail {
-	height: 525px;
+    height: 300px;
+ 	background-size: cover;
+ 	background-repeat: no-repeat;
 }
-*/
+
 .glyphicon-remove {
 	float: right;
 	display: inline-block;
+}
+
+.popover {
+    max-width: 600px;
+    width: 400px;
+}
+
+.quickAdd {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    margin: auto;
+}
+
+.caption {
+    position:absolute;
+    top:0;
+    right:0;
+    background:rgba(50, 50, 50, 0.50);
+    width:90%;
+    margin-right: 5%;
+    height:30%;
+    padding:2%;
+    display: none;
+    text-align:center;
+    color:#fff !important;
+    z-index:2;
+}
+
+.thumbnail > a:link {
+    color: white;
+}
+
+.thumbnail > a:visited {
+    color: white;
 }

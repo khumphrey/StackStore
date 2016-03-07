@@ -19,15 +19,18 @@ app.config(function ($stateProvider) {
         resolve: {
             product: function (ProductsFactory, ReviewFactory, $stateParams){
                 return ProductsFactory.fetchById($stateParams.productId)
-                    .then(function(product){
+                    .then(function (product){
                         return ReviewFactory.fetchProdReviews($stateParams.productId)
-                        .then(function(reviews){
+                        .then(function (reviews){
                             product.reviews = reviews;
                             console.log("STATE", product.categories);
                             return product;
                         });
                     });
             // we can save some latency by having the return from the backend for fetchById include the reviews already
+            },
+            recs: function (ProductsFactory, $stateParams) {
+                return ProductsFactory.fetchRecs($stateParams.productId);
             }
         }
     });

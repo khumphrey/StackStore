@@ -1,32 +1,37 @@
-<div class="container">
-	<h3>{{ itemstot }} Item(s) in your shipping cart: ${{ total }}</h3>
-	<form name="ourCart">
+<div id="outer">
+<div id="cart" class="container">
+	<h3>{{ itemstot }} Item(s) in your shipping cart: ${{ total }}*</h3>
+	<hr>
+	<form novalidate name="ourCart" class="css-form">
 		<table class="table table-striped">
 			<tbody>
-				<tr ng-repeat="item in cart">
-					<td>
+				<tr ng-repeat="item in cart" >
+					<td class="left">
 						<div>
 							<img src="{{item.product.photoUrl}}" class="img-thumbnail" height="200" width="200"/>
 						</div>
 					</td>
 					<td width="200">
-						<a ui-sref="product({productId: item.product._id})">
-							Title: {{ item.product.title }} <br>
-							Description: {{ item.product.description.slice(0,40) }}...
+						Title: <a ui-sref="product({productId: item.product._id})">
+							{{ item.product.title }} <br>
+						</a>
+						Description: <a ui-sref="product({productId: item.product._id})">
+							{{ item.product.description.slice(0,60) }}...
 						</a>
 					</td>
-					<td>
+					<td class="qtybox">
+						<p>QTY</p>
 						<div>
-							<button class="row btn btn-primary" ng-click='change(item, -1)'>-</button>
+							<button class="btn btn-primary qty" ng-click='change(item, -1)'>-</button>
 
-							<input class="row form-control" ng-model="item.quantity" style="width:50px" ng-change="update(item, $index)"></input>
+							<input class="form-control qty" ng-model="item.quantity" max="8" name="qty" style="width:45px" ng-required="true" ng-change="update(item, $index)" ng-focus="cacheVal(item)" ng-blur="revert(item)"></input>
 
-							<button class="row btn btn-primary" ng-disabled="item.quantity === item.product.quantity" ng-click='change(item, 1, $index)'>+</button>
-
+							<button class="btn btn-primary qty" ng-disabled="item.quantity === item.product.quantity" ng-click='change(item, 1, $index)'>+</button>
+						</div>
+						<div>
 							<h6>IN STOCK LIMIT {{ item.product.quantity }}</h6>
-							<br>
-							<span ng-show="item.quantity > item.product.quantity">Enter a quantity less than the in stock limit</span>
-						<div>
+							<p class="alert alert-warning" ng-show="item.quantity > item.product.quantity">Stock Limit <br> Exceeded</p>
+						</div>
 					</td>
 					<td>
 						
@@ -39,7 +44,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td class="left">
 						<button class="btn btn-primary" ui-sref="products">Continue Shopping</button>
 					</td>
 					<td>
@@ -52,10 +57,11 @@
 						Subtotal: ${{ total }}
 					</td>
 					<td>
-						<button class="btn btn-success" ui-sref="products">Check Out</button>
+						<button class="btn btn-success" ng-disabled="checkout" ui-sref="checkout">Check Out</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</form>
+</div>
 </div>

@@ -23,8 +23,13 @@ app.factory('ProductsFactory', function ($http) {
 			.then(product => product.data);
 		},
 
-		delete: function(id) {
+		delete: function (id) {
 			return $http.delete('/api/products/' + id);
+		},
+
+		fetchRecs: function (id) {
+			return $http.get('/api/recommendations/' + id)
+			.then(res => res.data);
 		}
 
 	};
