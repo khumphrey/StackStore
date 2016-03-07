@@ -16,18 +16,16 @@ module.exports = function (app) {
     };
 
     var createNewUser = function (token, tokenSecret, profile) {
+        //twitter does not provide emails so one is made for it
         return UserModel.create({
+            email: profile.username + "@aol.com", 
             twitter: {
-                id: profile.id,
-                username: profile.username,
-                token: token,
-                tokenSecret: tokenSecret
+                id: profile.id
             }
         });
     };
 
     var updateUserCredentials = function (user, token, tokenSecret, profile) {
-
         user.twitter.token = token;
         user.twitter.tokenSecret = tokenSecret;
         user.twitter.username = profile.username;
@@ -37,11 +35,11 @@ module.exports = function (app) {
     };
 
     var verifyCallback = function (token, tokenSecret, profile, done) {
-
         UserModel.findOne({'twitter.id': profile.id}).exec()
             .then(function (user) {
                 if (user) { // If a user with this twitter id already exists.
                     return updateUserCredentials(user, token, tokenSecret, profile);
+                    // return user.sanitize();
                 } else { // If this twitter id has never been seen before and no user is attached.
                     return createNewUser(token, tokenSecret, profile);
                 }
@@ -59,7 +57,10 @@ module.exports = function (app) {
     app.get('/auth/twitter', passport.authenticate('twitter'));
 
     app.get('/auth/twitter/callback',
-        passport.authenticate('twitter', {failureRedirect: '/login'}),
+        passport.authenticate('twitter', {
+            successRedirect: '/#/products',
+            failureRedirect: '/'
+        }),
         function (req, res) {
             res.redirect('/');
         });

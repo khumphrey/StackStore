@@ -8,4 +8,6 @@ var categorySchema = new mongoose.Schema({
 	}
 });
 
+// add pre delete hook to remove category ref in product
+
 mongoose.model('Category', categorySchema);

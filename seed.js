@@ -30,6 +30,8 @@ var Order = Promise.promisifyAll(mongoose.model('Order'));
 var chance = require('chance')(123);
 var _ = require('lodash');
 
+var boatData = require('./boat-data/all_boats.json');
+
 var seedUsers = function() {
 
     var users = [{
@@ -72,20 +74,24 @@ function randWords(minWords, maxWords) {
     return chance.sentence({ words: numWords });
 }
 
-var categories = ['motor boat', 'cruise ship', 'pirate ship'];
+var categories = ['motor boat', 'cruise ship', 'pirate ship', 'party boat'];
 
 function randInteger(minNum, maxNum) {
     return chance.integer({ min: minNum, max: maxNum });
 }
 
+
+
+
 function randProduct(catId) {
+    var boat = boatData.pop();
     return new Product({
-        title: randWords(1, 3),
+        title: boat.title,
         description: randWords(10, 30),
         price: randInteger(400, 900),
         quantity: randInteger(60, 80),
         categories: [catId],
-        photoUrl: randPhoto(),
+        photoUrl: boat.photoUrl
         // this is photos of people for now
     });
 }
@@ -138,7 +144,7 @@ connectToDb.then(function() {
             return Product.findAsync({});
         })
         .then(function(product) {
-            return Promise.map(seedProdCat(50), function(productDoc) {
+            return Promise.map(seedProdCat(boatData.length), function(productDoc) {
                 return productDoc.save();
             });
         }).then(function(products) {

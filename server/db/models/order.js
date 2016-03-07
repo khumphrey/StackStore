@@ -58,7 +58,7 @@ orderSchema.pre('save', function(next) {
 
 		// Calculate the total price
 		this.totalPrice = this.purchasedItems.reduce(function(sum, item) {
-		    return item.product.price * item.quantity + sum;
+			return item.product.price * item.quantity + sum;
 		}, 0)
 	}
 
