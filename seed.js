@@ -88,7 +88,7 @@ function randProduct(catId) {
     return new Product({
         title: boat.title,
         description: randWords(10, 30),
-        price: randInteger(4000, 90000),
+        price: randInteger(400, 900),
         quantity: randInteger(60, 80),
         categories: [catId],
         photoUrl: boat.photoUrl
