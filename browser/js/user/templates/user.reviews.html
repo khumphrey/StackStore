@@ -32,7 +32,7 @@
                 <a ui-sref="product({productId: review.product._id})">
                     <h4 class="list-group-item-heading">{{ review.product.title }}</h4>
                 </a>
-                <uib-rating ng-model="review.starRating" name="starRating" data-readonly="false" max="5"></uib-rating>
+                <uib-rating ng-model="review.starRating" name="starRating" max="5"></uib-rating>
                 <input class="list-group-item-text" style="width: 90%; display: block" required ng-minlength="10" ng-model="review.content" name="content"></input>
                 <br>
                 <div ng-messages="editReviewForm.content.$error" role="alert" class="text-danger">
@@ -44,7 +44,7 @@
             </form>
 
             <br>
-            <uib-alert ng-show="failure" class="alert" type="danger" role="alert">Your changes were NOT saved</uib-alert>
+            <uib-alert ng-show="failure" class="alert" type="danger" role="alert">Your changes were NOT saved {{ failMessage }}</uib-alert>
 
         </div>
     </div>

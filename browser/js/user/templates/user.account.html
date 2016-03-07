@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <!-- how to do route so that they know that the email is already taken -->
                     <label>Email</label>
-                    <input class="form-control" ng-model="user.email" required name="email" value="{{ user.email }}">
+                    <input class="form-control" ng-model="user.email" required type="email" name="email" value="{{ user.email }}">
                     <div ng-messages="updateUserForm.username.$error" role="alert">
                         <div ng-message="required">Please enter an email before saving</div>
                     </div>
