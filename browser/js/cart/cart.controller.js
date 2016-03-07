@@ -1,12 +1,14 @@
 'use strict';
 
 app.controller('CartController', function ($scope, cart, CartFactory) {
-	$scope.cart = cart;	
+	$scope.cart = cart;
 
 	var total = function() {
+		$scope.itemstot = 0;
 		var tot = 0;
 		for(var i=0; i<$scope.cart.length; i++) {
 			tot += ($scope.cart[i].product.price * $scope.cart[i].quantity);
+			$scope.itemstot += parseInt($scope.cart[i].quantity);
 		}
 		return tot;
 	};
@@ -14,11 +16,10 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 	$scope.total = total();
 
 	$scope.update = function (item) {
-		if(item.quantity !== "") {
+		item.quantity = parseInt(item.quantity);
+		if(!isNaN(item.quantity)) {
 			CartFactory.updateItem(item.product._id, item.quantity)
 			.then(function () {
-				// item.quantity = item.newQuantity;
-				// item.newQuantity = "";
 				$scope.total = total();
 			});
 		}
@@ -31,7 +32,16 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 		});
 	};
 
-	$scope.change = function (item, num) {
+	$scope.change = function (item, num, index) {
+		if(item.quantity + num <= 0) {
+			var yn = confirm("Are you sure you want to remove this item from your cart?");
+			if(yn === false){
+				return;
+			} 
+			else {
+				$scope.remove(item, index);
+				return;			}
+		}
 		item.quantity += num;
 		$scope.update(item);
 	}
