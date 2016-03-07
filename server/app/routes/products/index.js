@@ -5,8 +5,8 @@ const Auth = require('../../../utils/auth.middleware');
 module.exports = router;
 
 router.param('prodId', function(req, res, next, prodId) {
-	var id = prodId.toString();
-	Product.findById(id)
+	Product.findById(prodId)
+	.populate('categories')
 	.then(function (product){
 		if(!product) return next({status: 404, message: "Product not found"}); 
 		req.requestedProduct = product;
@@ -19,13 +19,14 @@ router.param('prodId', function(req, res, next, prodId) {
 
 router.get('/', function(req, res, next){
 	Product.find({})
-	.populate('categories reviews')
+	.populate('categories')
 	.then(products => res.json(products))
 	.then(null, next);
 	// return .data?
 });
 
 router.get('/:prodId', function(req, res){
+	console.log("Router", req.requestedProduct.categories);
 	res.json(req.requestedProduct);
 });
 
@@ -33,6 +34,7 @@ router.get('/:prodId', function(req, res){
 router.use(Auth.ensureAdmin);
 
 router.post('/', function(req, res, next){
+	console.log('post',req.body);
 	Product.create(req.body)
 	.then(product => res.status(201).json(product))
 	.then(null,next);

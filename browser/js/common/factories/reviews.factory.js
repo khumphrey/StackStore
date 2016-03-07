@@ -15,5 +15,10 @@ app.factory('ReviewFactory', function ($http){
 			.then(reviews => reviews.data);
 		},
 
+		updateReview: function (review) {
+			return $http.put('/api/reviews/' + review._id, review)
+			.then(updatedReview => updatedReview.data);
+		}
+
 	};
 });
