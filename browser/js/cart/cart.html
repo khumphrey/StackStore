@@ -1,5 +1,5 @@
-<div>
-	<p>This is a list of cart items</p>
+<div class="container">
+	<h3>{{ cart.length }} Item(s) in your shipping cart: ${{ total }}</h3>
 	<form name="ourCart">
 		<table class="table table-striped">
 <!-- 			<thead>
@@ -20,31 +20,53 @@
 				<tr ng-repeat="item in cart">
 					<td>
 						<div>
-							<input type="checkbox"></input>
-							<div style="background-image:url('{{item.product.photoUrl}}'); height:150px; width:150px">
-							</div>
-							<a ui-sref="product({productId: item.product._id})">{{ item.product.title }}<a>
+							<img src="{{item.product.photoUrl}}" class="img-thumbnail" height="200" width="200"/>
 						</div>
+					</td>
+					<td width="200">
+						<a ui-sref="product({productId: item.product._id})">
+							Title: {{ item.product.title }} <br><br>
+							Description: {{ item.product.description.slice(0,40) }}...
+						</a>
 					</td>
 					<td>
 						<div>
-							qty<br>
-							<button class="btn" ng-click='change(item, -1)'>-</button>
-							<input class="form-control" ng-model="item.quantity" style="width:50px" ng-change="update(item)"></input>
-							<button class="btn" ng-click='change(item, 1)'>+</button>
+							<!-- qty<br> -->
+							<button class="row btn btn-primary" ng-click='change(item, -1)'>-</button>
+							<input class="row form-control" ng-model="item.quantity" style="width:50px" ng-change="update(item, $index)"></input>
+							<button class="row btn btn-primary" ng-click='change(item, 1)'>+</button>
 							<br>
-							<p>LIMIT IN STOCK {{ item.product.quantity }}</p>
+							<h6>IN STOCK LIMIT {{ item.product.quantity }}</h6>
 						<div>
+					</td>
+					<td>
+						
 					</td>
 					<td>
 						Price: ${{ item.product.price }}
-						<br>
-						<button class="btn" ng-click='remove(item, $index)'>Remove Item</button>
+					</td>
+					<td>
+						<button class="btn btn-danger" ng-click='remove(item)'>X</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button class="btn btn-primary" ui-sref="products">Continue Shopping</button>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+						Subtotal: ${{ total }}
+					</td>
+					<td>
+						<button class="btn btn-success" ui-sref="products">Check Out</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</form>
-	<button class="btn" ui-sref="products">Continue Shopping</button>
-	Total: ${{ total }}
 </div>

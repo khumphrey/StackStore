@@ -8,7 +8,7 @@ const Promise = require('bluebird');
 
 
 //Get a user's cart
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
 	if(req.user) {
 		User.findById(req.user._id)
 		.populate('cart.product')
@@ -36,7 +36,7 @@ router.get('/', function (req, res, next) {
 // })
 
 //Post a single item to the cart. Expect req.body.quantity = NUMBER
-router.post('/:productId', function (req, res, next) {
+router.post('/:productId', function (req, res) {
 	var productItem = {product: req.params.productId, quantity: req.body.quantity};
 	if(req.user) {
 		req.user.addOrModify(productItem);
@@ -91,7 +91,7 @@ router.put('/:productId', function (req, res, next) {
 		if (!req.session.cart) {
 			var err = new Error(404)
 			err.message = "Cart does not exist";
-		    next(err);
+			next(err);
 		}
 		for (var i=0; i<req.session.cart.length; i++) {
 			if(req.session.cart[i].product === req.params.productId) {
@@ -116,7 +116,7 @@ router.delete('/', function (req, res, next) {
 		if (!req.session.cart) {
 			var err = new Error(404)
 			err.message = "Cart does not exist";
-		    next(err);
+			next(err);
 		}
 		else {
 			req.session.cart = [];
@@ -139,9 +139,9 @@ router.delete('/:productId', function (req, res, next) {
 	}
 	else {
 		if (!req.session.cart) {
-		    var err = new Error(404)
+			var err = new Error(404)
 			err.message = "Cart does not exist";
-		    return next(err);
+			return next(err);
 		}
 		else{
 			for (var i=0; i<req.session.cart.length; i++) {

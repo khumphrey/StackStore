@@ -14,11 +14,14 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 	$scope.total = total();
 
 	$scope.update = function (item) {
+		if(typeof item.quantity !== "number" && item.quantity !== "") {
+			alert("Please enter a number");
+			item.quantity = 1;
+			return;
+		}
 		if(item.quantity !== "") {
 			CartFactory.updateItem(item.product._id, item.quantity)
 			.then(function () {
-				// item.quantity = item.newQuantity;
-				// item.newQuantity = "";
 				$scope.total = total();
 			});
 		}
@@ -32,6 +35,10 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 	};
 
 	$scope.change = function (item, num) {
+		if(item.quantity + num <= 0) {
+			alert("whoa there sir and/or ma'am");
+			return;
+		}
 		item.quantity += num;
 		$scope.update(item);
 	}
