@@ -1,5 +1,6 @@
 app.controller('ProductsController', function ($scope, products, ProductsFactory, CategoryFactory, AuthService, CartFactory) {
 	// Code for the filtering of items:
+
 	$scope.products = products;
 	$scope.categories = [];
 	$scope.price = {
@@ -40,7 +41,6 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 			}
 		});
 	});
-
 
 		
 	// Code for admin functions:
