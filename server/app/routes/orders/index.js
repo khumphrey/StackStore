@@ -75,71 +75,39 @@ router.put('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
 });
 
 
-//---------------------------------------
-//vvvvvvvvvv I DON'T WORK YET vvvvvvvvvv
-//---------------------------------------
 router.post('/', function (req, res, next) {
-	// security consideration:
-	// what if someone spams us with orders via postman?
-	var shippingAddress = req.body.shippingAddress,
-		shippingEmail = req.body.shippingEmail;
-	
-	if (!shippingEmail || !shippingAddress) return next({status: 400, message: "Shipping address and email are required"});
+	// Order Creation:
+	//
+	// What we get from the frontEnd:
+	// req.body: {
+	// 	purchasedItems: cart,
+	// 	shippingAddress: xx,
+	// 	shippingEmail: xx,
+	//  user: only if logged in else it's undefined!
+	// }
+	// Total price calcualtion and validation is handled in
+	// the pre save hook of the order schema
 
-	var newOrder = {
-		purchasedItems: req.session.cart,
-		shippingAddress : shippingAddress,
-		shippingEmail : shippingEmail
-	};
-	
-	//if there is a logged in user, the cart should be on the user schema
-	if (req.user) {
-		User.findById(req.user._id)
-			.populate('cart.product')
-			.then(function (user) {
-				//if there is no cart, the schema will throw an error
-				newOrder.purchasedItems = user.cart;
-				newOrder[user] = user._id;
-				return Order.create(newOrder)
+	// This is a public route, so this could get spammed creating orders
+	// how do we protect against this? do we need to?
+
+	// we have to populate the cart again
+	// cart is 
+	var productPromises = [];
+	req.body.purchasedItems.forEach(function(item) {
+		productPromises.push(Product.findById(item.product._id));
+	})
+	Promise.all(productPromises)
+		.then(function(products) {
+			products.forEach(function(product, i) {
+				req.body.purchasedItems[i].product = product;
 			})
-			.then(order => res.status(201).json(order))
-			.then(null, function() {
-				next({status: 400, message: "Validation Error: Could not create order"});
-			});
-	} else {
-
-		//this is in the schema but we still might get an error if there is no req.session.cart 
-		//do we want to create a cart on each new session to prevent this?
-		if (!req.session.cart) return next({status: 400, message: "There are no items to create an order"});
-		
-		//populate req.session.cart so it has more than productId
-			var productsPromises = [];
-			newOrder.purchasedItems.forEach(function (item) {
-				productsPromises.push(Product.findById(item.product).exec())
-			});
-
-			Promise.all(productsPromises)
-				.then(function (products) {
-					newOrder.purchasedItems = products;
-					return Order.create(newOrder);
-				})
-				.then(order => res.status(201).json(order))
-				.then(null, function() {
-					next({status: 400, message: "Validation Error: Could not create order"});
-				});
-		
-		// req.body = {cart: cart, shippingAddress: xxxx, shippingEmail: xxx}
-		// cart: [{ 
-		//         product: {
-		//             type: mongoose.Schema.Types.ObjectId, 
-		//             ref: 'Product'
-		//         }, 
-		//         quantity: {type:Number, min:1, default:1}
-		//     }]
-		// The cart has to be populated with the products to make sure
-		// prices etc. stay the same after the order has been created
-	}
-
+			return Order.create(req.body);
+		})
+		.then(function(createdOrder) {
+			res.json(createdOrder);
+		})
+		.then(null, next);
 });
 
 module.exports = router;

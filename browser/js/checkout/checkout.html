@@ -23,8 +23,25 @@
             <td><strong>Total: get cart total</strong></td>
         </tr>
     </table>
-
     <form></form>
-
-<button type="button" ng-click="checkout()" class="btn btn-primary" style="float:right">Buy</button>
+    <form name="shippingForm" class="form" novalidate>
+        <div class="form-group">
+            <label>Shipping Address</label>
+            <input type="text" class="form-control" ng-model="newOrder.shippingAddress" name="address" required></input>
+            <div class="help-block" ng-messages="shippingForm.address.$error">
+                <p ng-message="required" ng-show="shippingForm.address.$touched" ng-class="{ 'has-error': userForm.name.$touched && userForm.name.$invalid }"> A shipping address is required.</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Shipping Email</label>
+            <input type="email" class="form-control" ng-model="newOrder.shippingEmail" name="email" required></input>
+        </div>
+        <div class="help-block" ng-messages="shippingForm.email.$error" ng-show="shippingForm.email.$touched" ng-class="{ 'has-error': userForm.name.$touched && userForm.name.$invalid }">
+            <p ng-message="required">A shipping email is required.</p>
+            <p ng-message="email">A valid shipping email is required.</p>
+        </div>
+        <div class="input-group">
+            <button type="button" ng-click="checkout()" class="btn btn-primary" ng-disabled="shippingForm.$invalid">Complete Purchase</button>
+        </div>
+    </form>
 </div>
