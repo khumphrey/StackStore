@@ -29,27 +29,27 @@ app.factory('OrderFactory', function($http, $uibModal) {
 			return currentFilter;
 		},
 
-	    ordersFilter: function(order) {
-	        if (currentFilter === "Show All") return true;
-	        else return order.orderStatus === currentFilter;
-	    },
+		ordersFilter: function(order) {
+		if (currentFilter === "Show All") return true;
+			else return order.orderStatus === currentFilter;
+		},
 
-	    setCurrentFilter: function (filter) {
-	    	currentFilter = filter;
-	    },
+		setCurrentFilter: function (filter) {
+			currentFilter = filter;
+		},
 
-	    openOrderDetail: function(order) {
-	        var modalInstance = $uibModal.open({
-	            templateUrl: '/js/common/controllers/order.detail.html',
-	            controller: 'OrderDetailCtrl',
-	            size: 'lg',
-	            resolve: {
-	                order: function() {
-	                    return order;
-	                }
-	            }
-	        });
-	    }
+		openOrderDetail: function(order) {
+			var modalInstance = $uibModal.open({
+				templateUrl: '/js/common/controllers/order.detail.html',
+				controller: 'OrderDetailCtrl',
+				size: 'lg',
+				resolve: {
+					order: function() {
+						return order;
+					}
+				}
+			});
+		}
 		
 	};
 
