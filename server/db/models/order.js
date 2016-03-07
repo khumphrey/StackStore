@@ -62,13 +62,10 @@ orderSchema.pre('save', function(next) {
 		}, 0)
 	}
 
-
-
-
 	// continue after resolving the save operations on all the products
 	Promise.all(productPromises)
 	.then(function() {
-		next();
+		next();		
 	})
 	.then(null, function(err) {
 		next(new Error(err));

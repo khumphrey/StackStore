@@ -105,6 +105,12 @@ router.post('/', function (req, res, next) {
 			return Order.create(req.body);
 		})
 		.then(function(createdOrder) {
+			// order creation was successful: reset the cart
+			if (req.user) {
+				req.user.cart = [];
+				req.user.save();
+			}
+			req.session.cart = [];
 			res.json(createdOrder);
 		})
 		.then(null, next);
