@@ -46,3 +46,16 @@ app.config(function ($stateProvider) {
         }
     });
 });
+
+app.config(function ($stateProvider) {
+    $stateProvider.state('admin.categoryManagement', {
+        url: '/category-management',
+        templateUrl: 'js/admin/category-management.html',
+        controller: 'CategoryManagementCtrl',
+        resolve: {
+            categories: function(CategoryFactory) {
+                return CategoryFactory.fetchAll();
+            }
+        }
+    });
+});
