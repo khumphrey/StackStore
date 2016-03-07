@@ -1,7 +1,8 @@
 app.factory('OrderFactory', function($http) {
 
-	var fetchAll = function() {
-		return $http.get('/api/orders')
+	var fetchAll = function(queryStr) {
+		queryStr = queryStr || "";
+		return $http.get('/api/orders' + queryStr)
 			.then(res => res.data);
 	};
 

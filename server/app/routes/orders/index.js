@@ -74,7 +74,6 @@ router.put('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
  
 });
 
-
 router.post('/', function (req, res, next) {
 	// Order Creation:
 	//
