@@ -14,9 +14,8 @@ app.controller('OrderManagementCtrl', function($scope, $uibModal, orders) {
 
     $scope.openOrderDetail = function(order) {
         var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
             templateUrl: '/js/admin/order-detail.html',
-            controller: 'ModalInstanceCtrl',
+            controller: 'OrderDetailCtrl',
             size: 'lg',
             resolve: {
                 order: function() {
