@@ -1,12 +1,14 @@
 'use strict';
 
 app.controller('CartController', function ($scope, cart, CartFactory) {
-	$scope.cart = cart;	
+	$scope.cart = cart;
 
 	var total = function() {
+		$scope.itemstot = 0;
 		var tot = 0;
 		for(var i=0; i<$scope.cart.length; i++) {
 			tot += ($scope.cart[i].product.price * $scope.cart[i].quantity);
+			$scope.itemstot += parseInt($scope.cart[i].quantity);
 		}
 		return tot;
 	};
@@ -14,12 +16,8 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 	$scope.total = total();
 
 	$scope.update = function (item) {
-		if(typeof item.quantity !== "number" && item.quantity !== "") {
-			alert("Please enter a number");
-			item.quantity = 1;
-			return;
-		}
-		if(item.quantity !== "") {
+		item.quantity = parseInt(item.quantity);
+		if(!isNaN(item.quantity)) {
 			CartFactory.updateItem(item.product._id, item.quantity)
 			.then(function () {
 				$scope.total = total();
@@ -34,10 +32,15 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 		});
 	};
 
-	$scope.change = function (item, num) {
+	$scope.change = function (item, num, index) {
 		if(item.quantity + num <= 0) {
-			alert("whoa there sir and/or ma'am");
-			return;
+			var yn = confirm("Are you sure you want to remove this item from your cart?");
+			if(yn === false){
+				return;
+			} 
+			else {
+				$scope.remove(item, index);
+				return;			}
 		}
 		item.quantity += num;
 		$scope.update(item);
