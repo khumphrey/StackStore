@@ -74,7 +74,7 @@ function randWords(minWords, maxWords) {
     return chance.sentence({ words: numWords });
 }
 
-var categories = ['motor boat', 'cruise ship', 'pirate ship'];
+var categories = ['motor boat', 'cruise ship', 'pirate ship', 'party boat'];
 
 function randInteger(minNum, maxNum) {
     return chance.integer({ min: minNum, max: maxNum });
