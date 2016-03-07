@@ -6,9 +6,9 @@ module.exports = router;
 
 // req.query has a product id on it
 // req.query.product 
-router.get('/', function(req, res, next) {
+router.get('/:productId', function(req, res, next) {
     // productId has to be a object id for the query to work
-    let productId = new mongoose.Types.ObjectId(req.query.productId);
+    let productId = new mongoose.Types.ObjectId(req.params.productId);
 
     // the hash with other products also ordered together with the queried product
     // connectedProducts: {

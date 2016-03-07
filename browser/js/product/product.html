@@ -1,26 +1,33 @@
-<div class='col-sm-8 col-sm-offset-2'>
-    <h2>{{product.title}}</h2> <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
-    <img width="100%" ng-src="{{product.photoUrl}}">
-    <br>
-    <div class=row>
-        <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="left-bottom" type="button" class="btn btn-default pull-right">{{openPanel.title}}</button>
-    </div>
-    <div class="row">
-    <h4>Description: {{product.description}}</h4>
-    </div>
-    <div class="row">
-    <h4>Price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
-    </div>
-    <div class="row">
-        <!-- Using populatingCategories should be uneccessary -->
-        <h4>Categories: <span ng-repeat="category in populatingCategories">{{category.name}}   </span></h4>
-    </div>
-    <div class='row'>
-        <h4 style='display:inline; float:left;'> Quantity: </h4>
-        <div class='col-sm-7'>
-            <uib-pagination style='display:inline;' direction-links="false" total-items="product.quantity" ng-model="item.quantity" items-per-page="1"></uib-pagination>
+ {{recProds}}
+<div class="container">
+    <div class='col-sm-4'>
+        <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
+        <img width="100%" ng-src="{{product.photoUrl}}">
+        <br>
+        <br>
+        <div class=row>
+            <button ng-show="isAdmin()" uib-popover-template="openPanel.templateUrl" popover-title="{{openPanel.title}}:" popover-placement="right" type="button" class="btn btn-default pull-right">{{openPanel.title}}</button>
         </div>
-        <button class="btn" style='display:inline; float:right' ng-click="addToCart()">Add To Cart</button>
+    </div>
+    <div class='col-sm-7 col-sm-offset-1'>
+        <h2>{{product.title}}</h2>
+        <div class="row">
+            <h4>Description: {{product.description}}</h4>
+        </div>
+        <div class="row">
+            <h4>Price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
+        </div>
+        <div class="row">
+            <!-- Using populatingCategories should be uneccessary -->
+            <h4>Categories: <span ng-repeat="category in populatingCategories">{{category.name}}   </span></h4>
+        </div>
+        <div class='row'>
+            <h4 style='display:inline; float:left;'> Quantity: </h4>
+            <div class='col-sm-7'>
+                <uib-pagination style='display:inline;' direction-links="false" total-items="product.quantity" ng-model="item.quantity" items-per-page="1" max-size="8" force-ellipses="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
+            </div>
+            <button class="btn" style='display:inline; float:right' ng-click="addToCart()">Add To Cart</button>
+        </div>
     </div>
     <div class="row">
     </div>
@@ -52,7 +59,7 @@
         <!-- TODO Change these icons to boats  -->
         <h4>{{review.content}}</h4>
         <a>
-            <!-- 	Should this link to the users info? -->
+            <!--    Should this link to the users info? -->
             <h5>{{review.user.username}}</h5>
         </a>
     </div>

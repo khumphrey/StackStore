@@ -19,11 +19,20 @@
 
 .prodImg {
  	height: 150px;
- 	background-size: contain;
+ 	background-size: cover;
  	background-repeat: no-repeat;
  }
+
+.thumbnail {
+	height: 300px;
+}
 
 .glyphicon-remove {
 	float: right;
 	display: inline-block;
+}
+
+.popover {
+    max-width: 600px;
+    width: 400px;
 }

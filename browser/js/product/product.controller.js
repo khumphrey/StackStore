@@ -1,5 +1,6 @@
-app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory, CartFactory) {
+app.controller('ProductController', function ($scope, $state, product, ReviewFactory, Session, ProductsFactory, $location, $anchorScroll, AuthService, CategoryFactory, CartFactory, recs) {
 	$scope.product = product;
+	$scope.recProds = recs;
 	// assigning this way does not keep the categories objects?
 	$scope.populatingCategories = product.categories;
 
