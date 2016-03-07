@@ -5,6 +5,7 @@
 body {
   font: 400 14px/24px Roboto, sans-serif;
   -webkit-text-size-adjust: none;
+  background: rgb(247,247,247);
 }
 
 @mixin clearfix {
@@ -16,10 +17,14 @@ body {
 }
 
 #main {
-  padding-top: 60px;
+  // padding-top: 60px;
+
   margin: 0 auto;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	color:rgb(41,53,110);
+}
 
 @import 'directives/main';
 @import 'home/main';
@@ -27,3 +32,5 @@ body {
 @import 'tutorial/main';
 @import 'login/main';
 @import 'product/main';
+
+

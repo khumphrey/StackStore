@@ -8,7 +8,10 @@ navbar {
   .container {
     width: 91%;
     max-width: 1340px;
-    padding-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+
   }
 
   fullstack-logo {
@@ -23,14 +26,15 @@ navbar {
   }
 
   .nav > li > a {
+    color: rgb(51, 53, 115);
     cursor: pointer;
     transition: color 0.2s;
     &.active {
-      color: darken(#f31214, 10%);
+      color: darken(rgb(188, 150, 74), 10%);
     }
     &:hover {
       background: none;
-      color: #f31214;
+      color: rgb(188, 150, 74);
     }
     &:focus {
       background: none;
