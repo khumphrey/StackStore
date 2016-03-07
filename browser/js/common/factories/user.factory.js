@@ -9,6 +9,11 @@ app.factory('UserFactory', function($http) {
 			.then(res => res.data);
 	};
 
+	var updateUser = function (user) {
+		return $http.put('/api/users/' + user._id, user)
+			.then(res => res.data);
+	};
+
 	var deleteOne = function(user) {
 		return $http.delete('/api/users/' + user._id)
 			.then(res => res.data);
@@ -35,6 +40,7 @@ app.factory('UserFactory', function($http) {
 	return {
 		fetchAll: fetchAll,
 		fetchOne: fetchOne,
+		updateUser: updateUser,
 		deleteOne: deleteOne,
 		promoteToAdmin: promoteToAdmin,
 		demoteToUser: demoteToUser,

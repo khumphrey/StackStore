@@ -64,6 +64,7 @@ router.post('/', Auth.ensureAuthenticated, function (req, res, next) {
 });
 
 router.put('/:reviewId', Auth.ensureAdminOrSelf, function (req, res, next) {
+	console.log('review id and stuff', req.review)
 	_.extend(req.review, req.body);
 	req.review.save()
 		.then(function (updatedReview) {

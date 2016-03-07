@@ -74,10 +74,6 @@ router.put('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
  
 });
 
-
-//---------------------------------------
-//vvvvvvvvvv I DON'T WORK YET vvvvvvvvvv
-//---------------------------------------
 router.post('/', function (req, res, next) {
 	// security consideration:
 	// what if someone spams us with orders via postman?
@@ -100,7 +96,7 @@ router.post('/', function (req, res, next) {
 				//if there is no cart, the schema will throw an error
 				newOrder.purchasedItems = user.cart;
 				newOrder[user] = user._id;
-				return Order.create(newOrder)
+				return Order.create(newOrder);
 			})
 			.then(order => res.status(201).json(order))
 			.then(null, function() {
@@ -115,7 +111,7 @@ router.post('/', function (req, res, next) {
 		//populate req.session.cart so it has more than productId
 			var productsPromises = [];
 			newOrder.purchasedItems.forEach(function (item) {
-				productsPromises.push(Product.findById(item.product).exec())
+				productsPromises.push(Product.findById(item.product).exec());
 			});
 
 			Promise.all(productsPromises)
@@ -127,17 +123,7 @@ router.post('/', function (req, res, next) {
 				.then(null, function() {
 					next({status: 400, message: "Validation Error: Could not create order"});
 				});
-		
-		// req.body = {cart: cart, shippingAddress: xxxx, shippingEmail: xxx}
-		// cart: [{ 
-		//         product: {
-		//             type: mongoose.Schema.Types.ObjectId, 
-		//             ref: 'Product'
-		//         }, 
-		//         quantity: {type:Number, min:1, default:1}
-		//     }]
-		// The cart has to be populated with the products to make sure
-		// prices etc. stay the same after the order has been created
+
 	}
 
 });

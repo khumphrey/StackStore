@@ -1,0 +1,37 @@
+<div class="container">
+    <h2 class="text-center">Order History for {{ user.fullname || user.username || user.email}}</h2>
+    <uib-alert ng-show="!areThereUserOrders()" class="alert" type="info" role="alert">You do not have any orders</uib-alert>
+    <div class="panel panel-primary" ng-show="areThereUserOrders()">
+        <table class="panel-body table table-striped">
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Shipping Address</th>
+                <th>Shipping Email</th>
+                <th>
+                    <div class="dropdown">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"><strong>Order Status:</strong> {{currentFilter}}
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="filter in availableFilters"><a ng-click="setCurrentFilter(filter)">{{filter}}</a></li>
+                        </ul>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+            <div>
+                <tr ng-repeat="order in orders | filter : ordersFilter">
+                    <td ng-click="openOrderDetail(order)">{{$index}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.user.fullname}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.shippingAddress}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.shippingEmail}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.orderStatus}}</td>
+                    <td>
+                        <button class="btn btn-info" ng-click="cancelOrder(order)" ng-show="order.orderStatus !== 'Cancelled'">Cancel Order
+                        </button>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+</div>

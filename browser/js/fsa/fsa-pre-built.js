@@ -54,6 +54,7 @@
             var data = response.data;
             Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            if (!data.user) data.user = data; //ugly hack for now
             return data.user;
         }
 
@@ -68,7 +69,6 @@
         }
 
         this.getLoggedInUser = function (fromServer) {
-
             // If an authenticated session exists, we
             // return the user attached to that session
             // with a promise. This ensures that we can
@@ -95,6 +95,14 @@
                 .then(onSuccessfulLogin)
                 .catch(function () {
                     return $q.reject({ message: 'Invalid login credentials.' });
+                });
+        };
+
+        this.signup = function (credentials) {
+            return $http.post('/signup', credentials)
+                .then(onSuccessfulLogin)
+                .catch(function () {
+                    return $q.reject({ message: 'Invalid signup credentials.' });
                 });
         };
 

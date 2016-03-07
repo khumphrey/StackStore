@@ -1,4 +1,4 @@
-<nav class="navbar navbar-static-top">
+<nav class="navbar navbar-static-top" >
     <div class="container">
         <div class="navbar-header">
             <fullstack-logo></fullstack-logo>
@@ -11,9 +11,10 @@
                 <a ui-sref-active="active" ui-sref="admin.userManagement">Admin</a>                
             </li>
         </ul>
-        <button ng-show="!user" ui-sref="login" class="btn login-button">Login</button>
+        <!-- ui-sref="auth" -->
+        <button ng-show="!user" ng-click="open()" class="btn auth-button">Login/<br>Signup</button>
         <div ng-show="user" class="welcome">
-            <span>Welcome, {{ user.email }}!</span>
+            <span>Welcome, {{ user.fullname || user.email }}!</span>
             <a ng-click="logout()">Logout</a>
         </div>
     </div>

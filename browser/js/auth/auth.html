@@ -1,0 +1,25 @@
+<form id="auth-form" name="authForm" ng-submit="authForm.$valid && sendAuth(auth)">
+
+    <div class="modal-header">
+        <h3 class="modal-title"> Login or Signup </h3>
+    </div>
+    <div class="modal-body">
+    <!-- have alert show for empty input as well -->
+        
+        <alert type="danger" ng-show="error">
+            {{ error }}
+        </alert>
+
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="text" type="email" ng-model="auth.email" required class="form-control" id="email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" ng-model="auth.password" required class="form-control" id="auth-password" placeholder="Password">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
