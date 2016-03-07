@@ -11,7 +11,9 @@
         </tr>
             <tr ng-repeat="orderItem in order.purchasedItems">
                 <td>{{$index}}</td>
-                <td>{{orderItem.product.title}}</td>
+                <td>
+                    <a ng-click="ok()" ui-sref="product({productId: orderItem.product._id})">{{orderItem.product.title}}</a>
+                </td>
                 <td>{{orderItem.quantity}}</td>
                 <td>${{orderItem.product.price}}</td>
             </tr>
@@ -19,8 +21,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><strong>Total:</strong> ${{order.totalPrice}}</td>
-                
+                <td><strong>Total:</strong> ${{order.totalPrice}}</td>     
             </tr>
     </table>
 </div>

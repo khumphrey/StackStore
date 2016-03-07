@@ -12,7 +12,7 @@ Auth.isSelf = function (req) {
 
 Auth.ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) return next();
-	return next({status: 401, message:"not authorized"});
+	return next({status: 401, message:"not logged in"});
 };
 
 Auth.ensureAdminOrSelf = function (req, res, next) {
