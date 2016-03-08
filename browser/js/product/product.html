@@ -14,7 +14,7 @@
             <h4>Description: {{product.description}}</h4>
         </div>
         <div class="row">
-            <h4>Price: {{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: {{product.price*item.quantity}} </span> </h4>
+            <h4>Price: ${{product.price}} <span ng-show="isQuantitySelected()" style='float:right;'> total price: ${{product.price*item.quantity}} </span> </h4>
         </div>
         <div class="row">
             <!-- Using populatingCategories should be uneccessary -->
