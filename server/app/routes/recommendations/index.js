@@ -1,8 +1,19 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const Order = mongoose.model('Order');
+const Product = mongoose.model('Product');
 module.exports = router;
 
+// mini cache for top products
+// this is initialized with random products
+// but the initial values will only be shown if the /similar/ route is hit
+// before the /top/ route
+// if the /top/ route has been hit at least once it will be filled with appropriate values
+var topProducts;
+Product.find({})
+    .then(function(products) {
+        topProducts = products.slice(0,3);
+    });
 
 // Helper Function
 // find the n products in an object with the highest values
@@ -41,22 +52,29 @@ router.get('/similar/:productId', function(req, res, next) {
     Order.find({ purchasedItems: { $elemMatch: { "product._id": productId } } })
         .then(function(orders) {
             orders.forEach(function(order) {
-                order.purchasedItems.forEach(function(item) {
-                    //item is an object with product&quantity
-                    if (!item.product._id.equals(productId)) {
-                        if (!connectedProducts[item.product._id]) {
-                            connectedProducts[item.product._id] = {
-                                count: 1,
-                                product: item.product
-                            }
-                        } else connectedProducts[item.product._id].count += 1;
-                    }
+                    order.purchasedItems.forEach(function(item) {
+                        //item is an object with product&quantity
+                        if (!item.product._id.equals(productId)) {
+                            if (!connectedProducts[item.product._id]) {
+                                connectedProducts[item.product._id] = {
+                                    count: 1,
+                                    product: item.product
+                                }
+                            } else connectedProducts[item.product._id].count += 1;
+                        }
+                    })
                 })
-            })
-
-            // find the 3 products that have been order most often together with the queried product
+                // find the 3 products that have been order most often together with the queried product
             let recommendedProducts = findTopProducts(connectedProducts, 3);
-            res.json(recommendedProducts);
+            console.log(recommendedProducts.length)
+            console.log(topProducts.length)
+
+            if (recommendedProducts.length === 3) return res.json(recommendedProducts);
+            // it is possible that this does not return 3 products
+            // to always return three products to keep the frontend consistent we'll 
+            // fill up the array with results from topProducts
+            recommendedProducts = recommendedProducts.concat(topProducts.slice(0, 3 - recommendedProducts.length));
+            return res.json(recommendedProducts);
         })
         .then(null, next);
 });
@@ -79,9 +97,8 @@ router.get('/top', function(req, res, next) {
                 })
             })
             let mostPopularProducts = findTopProducts(productCounts, 3);
-            console.log(productCounts, mostPopularProducts)
+            topProducts = mostPopularProducts; // save in the cache
             res.json(mostPopularProducts);
         })
         .then(null, next);
 })
-
