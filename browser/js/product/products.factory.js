@@ -28,8 +28,13 @@ app.factory('ProductsFactory', function ($http) {
 		},
 
 		fetchRecs: function (id) {
-			return $http.get('/api/recommendations/' + id)
+			return $http.get('/api/recommendations/similar/' + id)
 			.then(res => res.data);
+		},
+
+		fetchTopProducts: function() {
+			return $http.get('/api/recommendations/top')
+				.then(res => res.data);
 		}
 
 	};

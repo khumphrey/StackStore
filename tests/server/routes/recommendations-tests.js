@@ -159,7 +159,7 @@ describe('Recommendation Engine:', function() {
 	it('returns most commenly ordered products together with queried product', function (done) {
 		let guestAgent = supertest(app);
 
-		guestAgent.get('/api/recommendations/?productId=' + createdProducts[0]._id)
+		guestAgent.get('/api/recommendations/similar/' + createdProducts[0]._id)
 			.end(function(err, response) {
 				if (err) done(err);
 				// top recommendation for product 0 should be product 2
