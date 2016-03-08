@@ -8,12 +8,18 @@ router.param('prodId', function(req, res, next, prodId) {
 	Product.findById(prodId)
 	.populate('categories')
 	.then(function (product){
-		if(!product) return next({status: 404, message: "Product not found"}); 
+		if(!product) {
+			var err = new Error("Product does not exist");
+            err.status = 404;
+            return next(err);
+		}
 		req.requestedProduct = product;
 		next();
 	})
 	.then(null, function(){ 
-		next({status: 404, message: "Product not found"});
+		var err = new Error("Product does not exist");
+        err.status = 404;
+        next(err);
 	});
 });
 

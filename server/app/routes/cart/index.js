@@ -20,7 +20,6 @@ router.get('/', function (req, res) {
 		if(!req.session.cart) req.session.cart = []; //initialize a session cart if needed
 		Promise.map(req.session.cart, function (item) {
 			return Product.findById(item.product);
-
 		})
 		.then(function (productArray) {
 			res.json(productArray.map(function (product, index) {
@@ -108,9 +107,9 @@ router.put('/:productId', function (req, res, next) {
 	}
 	else {
 		if (!req.session.cart) {
-			var err = new Error(404)
-			err.message = "Cart does not exist";
-			next(err);
+			var err = new Error("Cart does not exist")
+			err.status = 404;
+			return next(err);
 		}
 		for (var i=0; i<req.session.cart.length; i++) {
 			if(req.session.cart[i].product === req.params.productId) {
@@ -133,8 +132,8 @@ router.delete('/', function (req, res, next) {
 	}
 	else {
 		if (!req.session.cart) {
-			var err = new Error(404)
-			err.message = "Cart does not exist";
+			var err = new Error("Cart does not exist")
+			err.status = 404;
 			next(err);
 		}
 		else {
@@ -158,8 +157,8 @@ router.delete('/:productId', function (req, res, next) {
 	}
 	else {
 		if (!req.session.cart) {
-			var err = new Error(404)
-			err.message = "Cart does not exist";
+			var err = new Error("Cart does not exist")
+			err.status = 404;
 			return next(err);
 		}
 		else{

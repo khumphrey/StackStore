@@ -15,7 +15,7 @@ app.controller('CheckoutCtrl', function($scope, $uibModal, $state, OrderFactory,
     $scope.checkout = function() {
         console.log('creating order ', $scope.newOrder)
         OrderFactory.createOrder($scope.newOrder)
-            .then(function(createdOrder) {
+            .then(function() {
                 // show confirmation modal
                 var confirmationModal = $uibModal.open({
                     templateUrl: '/js/checkout/confirmation.html',

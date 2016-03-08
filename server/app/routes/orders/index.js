@@ -10,24 +10,33 @@ const Auth = require('../../../utils/auth.middleware');
 
 
 router.param('orderId', function (req, res, next, orderId) {
-    var id = orderId.toString();
-    Order.findById(id)
+    Order.findById(orderId)
 	.populate('user')
     .then(function (order) {
-        if (!order) return next({status: 404, message:"Order does not exist"});
+        if (!order) {
+        	var err = new Error("Order does not exist");
+            err.status = 404;
+            return next(err);
+        }
         req.requestedOrder = order;
         req.requestedUser = order.user;
         next();
     })
     .then(null, function() {
-        next({status: 404, message:"Order does not exist"});
+    	var err = new Error("Order does not exist");
+        err.status = 400;
+        next(err);
     });
 });
 
 router.get('/', Auth.ensureAuthenticated, function (req, res, next) {
 	//if it is a person trying to get their orders that is okay; otherwise needs to be admin
 	if (req.query.user !== req.user._id.toString()) {
-		if (!Auth.isAdmin (req)) return next({status: 403, message:"not authorized"});
+		if (!Auth.isAdmin (req)) {
+			var err = new Error("Not authorized");
+            err.status = 403;
+            return next(err);
+		}
 	}
 
 	Order.find(req.query)
@@ -43,11 +52,20 @@ router.get('/', Auth.ensureAuthenticated, function (req, res, next) {
 
 router.get('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
 	//ensure admin or user (not all orders have users so this is difficult)
+	var err;
 	if (!Auth.isAdmin(req)) {
 		if (req.requestedOrder.user) {
 			req.requestedUser = req.requestedOrder.user;
-			if (!Auth.isSelf(req)) return next({status: 403, message:"Users can only view his/her own orders"});
-		} else return next({status: 403, message:"Users can only view his/her own orders"});	
+			if (!Auth.isSelf(req)) {
+				err = new Error("Users can only view his/her own orders");
+                err.status = 403;
+                return next(err);
+			}
+		} else {
+			err = new Error("Users can only view his/her own orders");
+            err.status = 403;
+            return next(err);
+			}	
 	}
 	if (req.requestedOrder.user) req.requestedOrder.user = req.requestedOrder.user.sanitize();
 	res.json(req.requestedOrder);
@@ -56,16 +74,28 @@ router.get('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
 
 router.put('/:orderId', Auth.ensureAuthenticated, function (req, res, next) {
 	delete req.body.purchasedItems;
-
+	var err;
 	//user only change status to Cancelled
 	//currently admin and user can change shipping address/email
 	if (!Auth.isAdmin(req)) {
 		if (req.requestedOrder.user) {
 			req.requestedUser = req.requestedOrder.user;
 			if (Auth.isSelf(req)) {
-				if (req.body.orderStatus !== "Cancelled") return next({status: 400, message:"User can only change order status to cancelled"});
-			} else return next({status: 403, message:"Users can only change his/her own orders"});
-		} else return next({status: 403, message:"Users can only change his/her own orders"});	
+				if (req.body.orderStatus !== "Cancelled") {
+					err = new Error("User can only change order status to cancelled");
+					err.status = 400;
+					return next(err);
+				}
+			} else {
+				err = new Error("Users can only view his/her own orders");
+                err.status = 403;
+                return next(err);
+			}
+		} else {
+			err = new Error("Users can only view his/her own orders");
+            err.status = 403;
+            return next(err);
+		}	
 	}
 
 	_.extend(req.requestedOrder, req.body);
@@ -100,7 +130,7 @@ router.post('/', function (req, res, next) {
 	req.body.purchasedItems = req.body.purchasedItems || [];
 	req.body.purchasedItems.forEach(function(item) {
 		productPromises.push(Product.findById(item.product._id));
-	})
+	}) //a Promise.map would work here right??
 	Promise.all(productPromises)
 		.then(function(products) {
 			products.forEach(function(product, i) {

@@ -5,11 +5,14 @@ const router = require('express').Router();
 const Auth = require('../../../utils/auth.middleware.js');
 const _ = require('lodash');
 
-router.param('reviewId', function (req, res, next, id) {
-	Review.findById(id).populate('user')
+router.param('reviewId', function (req, res, next, reviewId) {
+	Review.findById(reviewId)
+		.populate('user')
 		.then(function (review) {
 			if (!review) {
-				return next({status: 404, message: "Review not found"});
+				var err = new Error("Review does not exist");
+                err.status = 404;
+                return next(err);
 			}
 			req.review = review;
 			review.user = review.user.sanitize();
@@ -19,7 +22,9 @@ router.param('reviewId', function (req, res, next, id) {
 			next();
 		})
 		.then(null, function (){
-			next({status: 404, message: "Review not found"});
+			var err = new Error("Review does not exist");
+            err.status = 404;
+            next(err);
 		})
 		.then(null, next);
 });
