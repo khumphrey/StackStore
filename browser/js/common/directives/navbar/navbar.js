@@ -1,4 +1,4 @@
-app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state) {
+app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state, CartFactory) {
 
     return {
         restrict: 'E',
@@ -14,12 +14,16 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
                 });
             };
 
+            // CartFactory.fetchCart()
+            // .then(function(itemList){
+            //     scope.total = itemList.length;
+            // })
+
             scope.items = [
                 { label: 'Home', state: 'home' },
                 { label: 'About', state: 'about' },
                 { label: 'Documentation', state: 'docs' },
                 { label: 'Catalogue', state: 'products' },
-                { label: 'Cart', state: 'cart' },
                 { label: 'Checkout', state: 'checkout'},
                 { label: 'Account', state: 'user.account', auth: true }
             ];
