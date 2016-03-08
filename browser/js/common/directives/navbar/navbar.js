@@ -15,13 +15,10 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
             };
 
             scope.items = [
-                { label: 'Home', state: 'home' },
-                { label: 'About', state: 'about' },
-                { label: 'Documentation', state: 'docs' },
+                { label: 'HOME', state: 'home' },
                 { label: 'CATALOGUE', state: 'products' },
-                { label: 'Cart', state: 'cart' },
-                { label: 'Checkout', state: 'checkout'},
-                { label: 'Account', state: 'user.account', auth: true }
+                { label: 'CART', state: 'cart' },
+                { label: 'ACCOUNT', state: 'user.account', auth: true }
             ];
 
             scope.user = null;
