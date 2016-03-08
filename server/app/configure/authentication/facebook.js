@@ -25,7 +25,7 @@ module.exports = function (app) {
                 } else {
                     return UserModel.create({
                         fullname: profile.displayName,
-                        email: name + "@yahoo.com", //FB doesn't provide an email, so just making one for now
+                        email: name[0] + "@yahoo.com", //FB doesn't provide an email, so just making one for now
                         facebook: {
                             id: profile.id
                         }
