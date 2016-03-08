@@ -6,7 +6,7 @@ module.exports = router;
 
 // req.query has a product id on it
 // req.query.product 
-router.get('/:productId', function(req, res, next) {
+router.get('/similar/:productId', function(req, res, next) {
     // productId has to be a object id for the query to work
     let productId = new mongoose.Types.ObjectId(req.params.productId);
 
@@ -54,6 +54,7 @@ router.get('/:productId', function(req, res, next) {
 });
 
 router.get('/top', function(req, res, next) {
+
     // return the three most popular products (popular = order most often)
     let productCounts = {};
 
