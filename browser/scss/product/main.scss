@@ -37,6 +37,7 @@
     bottom: 25px;
     left: 25px;
     margin: auto;
+
 }
 
 .caption {
@@ -54,10 +55,22 @@
     z-index:2;
 }
 
-.thumbnail > a:link {
+.thumbnail a:link {
     color: white;
 }
 
-.thumbnail > a:visited {
+.thumbnail a:visited {
     color: white;
+}
+
+.thumbnail .btn {
+   background-color: rgba(50, 50, 50, .8);
+   border-radius: 5px;
+   border: 1px solid rgb(188, 150, 74);
+   display: inline-block;
+   cursor: pointer;
+   color: #ffffff ;
+   font-family: Arial;
+   padding: 8px 15px;
+   text-decoration: none;
 }

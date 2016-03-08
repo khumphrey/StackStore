@@ -13,6 +13,7 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 
 	$scope.addToCart = function (){
 		CartFactory.addToCart($scope.product._id, $scope.item.quantity);
+		$scope.alerts.push({msg: 'This item has been added to your cart!'});
 	};
 
 	$scope.removeProduct = function () {
@@ -111,8 +112,15 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 
 
     // Quick add 1 to cart
+    $scope.alerts = [
+	  ];
+
+	$scope.closeAlert = function(index) {
+    	$scope.alerts.splice(index, 1);
+  	};
 	$scope.quickAddToCart = function (productId){
-		CartFactory.addToCart(productId, 1);	
+		CartFactory.addToCart(productId, 1);
+		$scope.alerts.push({msg: 'This item has been added to your cart!'});	
 	};
 
 	$scope.showCaption = function (e) {
