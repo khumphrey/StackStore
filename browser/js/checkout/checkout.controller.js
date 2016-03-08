@@ -24,11 +24,11 @@ app.controller('CheckoutCtrl', function($scope, $uibModal, $state, OrderFactory,
                 // show confirmation modal
                 var confirmationModal = $uibModal.open({
                     templateUrl: '/js/checkout/confirmation.html',
-                    controller: function($scope, $uibModalInstance, $state) {
+                    controller: ['$scope', '$uibModalInstance', '$state' , function($scope, $uibModalInstance, $state) {
                         $scope.ok = function() {
                             $uibModalInstance.close();
                         }
-                    }
+                    }]
                 });
                 $state.go('products');
             })
