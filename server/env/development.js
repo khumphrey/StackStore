@@ -4,7 +4,7 @@ module.exports = {
   "DATABASE_URI": secrets.databaseURI,
   "SESSION_SECRET": secrets.session,
   "TWITTER": {
-    "consumerKey": "dH1cEGorTHqLvxSeaHp2uWig0",
+    "consumerKey": "U4r0tngrEmTC7HE2Fi5e6CL0N",
     "consumerSecret": secrets.twitterSecret,
     "callbackUrl": "http://127.0.0.1:1337/auth/twitter/callback"
   },
