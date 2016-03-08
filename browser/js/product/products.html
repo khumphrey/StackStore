@@ -21,23 +21,7 @@
 <div>
     <div class='col-sm-9'>
         <div class='col-sm-4' ng-repeat="product in products | filter: {description: descriptionSearch} | filter: {title: titleSearch} | filterCategories: categoryResults | filterPropertyByRange:'price':price.min:price.max | filterPropertyByRange:'quantity':quantity.min:quantity.max">
-            <div class="thumbnail" style="background-image:url('{{product.photoUrl}}')" ng-mouseenter="showCaption($event)" ng-mouseleave="hideCaption($event)">
-                <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct(product._id)"></span>
-                <a ui-sref="product({productId: product._id})">
-                    <!-- <div class="prodImg" style="background-image:url('{{product.photoUrl}}')"></div> -->
-                    <div class="caption" ng-mouseleave="hideCaption($event)">
-                        <h4>{{product.title}} </h4>
-                        <p>Price: ${{product.price}}</p>
-                </a>
-                <!-- <p>Description: {{product.description}}</p> -->
-                <!-- <p>Quantity: {{product.quantity}}</p> -->
-                <!-- possibly have Title and Description popover with template on Mouseenter -->
-                <!-- <p>Categories: <span ng-repeat="category in product.categories">{{category.name}}</span></p> -->
-                </div>
-                <div class="quickAdd">
-                    <button class="btn" ng-click="addToCart(product._id)">Add To Cart</button>
-                </div>
-            </div>
+            <product product="product"> </product>
         </div>
     </div>
 </div>
