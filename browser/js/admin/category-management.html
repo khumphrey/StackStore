@@ -1,0 +1,28 @@
+<table class="table table-striped table-hover">
+    <tr>
+        <th>Nr</th>
+        <th>Name</th>
+        <th>
+        </th>
+    </tr>
+    <div>
+        <tr ng-repeat="category in categories">
+            <td>
+                {{$index}}
+            </td>
+            <td>
+                {{category.name}}
+            </td>
+            <td>
+                <button class="btn btn-default btn-sm" ng-click="deleteCategory(category)">Remove</button>
+            </td>
+        </tr>
+    </div>
+</table>
+<form class="form-inline" name="newCategoryForm">
+    <div class="form-group">
+        <label>Category Name</label>
+        <input type="text" ng-model="newCategory.name" required></input>
+        <button ng-click="addNewCategory()" ng-disabled="newCategoryForm.$invalid" class="btn btn-primary btn-sm">Add New Category</button>
+    </div>
+</form>

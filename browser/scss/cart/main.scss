@@ -1,0 +1,28 @@
+#cart {
+	
+	.alert-warning {
+		text-align:center;
+		margin-bottom: 0px;
+		padding: 0;
+		border-radius:5px;
+	}
+
+	td{
+		vertical-align: middle;
+		text-align: center;
+	}
+
+	.qty {
+		text-align:center;
+		display: inline-block;
+		width:34px;
+	}
+
+	a {
+		text-decoration: underline;
+	}
+
+	.left {
+		text-align: left;
+	}
+}

@@ -6,7 +6,7 @@ app.filter('filterCategories', function() {
 // product.categories =
 // [{"_id":"56d6211a41380ba6524bf3e7","name":"pirate ship","__v":0}],
 				for (var i = 0; i < product.categories.length; i++) {
-					if(product.categories[i].name === elem) return true;
+					if(product.categories[i].name === elem || !product.categories[i].name) return true;
 				}
 
 				return false;

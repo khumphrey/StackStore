@@ -32,7 +32,7 @@ router.get('/', function (req, res) {
 
 //Post a new cart
 router.post('/', function (req, res) {
-	if(req.user){
+	if(req.user && req.session.cart.length > 0){
 		req.session.cart.forEach(function (seshItem) {
 			req.user.addOrModify(seshItem);
 		});
