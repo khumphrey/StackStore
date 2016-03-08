@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('CartController', function ($scope, cart, CartFactory) {
+app.controller('CartController', function ($scope, cart, CartFactory, $uibModal) {
 	$scope.cart = cart;
 
 	$scope.cacheVal = function (item) {
@@ -10,8 +10,21 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 	$scope.revert = function (item) {
 		if(!item.quantity) {
 			item.quantity = $scope.cache;
+			$scope.update(item);
 		}
 	}
+
+	function checkout(){
+		var bool = false;
+		$scope.cart.forEach(function (item) {
+			if(item.quantity > item.product.quantity){
+				bool = true;
+			}
+		})
+		return bool;
+	}
+
+	$scope.checkout = checkout();
 
 	var total = function() {
 		$scope.itemstot = 0;
@@ -55,31 +68,30 @@ app.controller('CartController', function ($scope, cart, CartFactory) {
 
 	$scope.change = function (item, num, index) {
 		if(item.quantity + num <= 0) {
-			var yn = confirm("Are you sure you want to remove this item from your cart?");
-			if(yn === false){
-				if(item.quantity === 1) return;
-				else item.quantity = $scope.cache;
-			} 
-			else {
-				$scope.remove(item, index);
-				return;			
-			}
+			var modal = $uibModal.open({
+				animation: true,
+				templateUrl: 'js/cart/confirmRemove.html',
+				controller: 'cartModalCtrl',
+				size: 'md'
+			})
+			modal.result.then(function(confirmed) {
+				if(confirmed) {
+					$scope.remove(item, index);
+				} 
+				else {
+					if(item.quantity === 1) return;
+					else {
+						$scope.update(item);
+						return;
+					}
+				}
+			})
 		}
-		item.quantity += num;
-		$scope.update(item);
+		else {
+			item.quantity += num;
+			$scope.update(item);
+		}
 	}
-
-	function checkout(){
-		var bool = false;
-		$scope.cart.forEach(function (item) {
-			if(item.quantity > item.product.quantity){
-				bool = true;
-			}
-		})
-		return bool;
-	}
-
-	$scope.checkout = checkout();
 });
 
 

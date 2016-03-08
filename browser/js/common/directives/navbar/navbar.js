@@ -1,4 +1,4 @@
-app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state, CartFactory) {
+app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal, $state) {
 
     return {
         restrict: 'E',

@@ -31,17 +31,27 @@ router.get('/', function (req, res) {
 });
 
 //Post a new cart
-router.post('/', function (req, res) {
-	if(req.user && req.session.cart.length > 0){
-		req.session.cart.forEach(function (seshItem) {
-			req.user.addOrModify(seshItem);
-		});
-		req.user.save()
-		.then(function () {			
-			req.session.cart = [];
-			res.status(201).json(req.user.cart); 
-		})
-		.then(null, next);
+router.post('/', function (req, res, next) {
+	if(req.user){
+		if(req.session.cart.length > 0) {
+			req.session.cart.forEach(function (seshItem) {
+				req.user.addOrModify(seshItem);
+			});
+			req.user.save()
+			.then(function () {			
+				req.session.cart = [];
+				res.status(201).json(req.user.cart); 
+			})
+			.then(null, next);
+		}
+		else {
+			res.end();
+		}
+	}
+	else {
+		var err = new Error("not a logged in user")
+		err.status = 401;
+		return next(err);
 	}
 })
 
@@ -61,7 +71,7 @@ router.post('/:productId', function (req, res, next) {
 		var notAdded = true;
 		if(!req.session.cart) req.session.cart = [productItem]; //initialize a session cart if needed
 		else{
-			for(var i=0; i<req.session.cart.length; i++) {
+			for(let i=0; i<req.session.cart.length; i++) {
 				if(req.session.cart[i].product === productItem.product) {
 					req.session.cart[i].quantity += productItem.quantity;
 					if(req.session.cart[i].quantity <= 0){
@@ -72,7 +82,7 @@ router.post('/:productId', function (req, res, next) {
 				} 
 			}
 			if (notAdded && productItem.quantity > 0) req.session.cart.push(productItem);
-			else {
+			else if(productItem.quantity < 0) {
 				var err = new Error("No negative quantities");
 				err.status = 404;
 				return next(err);
@@ -97,7 +107,7 @@ router.post('/:productId', function (req, res, next) {
 //Update a single product quantity. Expect req.body.quantity = NUMBER
 router.put('/:productId', function (req, res, next) {
 	if (req.user) {
-		for (var i=0; i<req.user.cart.length; i++) {
+		for (let i=0; i<req.user.cart.length; i++) {
 			if (req.user.cart[i].product.equals(req.params.productId)) {
 				req.user.cart[i].quantity = req.body.quantity;
 				req.user.save()
@@ -112,7 +122,7 @@ router.put('/:productId', function (req, res, next) {
 			err.message = "Cart does not exist";
 			next(err);
 		}
-		for (var i=0; i<req.session.cart.length; i++) {
+		for (let i=0; i<req.session.cart.length; i++) {
 			if(req.session.cart[i].product === req.params.productId) {
 				req.session.cart[i].quantity = req.body.quantity;
 				break;
@@ -147,7 +157,7 @@ router.delete('/', function (req, res, next) {
 //Delete a single item from a cart
 router.delete('/:productId', function (req, res, next) {
 	if (req.user) {
-		for (var i=0; i<req.user.cart.length; i++) {
+		for (let i=0; i<req.user.cart.length; i++) {
 			if (req.user.cart[i].product.equals(req.params.productId)) {
 				req.user.cart.splice(i,1);
 				req.user.save()
@@ -163,7 +173,7 @@ router.delete('/:productId', function (req, res, next) {
 			return next(err);
 		}
 		else{
-			for (var i=0; i<req.session.cart.length; i++) {
+			for (let i=0; i<req.session.cart.length; i++) {
 				if (req.session.cart[i].product === req.params.productId) {
 					req.session.cart.splice(i,1);
 					break;
