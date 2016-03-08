@@ -7,12 +7,12 @@
                 <!-- want to add functionality so that you will be asked if you try to leave the page without saving changes -->
                 <div class="form-group">
                     <label>Name</label>
-                    <input class="form-control" ng-model="user.fullname" name="fullname" value="{{ user.fullname }}">
+                    <input class="form-control" ng-model="user.fullname" name="fullname" placeholder="Enter Name Here">
                 </div>
                 <div class="form-group">
                     <label>Username</label>
                     <!-- do these need to be unique? -->
-                    <input class="form-control" ng-model="user.username" required name="username" value="{{ user.username }}">
+                    <input class="form-control" ng-model="user.username" required name="username">
                     <div ng-messages="updateUserForm.username.$error" role="alert" class="text-danger">
                         <div ng-message="required">Please enter a username before saving</div>
                     </div>
@@ -20,20 +20,39 @@
                 <div class="form-group">
                     <!-- how to do route so that they know that the email is already taken -->
                     <label>Email</label>
-                    <input class="form-control" ng-model="user.email" required type="email" name="email" value="{{ user.email }}">
+                    <input class="form-control" ng-model="user.email" required type="email" name="email" >
                     <div ng-messages="updateUserForm.username.$error" role="alert">
                         <div ng-message="required">Please enter an email before saving</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control" ng-model="user.password" name="password" placeholder="Password">
+                    <input type="password" class="form-control" ng-model="user.password" name="password" placeholder="Enter Password Here">
                 </div>
 
                 <div>
                     <uib-alert ng-show="user.requiresPasswordReset" class="alert" type="danger" role="alert">You are required to change your password</uib-alert>
                 </div>
-
+                <div class="container">
+                    <h4>Address Information</h4>
+                    <div class="form-group col-xs-10">
+                        <label>Street Address</label>
+                        <input class="form-control" ng-model="user.streetAddress" name="streetAddress" placeholder="Enter Street Address Here">
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label>City</label>
+                        <input class="form-control" ng-model="user.city" name="city" placeholder="Enter City Here">
+                    </div>
+                    <div class="form-group col-xs-2">
+                        <label>State</label>
+                        <input class="form-control" ng-model="user.state" name="state" placeholder="Enter State Here" ng-maxlength="2">
+                    </div>
+                    <div class="form-group col-xs-2">
+                        <label>Zip Code</label>
+                        <input class="form-control" ng-model="user.zipCode" name="zipCode" placeholder="Enter Zip Code Here" ng-maxlength="5">
+                    </div>
+                </div>
+                <br>
                 <button type="submit" class="btn btn-submit">Save Changes</button>
             </form>
             <br>
