@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <!-- how to do route so that they know that the email is already taken -->
                     <label>Email</label>
-                    <input class="form-control" ng-model="user.email" required type="email" name="email" >
+                    <input class="form-control" ng-model="user.email" required type="email" name="email">
                     <div ng-messages="updateUserForm.username.$error" role="alert">
                         <div ng-message="required">Please enter an email before saving</div>
                     </div>
@@ -29,7 +29,6 @@
                     <label>Password</label>
                     <input type="password" class="form-control" ng-model="user.password" name="password" placeholder="Enter Password Here">
                 </div>
-
                 <div>
                     <uib-alert ng-show="user.requiresPasswordReset" class="alert" type="danger" role="alert">You are required to change your password</uib-alert>
                 </div>
@@ -45,11 +44,19 @@
                     </div>
                     <div class="form-group col-xs-2">
                         <label>State</label>
-                        <input class="form-control" ng-model="user.state" name="state" placeholder="Enter State Here" ng-maxlength="2">
+                        <input class="form-control" ng-model="user.state" name="state" ng-minlength="2" ng-maxlength="2" placeholder="Enter State Here">
+                        <div ng-messages="updateUserForm.state.$error" ng-show="updateUserForm.state.$touched" role="alert" class="text-danger">
+                            <div ng-message="minlength">Please enter a state abbreviation of two characters</div>
+                            <div ng-message="maxlength">Please enter a state abbreviation of two characters</div>
+                        </div>
                     </div>
                     <div class="form-group col-xs-2">
                         <label>Zip Code</label>
-                        <input class="form-control" ng-model="user.zipCode" name="zipCode" placeholder="Enter Zip Code Here" ng-maxlength="5">
+                        <input class="form-control" ng-model="user.zipCode" name="zipCode" placeholder="Enter Zip Code Here" ng-maxlength="5" ng-minlength="5">
+                        <div ng-messages="updateUserForm.zipCode.$error" ng-show="updateUserForm.zipCode.$touched" role="alert" class="text-danger">
+                            <div ng-message="minlength">Please enter a 5 digit zip code</div>
+                            <div ng-message="maxlength">Please enter a 5 digit zip code</div>
+                        </div>
                     </div>
                 </div>
                 <br>
