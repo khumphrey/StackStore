@@ -12,12 +12,12 @@ router.get('/similar/:productId', function(req, res, next) {
 
     // the hash with other products also ordered together with the queried product
     // connectedProducts: {
-    // 	product1: { 
-    // 	count: 3,  how often product1 has been in the same order as the queried product
-    // 	product: productobj
+    //  product1: { 
+    //  count: 3,  how often product1 has been in the same order as the queried product
+    //  product: productobj
     // }, 
-    // 	product3: {7},
-    // 	...
+    //  product3: {7},
+    //  ...
     // }
     let connectedProducts = {};
 
@@ -33,18 +33,18 @@ router.get('/similar/:productId', function(req, res, next) {
     Order.find({ purchasedItems: { $elemMatch: { "product._id": productId } } })
         .then(function(orders) {
             orders.forEach(function(order) {
-                    order.purchasedItems.forEach(function(item) {
-                        //item is an object with product&quantity
-                        if (!item.product._id.equals(productId)) {
-                            if (!connectedProducts[item.product._id]) {
-                                connectedProducts[item.product._id] = {
-                                    count: 1,
-                                    product: item.product
-                                }
-                            } else connectedProducts[item.product._id].count += 1;
-                        }
-                    })
+                order.purchasedItems.forEach(function(item) {
+                    //item is an object with product&quantity
+                    if (!item.product._id.equals(productId)) {
+                        if (!connectedProducts[item.product._id]) {
+                            connectedProducts[item.product._id] = {
+                                count: 1,
+                                product: item.product
+                            }
+                        } else connectedProducts[item.product._id].count += 1;
+                    }
                 })
+            })
 
             // find the 3 products that have been order most often together with the queried product
             let recommendedProducts = findTopProducts(connectedProducts, 3);
