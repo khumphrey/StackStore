@@ -5,7 +5,7 @@ app.controller('CheckoutCtrl', function($scope, $uibModal, $state, OrderFactory,
 
     // Total Price should be abstracted away and made available by the CartFactory
     $scope.totalPrice = cart.reduce(function(sum, item) {
-        return sum += item.quantity * item.product.price;
+        return sum + item.quantity * item.product.price;
     }, 0);
 
     // add error handling
@@ -22,7 +22,7 @@ app.controller('CheckoutCtrl', function($scope, $uibModal, $state, OrderFactory,
         OrderFactory.createOrder($scope.newOrder)
             .then(function() {
                 // show confirmation modal
-                var confirmationModal = $uibModal.open({
+                $uibModal.open({
                     templateUrl: '/js/checkout/confirmation.html',
                     controller: ['$scope', '$uibModalInstance', '$state' , function($scope, $uibModalInstance, $state) {
                         $scope.ok = function() {
