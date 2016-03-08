@@ -14,6 +14,11 @@ app.directive('navbar', function($rootScope, AuthService, AUTH_EVENTS, $uibModal
                 });
             };
 
+            // CartFactory.fetchCart()
+            // .then(function(itemList){
+            //     scope.total = itemList.length;
+            // })
+
             scope.items = [
                 { label: 'HOME', state: 'home' },
                 { label: 'CATALOGUE', state: 'products' },
