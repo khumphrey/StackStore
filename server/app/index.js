@@ -34,7 +34,7 @@ app.get('/*', function (req, res) {
 });
 
 // Error catching endware.
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
     console.error(err);
     // console.error(err.stack);
     res.status(err.status || 500).send(err.message || 'Internal server error.');
