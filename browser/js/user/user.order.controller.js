@@ -1,4 +1,4 @@
-app.controller('UserOrderCtrl', function ($scope, OrderFactory, userOrders, $controller) {
+app.controller('UserOrderCtrl', function ($scope, OrderFactory, userOrders) {
 
     $scope.orders = userOrders;
     $scope.success = false;

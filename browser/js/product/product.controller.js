@@ -112,8 +112,7 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 
 
     // Quick add 1 to cart
-    $scope.alerts = [
-	  ];
+    $scope.alerts = [];
 
 	$scope.closeAlert = function(index) {
     	$scope.alerts.splice(index, 1);
