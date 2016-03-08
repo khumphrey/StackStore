@@ -1,11 +1,19 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const Order = mongoose.model('Order');
-const Product = mongoose.model('Product');
 module.exports = router;
 
-// req.query has a product id on it
-// req.query.product 
+
+// Helper Function
+// find the n products in an object with the highest values
+var findTopProducts = function(obj, n) {
+    return Object.keys(obj).sort(function(a, b) {
+        return obj[b].count - obj[a].count;
+    }).slice(0, n).map(key => obj[key].product);
+}
+
+
+// req.query.product : is a productId
 router.get('/similar/:productId', function(req, res, next) {
     // productId has to be a object id for the query to work
     let productId = new mongoose.Types.ObjectId(req.params.productId);
@@ -77,9 +85,3 @@ router.get('/top', function(req, res, next) {
         .then(null, next);
 })
 
-// find the n products in an object with the highest values
-var findTopProducts = function(obj, n) {
-    return Object.keys(obj).sort(function(a, b) {
-        return obj[b].count - obj[a].count;
-    }).slice(0, n).map(key => obj[key].product);
-}
