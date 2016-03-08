@@ -1,6 +1,6 @@
 <div class="container">
-<h3>Checkout</h3>
-<hr>
+    <h3>Checkout</h3>
+    <hr>
     <table class="table table-stripe">
         <tr>
             <th></th>
@@ -27,13 +27,44 @@
     </table>
     <form></form>
     <form name="shippingForm" class="form" novalidate>
-        <div class="form-group">
+        <div class="container">
+            <h4>Shipping Address</h4>
+            <div class="form-group col-xs-10">
+                <label>Street Address</label>
+                <input class="form-control" ng-model="newOrder.streetAddress" name="streetAddress" required placeholder="Enter Street Address Here">
+                <div ng-messages="shippingForm.streetAddress.$error" ng-show="shippingForm.streetAddress.$touched" role="alert" class="text-danger">
+                    <div ng-message="required">Please enter a street address before continuing</div>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label>City</label>
+                <input class="form-control" ng-model="newOrder.city" name="city" required placeholder="Enter City Here">
+                <div ng-messages="shippingForm.city.$error" ng-show="shippingForm.city.$touched" role="alert" class="text-danger">
+                    <div ng-message="required">Please enter a city before continuing</div>
+                </div>
+            </div>
+            <div class="form-group col-xs-2">
+                <label>State</label>
+                <input class="form-control" ng-model="newOrder.state" name="state" ng-minlength="2" ng-maxlength="2" required placeholder="Enter State Here">
+                <div ng-messages="shippingForm.state.$error" ng-show="shippingForm.state.$touched" role="alert" class="text-danger">
+                    <div ng-message="minlength || maxlength || required">Please enter a state abbreviation of two characters</div>
+                </div>
+            </div>
+            <div class="form-group col-xs-2">
+                <label>Zip Code</label>
+                <input class="form-control" ng-model="newOrder.zipCode" name="zipCode" placeholder="Enter Zip Code Here" required ng-maxlength="5" ng-minlength="5">
+                <div ng-messages="shippingForm.zipCode.$error" ng-show="shippingForm.zipCode.$touched" role="alert" class="text-danger">
+                    <div ng-message="minlength || maxlength || required">Please enter a 5 digit zip code</div>
+                </div>
+            </div>
+        </div>
+        <!--         <div class="form-group">
             <label>Shipping Address</label>
             <input type="text" class="form-control" ng-model="newOrder.shippingAddress" name="address" required></input>
             <div class="help-block" ng-messages="shippingForm.address.$error">
                 <p ng-message="required" ng-show="shippingForm.address.$touched" ng-class="{ 'has-error': userForm.name.$touched && userForm.name.$invalid }"> A shipping address is required.</p>
             </div>
-        </div>
+        </div> -->
         <div class="form-group">
             <label>Shipping Email</label>
             <input type="email" class="form-control" ng-model="newOrder.shippingEmail" name="email" required></input>

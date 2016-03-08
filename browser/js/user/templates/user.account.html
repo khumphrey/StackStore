@@ -46,16 +46,14 @@
                         <label>State</label>
                         <input class="form-control" ng-model="user.state" name="state" ng-minlength="2" ng-maxlength="2" placeholder="Enter State Here">
                         <div ng-messages="updateUserForm.state.$error" ng-show="updateUserForm.state.$touched" role="alert" class="text-danger">
-                            <div ng-message="minlength">Please enter a state abbreviation of two characters</div>
-                            <div ng-message="maxlength">Please enter a state abbreviation of two characters</div>
+                            <div ng-message="minlength || maxlength">Please enter a state abbreviation of two characters</div>
                         </div>
                     </div>
                     <div class="form-group col-xs-2">
                         <label>Zip Code</label>
                         <input class="form-control" ng-model="user.zipCode" name="zipCode" placeholder="Enter Zip Code Here" ng-maxlength="5" ng-minlength="5">
                         <div ng-messages="updateUserForm.zipCode.$error" ng-show="updateUserForm.zipCode.$touched" role="alert" class="text-danger">
-                            <div ng-message="minlength">Please enter a 5 digit zip code</div>
-                            <div ng-message="maxlength">Please enter a 5 digit zip code</div>
+                            <div ng-message="minlength || maxlength">Please enter a 5 digit zip code</div>
                         </div>
                     </div>
                 </div>

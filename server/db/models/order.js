@@ -21,10 +21,26 @@ var orderSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	shippingEmail: {
+	streetAddress: {
 		type: String,
 		required: true
-	}
+	},
+    city: {
+    	type: String,
+    	required: true
+    },
+    state: {
+        type: String,
+        minlength: 2,
+        maxlength: 2,
+        required: true
+    },
+    zipCode: {
+        type: Number,
+        minlength: 5,
+        maxlength: 5,
+        required: true
+    },
 
 });
 
