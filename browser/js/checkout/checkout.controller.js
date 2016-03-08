@@ -3,6 +3,11 @@ app.controller('CheckoutCtrl', function($scope, $uibModal, $state, OrderFactory,
         purchasedItems: cart
     };
 
+    // Total Price should be abstracted away and made available by the CartFactory
+    $scope.totalPrice = cart.reduce(function(sum, item) {
+        return sum += item.quantity * item.product.price;
+    }, 0);
+
     // add error handling
     AuthService.getLoggedInUser()
         .then(function(user) {
