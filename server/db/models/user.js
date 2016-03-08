@@ -37,6 +37,18 @@ var schema = new mongoose.Schema({
     salt: {
         type: String
     },
+    streetAddress: String,
+    city: String,
+    state: {
+        type: String,
+        minlength: 2,
+        maxlength: 2
+    },
+    zipCode: {
+        type: Number,
+        minlength: 5,
+        maxlength: 5
+    },
     twitter: {
         id: String,
         username: String,
