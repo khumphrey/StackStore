@@ -12,13 +12,20 @@
 
 .jumbotron {
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 50px;
     height: 600px;
     background-image: url("images/page1.jpg");
     background-size: cover;
     padding-top: 0;
     padding-bottom: 0;
     // -webkit-filter: contrast(70%);
+}
+
+.top-product {
+    margin-top: 20px;
+    img {
+        width: 100%;
+    }
 }
 
 .jumbotron .bg-overlay {

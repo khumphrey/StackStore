@@ -26,7 +26,11 @@
 <div class="container">
 
 <div class="row">
-    
+<h2>Our Recommended Boats:</h2>
+    <div class="col-sm-4 top-product" ng-repeat="topProduct in topProducts">
+
+        <img ng-src="{{topProduct.photoUrl}}">
+    </div>
 </div>
 
     <div id="compass" class="row">
