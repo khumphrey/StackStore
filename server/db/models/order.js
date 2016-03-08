@@ -37,17 +37,21 @@ orderSchema.pre('save', function(next) {
 	}
 
 	// check if none of the products are out of stock
-	this.purchasedItems.forEach(function(item) {
+	for (var i = 0; i < this.purchasedItems.length; i ++) {
+		let item = this.purchasedItems[i];
 		if (item.product.quantity < item.quantity) {
 			return next(new Error('Item is out of stock'));
-		}
-	});
+		}	
+	}
 
 	// if everything is correct we subtract the items from the inventory for new orders
 	var productPromises = [];
 	// console.log(this.purchasedItems)
 
 	if (this.isModified('purchasedItems')) {
+		this.purchasedItems.map(function (item) {
+			item.product.quantity -= item.quantity;
+		})
 		this.purchasedItems.forEach(function(item) {
 			// console.log(item.product.save)
 			// you cant assume that the purchased items are actually products!! Do validations on each product here
@@ -59,7 +63,7 @@ orderSchema.pre('save', function(next) {
 		// Calculate the total price
 		this.totalPrice = this.purchasedItems.reduce(function(sum, item) {
 			return item.product.price * item.quantity + sum;
-		}, 0)
+		}, 0);
 	}
 
 	// continue after resolving the save operations on all the products
