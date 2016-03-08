@@ -1,0 +1,11 @@
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <a ui-sref="product({productId: product._id})">
+        <div class="hovereffect">
+            <img class="img-responsive" ng-src="{{product.photoUrl}}" alt="">
+            <div class="overlay">
+                <h2>{{product.title}}</h2>
+                <a class="info" ng-click="addToCart(product._id)">Add To Cart</a>
+            </div>
+        </div>
+    </a>
+</div>
