@@ -1,5 +1,5 @@
 <section id="home">
-<!--         <video autoplay loop muted poster="screenshot.jpg" id="background">
+    <!--         <video autoplay loop muted poster="screenshot.jpg" id="background">
         <source src="/videos/redneckyacht.mp4" type="video/mp4">
     </video>
         <div class="container">
@@ -12,36 +12,30 @@
     <div class="jumbotron">
         <div class="bg-overlay">
             <div class="container">
-            <div id="jumbotron-text">
-                <h1>SEAS THE DAY</h1>
-                <p>WHAT A SHIP REALLY IS ... IS FREEDOM</p>
-                <br>
-                <p><a class="btn btn-primary btn-lg" ui-sref="products" role="button">EXPLORE</a></p>
+                <div id="jumbotron-text">
+                    <h1>SEAS THE DAY</h1>
+                    <p>WHAT A SHIP REALLY IS ... IS FREEDOM</p>
+                    <br>
+                    <p><a class="btn btn-primary btn-lg" ui-sref="products" role="button">EXPLORE</a></p>
                 </div>
             </div>
         </div>
     </div>
-
-
-<div class="container">
-
-<div class="row">
-<h2>Our Recommended Boats:</h2>
-    <div class="col-sm-4 top-product" ng-repeat="topProduct in topProducts">
-
-        <img ng-src="{{topProduct.photoUrl}}">
-    </div>
-</div>
-
-    <div id="compass" class="row">
-    <div class="col-sm-2"></div>
-        <div class="col-sm-4">
-            <img src="/images/kompass.png">
-        </div>        <div class="col-sm-6">
-            <h1>
+    <div class="container">
+        <div class="row">
+            <h2>Our Recommended Boats:</h2>
+            <product ng-repeat="topProduct in topProducts" product="topProduct"></product>
+        </div>
+        <div id="compass" class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4">
+                <img src="/images/kompass.png">
+            </div>
+            <div class="col-sm-6">
+                <h1>
                  Wherever we want to go, we'll go. That's what a ship is, you know.
             </h1>
+            </div>
         </div>
-    </div>
     </div>
 </section>

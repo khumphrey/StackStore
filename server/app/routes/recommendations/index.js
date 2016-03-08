@@ -71,7 +71,7 @@ router.get('/top', function(req, res, next) {
                 })
             })
             let mostPopularProducts = findTopProducts(productCounts, 3);
-            console.log(productCounts, mostPopularProducts)
+            // console.log(productCounts, mostPopularProducts)
             res.json(mostPopularProducts);
         })
         .then(null, next);
