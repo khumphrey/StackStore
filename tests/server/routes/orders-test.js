@@ -80,7 +80,10 @@ describe('Orders Routes', function() {
                         quantity: 1
                     }],
                     user: createdUsers[0]._id,
-                    shippingAddress: "123 ABC",
+                    streetAddress: "123 ABC",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
                     shippingEmail: "me@aol.com"
                 }, {
                     purchasedItems: [{
@@ -90,7 +93,10 @@ describe('Orders Routes', function() {
                         product: createdProducts[1],
                         quantity: 1
                     }],
-                    shippingAddress: "456 DEF",
+                    streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
                     shippingEmail: "you@aol.com"
                 }]);
             })
@@ -142,7 +148,10 @@ describe('Orders Routes', function() {
                         product: createdProducts[1],
                         quantity: 2
                     }],
-                    shippingAddress: "My house",
+                    streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
                     shippingEmail: "me@email.com"
                 })
                 .expect(201)
@@ -213,7 +222,10 @@ describe('Orders Routes', function() {
         it('should get a 400 for incomplete post', function(done) {
             loggedInAgent.post('/api/orders')
                 .send({
-                    shippingAddress: "My house"
+                    streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888
                 })
                 .expect(400)
                 .end();
@@ -231,7 +243,10 @@ describe('Orders Routes', function() {
                 .then(function() {
                     loggedInAgent.post('/api/orders')
                         .send({
-                            shippingAddress: "My house",
+                            streetAddress: "456 DEF",
+                            city: "NYC",
+                            state: "NY",
+                            zipCode: 88888,
                             shippingEmail: "me@email.com"
                         })
                         .expect(400)

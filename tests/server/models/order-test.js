@@ -70,7 +70,10 @@ describe('Order model', function () {
                     product: createdProducts[1],
                     quantity: 2
                 }],
-                shippingAddress: "the address",
+                streetAddress: "456 DEF",
+                city: "NYC",
+                state: "NY",
+                zipCode: 88888,
                 shippingEmail: "email@emailcom"
             })
             .then(function(order) {

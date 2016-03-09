@@ -92,7 +92,10 @@ describe('Recommendation Engine:', function() {
 						quantity: 1
 					}],
 					user: createdUsers[0]._id,
-					shippingAddress: "123 ABC",
+					streetAddress: "123 ABC",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
 					shippingEmail: "me@aol.com"
 				},
 				{
@@ -104,7 +107,10 @@ describe('Recommendation Engine:', function() {
 						product: createdProducts[2],
 						quantity: 1
 					}],
-					shippingAddress: "456 DEF",
+					streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
 					shippingEmail: "you@aol.com"
 				},
 				{
@@ -116,7 +122,10 @@ describe('Recommendation Engine:', function() {
 						product: createdProducts[2],
 						quantity: 1
 					}],
-					shippingAddress: "456 DEF",
+					streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
 					shippingEmail: "you@aol.com"
 				},
 				{
@@ -128,7 +137,10 @@ describe('Recommendation Engine:', function() {
 						product: createdProducts[2],
 						quantity: 2
 					}],
-					shippingAddress: "456 DEF",
+					streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
 					shippingEmail: "you@aol.com"
 				},
 				{
@@ -140,7 +152,10 @@ describe('Recommendation Engine:', function() {
 						product: createdProducts[2],
 						quantity: 2
 					}],
-					shippingAddress: "456 DEF",
+					streetAddress: "456 DEF",
+                    city: "NYC",
+                    state: "NY",
+                    zipCode: 88888,
 					shippingEmail: "you@aol.com"
 				}
 				]);

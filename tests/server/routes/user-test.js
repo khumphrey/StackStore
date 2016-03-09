@@ -44,13 +44,13 @@ describe('Users Route', function () {
 		it('should get a 201 for appropriate signup', function (done) {
 			guestAgent.post('/signup')
 				.send({
-					email: "k",
+					email: "k@k.k",
 					password: "k"
 				})
 				.expect(201)
 			.end(function (err, res) {
 				if (err) return done(err);
-				User.findById(res.body._id, function (err, user) {
+				User.findById(res.body.user._id, function (err, user) {
 					if (err) return done(err);
 					expect(user).to.not.be.null;
 					done();
