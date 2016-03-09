@@ -1,7 +1,7 @@
 <div class="container">
     <div class='col-sm-4'>
         <span ng-show="isAdmin()" class="glyphicon glyphicon-remove" ng-click="removeProduct()"></span>
-        <img width="100%" ng-src="{{product.photoUrl}}">
+        <img width="100%" id="{{product._id}}" ng-src="{{product.photoUrl}}">
         <br>
         <br>
         <div class=row>
@@ -25,7 +25,7 @@
             <div class='col-sm-7'>
                 <uib-pagination style='display:inline;' direction-links="false" total-items="product.quantity" ng-model="item.quantity" items-per-page="1" max-size="8" force-ellipses="true" boundary-link-numbers="true" rotate="false"></uib-pagination>
             </div>
-            <button class="btn" style='display:inline; float:right' ng-click="addToCart()">Add To Cart</button>
+            <button class="btn" style='display:inline; float:right' ng-click="addToCart($event)">Add To Cart</button>
         </div>
     </div>
 </div>

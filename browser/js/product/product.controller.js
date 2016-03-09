@@ -12,8 +12,39 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
 	// this should equal if the user is actuall an admin
 
 	$scope.addToCart = function (){
-		CartFactory.addToCart($scope.product._id, $scope.item.quantity);
-		$scope.alerts.push({msg: 'This item has been added to your cart!'});
+		var prodId = $scope.product._id
+		CartFactory.addToCart(prodId, $scope.item.quantity);
+		// send image to cart
+		var cart = $('.cart-nav');
+        var imgtodrag = $('#' + prodId)
+        if (imgtodrag) {
+            var imgclone = imgtodrag.clone()
+                .offset({
+                top: imgtodrag.offset().top,
+                left: imgtodrag.offset().left
+            })
+                .css({
+                'opacity': '0.5',
+                    'position': 'absolute',
+                    'height': '150px',
+                    'width': '150px',
+                    'z-index': '100'
+            })
+                .appendTo($('body'))
+                .animate({
+                'top': cart.offset().top + 10,
+                    'left': cart.offset().left + 10,
+                    'width': 75,
+                    'height': 75
+            }, 1000);
+
+            imgclone.animate({
+                'width': 0,
+                'height': 0
+            }, function () {
+                $(this).detach()
+            });
+        }
 	};
 
 	$scope.removeProduct = function () {
@@ -111,16 +142,6 @@ app.controller('ProductController', function ($scope, $state, product, ReviewFac
     };
 
 
-    // Quick add 1 to cart
-    $scope.alerts = [];
-
-	$scope.closeAlert = function(index) {
-    	$scope.alerts.splice(index, 1);
-  	};
-	$scope.quickAddToCart = function (productId){
-		CartFactory.addToCart(productId, 1);
-		$scope.alerts.push({msg: 'This item has been added to your cart!'});	
-	};
 
 	$scope.showCaption = function (e) {
 		$(e.target).find('.caption').slideDown(250); //.fadeIn(250)
