@@ -1,12 +1,13 @@
 <div>
+    <span ng-show="isAdmin()" style="z-index:99" class="glyphicon glyphicon-remove" ng-click="removeProduct($event, product._id)"></span>
     <a ui-sref="product({productId: product._id})">
         <div class="hovereffect">
-            <img class="thumbnail" ng-src="{{product.photoUrl}}" alt="">
+            <img class="thumbnail" id="{{product._id}}" ng-src="{{product.photoUrl}}" alt="">
             <div class="overlay">
-            <div>
-                <h2>{{product.title}}<br><span style="font-size:0.8em">${{product.price}}</span></h2>
+                <div>
+                    <h2>{{product.title}}<br><span style="font-size:0.8em">${{product.price}}</span></h2>
                 </div>
-                <a class="info" ng-click="addToCart(product._id)">Add To Cart</a>
+                <a class="info" ng-click="addToCart($event, product._id)">Add To Cart</a>
             </div>
         </div>
     </a>

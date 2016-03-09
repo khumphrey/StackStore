@@ -25,7 +25,7 @@ var productSchema = new mongoose.Schema({
 	}],
 	photoUrl: {
 		type: String,
-		default: true 
+		default: "http://images0.boattrader.com/resize/1/24/1/5372401_20150903175537814_1_LARGE.jpg?w=480&h=350&t=1212120" 
 	}
 });
 
