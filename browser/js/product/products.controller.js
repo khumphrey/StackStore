@@ -73,8 +73,6 @@ app.controller('ProductsController', function ($scope, products, ProductsFactory
 
 	$scope.newProduct = {
 			categories: [],
-			photoUrl: '/imgBoat/boatImg5.jpg'
-			// Still working on uploading images
 	};
 
 	// I would make this panel a seperate directive if I could have it update the products in this view and while adding. How is that usually done? event emitter? or storing the products on a the factory and then syncing with that?
