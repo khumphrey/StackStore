@@ -49,9 +49,9 @@ orderSchema.pre('save', function(next) {
 	// console.log(this.purchasedItems)
 
 	if (this.isModified('purchasedItems')) {
-		this.purchasedItems.map(function (item) {
-			item.product.quantity -= item.quantity;
-		})
+		// this.purchasedItems.map(function (item) {
+		// 	item.product.quantity -= item.quantity;
+		// })
 		this.purchasedItems.forEach(function(item) {
 			// console.log(item.product.save)
 			// you cant assume that the purchased items are actually products!! Do validations on each product here
