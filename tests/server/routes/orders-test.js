@@ -268,7 +268,7 @@ describe('Orders Routes', function() {
                 .then(function() {
                     loggedInAgent.post('/api/orders')
                         .send({
-                            streetAddress: "123 ABC",
+                            streetAddress: "5 Hanover Sq",
                             city: "NYC",
                             state: "NY",
                             zipCode: 88888,
@@ -286,7 +286,12 @@ describe('Orders Routes', function() {
                             if (err) return done(err);
                             expect(res.body.orderStatus).to.equal('Created');
                             expect(res.body.purchasedItems[0].price).to.not.be.null;
-                            done();
+                            Order.findById(res.body._id)
+                                .then(function (order) {
+                                    expect(order).to.not.be.null;
+                                    done();
+                                })
+                                .then(null, done)
                         });
                 });
         });
