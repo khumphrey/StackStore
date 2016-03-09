@@ -24,7 +24,9 @@
     <div class="container">
         <div class="row">
             <h2>Our Recommended Boats:</h2>
-            <product ng-repeat="topProduct in topProducts" product="topProduct"></product>
+            <div class="col-sm-4" ng-repeat="topProduct in topProducts">
+            <product product="topProduct"></product>
+            </div>
         </div>
         <div id="compass" class="row">
             <div class="col-sm-2"></div>
