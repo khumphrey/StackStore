@@ -16,6 +16,7 @@ app.controller('CartController', function ($scope, cart, CartFactory, $uibModal)
 
 	function checkout(){
 		var bool = false;
+		if($scope.cart.length === 0) bool = true;
 		$scope.cart.forEach(function (item) {
 			if(item.quantity > item.product.quantity){
 				bool = true;
@@ -60,6 +61,7 @@ app.controller('CartController', function ($scope, cart, CartFactory, $uibModal)
 		.then(function () {
 			$scope.cart.splice(index, 1);
 			$scope.total = total();
+			$scope.checkout = checkout();
 		})
 		.then(null, function (err) {
 			$scope.error = err.message || "Error removing";
@@ -92,6 +94,13 @@ app.controller('CartController', function ($scope, cart, CartFactory, $uibModal)
 			$scope.update(item);
 		}
 	}
+
+	$scope.blurOnEnter = function( $event ) {	
+		if($event.keyCode === 13) $event.target.blur();
+		return;
+	}
+
+
 });
 
 

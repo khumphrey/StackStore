@@ -22,11 +22,11 @@
 					<td class="qtybox">
 						<p>QTY</p>
 						<div>
-							<button class="btn btn-primary qty" ng-click='change(item, -1)'>-</button>
+							<button type="button" class="btn btn-primary qty" ng-click='change(item, -1)'>-</button>
 
-							<input class="form-control qty" ng-model="item.quantity" maxlength="2" name="qty" style="width:45px" ng-required="true" ng-change="update(item, $index)" ng-focus="cacheVal(item)" ng-blur="revert(item)"></input>
+							<input type="text" class="form-control qty" ng-model="item.quantity" maxlength="2" name="qty" style="width:45px" ng-required="true" ng-change="update(item, $index)" ng-focus="cacheVal(item)" ng-blur="revert(item)" ng-keypress="blurOnEnter($event)"></input>
 
-							<button class="btn btn-primary qty" ng-disabled="item.quantity === item.product.quantity" ng-click='change(item, 1, $index)'>+</button>
+							<button type="button" class="btn btn-primary qty" ng-disabled="item.quantity === item.product.quantity" ng-click='change(item, 1, $index)'>+</button>
 						</div>
 						<div>
 							<h6>IN STOCK LIMIT {{ item.product.quantity }}</h6>
@@ -40,12 +40,12 @@
 						Price: ${{ item.product.price }}
 					</td>
 					<td>
-						<button class="btn btn-danger" ng-click='remove(item)'>X</button>
+						<button type="button" class="btn btn-danger" ng-click='remove(item)'>X</button>
 					</td>
 				</tr>
 				<tr>
 					<td class="left">
-						<button class="btn btn-primary" ui-sref="products">Continue Shopping</button>
+						<button type="button" class="btn btn-primary" ui-sref="products">Continue Shopping</button>
 					</td>
 					<td>
 					</td>
@@ -57,7 +57,7 @@
 						Subtotal: ${{ total }}
 					</td>
 					<td>
-						<button class="btn btn-success" ng-disabled="checkout" ui-sref="checkout">Check Out</button>
+						<button type="button" class="btn btn-success" ng-disabled="checkout" ui-sref="checkout">Check Out</button>
 					</td>
 				</tr>
 			</tbody>
