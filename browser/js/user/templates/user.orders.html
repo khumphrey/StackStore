@@ -23,7 +23,7 @@
                 <tr ng-repeat="order in orders | filter : ordersFilter">
                     <td ng-click="openOrderDetail(order)">{{$index}}</td>
                     <td ng-click="openOrderDetail(order)">{{order.user.fullname}}</td>
-                    <td ng-click="openOrderDetail(order)">{{order.shippingAddress}}</td>
+                    <td ng-click="openOrderDetail(order)">{{order.streetAddress}}, {{order.city}}, {{order.state}}, {{order.zipCode}}</td>
                     <td ng-click="openOrderDetail(order)">{{order.shippingEmail}}</td>
                     <td ng-click="openOrderDetail(order)">{{order.orderStatus}}</td>
                     <td>

@@ -17,14 +17,30 @@ var orderSchema = new mongoose.Schema({
 	},
 	// if user is authenticated the html form will pre-fill the user data
 	// if there is no user, these two properties are required for shipping
-	shippingAddress: {
-		type: String,
-		required: true
-	},
 	shippingEmail: {
 		type: String,
 		required: true
-	}
+	},
+	streetAddress: {
+		type: String,
+		required: true
+	},
+    city: {
+    	type: String,
+    	required: true
+    },
+    state: {
+        type: String,
+        minlength: 2,
+        maxlength: 2,
+        required: true
+    },
+    zipCode: {
+        type: Number,
+        minlength: 5,
+        maxlength: 5,
+        required: true
+    },
 
 });
 

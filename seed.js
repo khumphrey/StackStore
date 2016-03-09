@@ -180,7 +180,10 @@ connectToDb.then(function() {
                     purchasedItems: purchasedItems,
                     user: chance.pickone(users),
                     orderStatus: chance.pickone(['Created', 'Processing', 'Completed', 'Cancelled']),
-                    shippingAddress: chance.address(),
+                    streetAddress: "5 Hanover Sq",
+                    city: "New York City",
+                    state: "NY",
+                    zipCode: 88888,
                     shippingEmail: chance.email()
                 };
                 newOrders.push(newOrder);

@@ -1,6 +1,6 @@
 <table class="table table-striped table-hover">
     <tr>
-        <th>Nr</th>
+        <th>#</th>
         <th>User Name</th>
         <th>Full Name</th>
         <th>Shipping Address</th>
@@ -21,7 +21,7 @@
             <td ng-click="openOrderDetail(order)">{{$index}}</td>
             <td ng-click="openOrderDetail(order)">{{order.user.username}}</td>
             <td ng-click="openOrderDetail(order)">{{order.user.fullname}}</td>
-            <td ng-click="openOrderDetail(order)">{{order.shippingAddress}}</td>
+            <td ng-click="openOrderDetail(order)">{{order.streetAddress}}, {{order.city}}, {{order.state}}, {{order.zipCode}}</td>
             <td ng-click="openOrderDetail(order)">{{order.shippingEmail}}</td>
             <td ng-click="openOrderDetail(order)">{{order.orderStatus}}</td>
             <td>
