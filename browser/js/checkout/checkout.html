@@ -28,7 +28,7 @@
     <form></form>
     <form name="shippingForm" class="form" novalidate>
         <div class="container">
-            <h4>Shipping Address</h4>
+            <h4>Shipping Information</h4>
             <div class="form-group col-xs-10">
                 <label>Street Address</label>
                 <input class="form-control" ng-model="newOrder.streetAddress" name="streetAddress" required placeholder="Enter Street Address Here">
@@ -57,21 +57,13 @@
                     <div ng-message="minlength || maxlength || required">Please enter a 5 digit zip code</div>
                 </div>
             </div>
-        </div>
-        <!--         <div class="form-group">
-            <label>Shipping Address</label>
-            <input type="text" class="form-control" ng-model="newOrder.shippingAddress" name="address" required></input>
-            <div class="help-block" ng-messages="shippingForm.address.$error">
-                <p ng-message="required" ng-show="shippingForm.address.$touched" ng-class="{ 'has-error': userForm.name.$touched && userForm.name.$invalid }"> A shipping address is required.</p>
+            <div class="form-group col-xs-10">
+                <label>Shipping Email</label>
+                <input type="email" class="form-control" ng-model="newOrder.shippingEmail" name="email" required></input>
+                <div ng-messages="shippingForm.email.$error" ng-show="shippingForm.email.$touched" role="alert" class="text-danger">
+                    <div ng-message="email || required">Please enter a valid email</div>
+                </div>
             </div>
-        </div> -->
-        <div class="form-group">
-            <label>Shipping Email</label>
-            <input type="email" class="form-control" ng-model="newOrder.shippingEmail" name="email" required></input>
-        </div>
-        <div class="help-block" ng-messages="shippingForm.email.$error" ng-show="shippingForm.email.$touched" ng-class="{ 'has-error': userForm.name.$touched && userForm.name.$invalid }">
-            <p ng-message="required">A shipping email is required.</p>
-            <p ng-message="email">A valid shipping email is required.</p>
         </div>
         <div class="input-group">
             <button type="button" ng-click="checkout()" class="btn btn-primary" ng-disabled="shippingForm.$invalid">Complete Purchase</button>

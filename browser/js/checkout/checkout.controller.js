@@ -14,6 +14,10 @@ app.controller('CheckoutCtrl', function($scope, $uibModal, $state, OrderFactory,
             if (user) {
             	$scope.newOrder.user = user; // if user is not logged in there will be no user on the order
             	$scope.newOrder.shippingEmail = user.email;
+                $scope.newOrder.streetAddress = user.streetAddress;           
+                $scope.newOrder.city = user.city;
+                $scope.newOrder.state = user.state;
+                $scope.newOrder.zipCode = user.zipCode;
             }
         });
 

@@ -16,6 +16,8 @@ app.controller('UserCtrl', function ($scope, loggedInUser, UserFactory) {
         if ($scope.user.password) {
             $scope.user.requiresPasswordReset = false;
         }
+        delete $scope.user.cart;
+        delete $scope.user.history;
         UserFactory.updateUser(userInfo)
             .then(function () {
                 delete $scope.user.password;

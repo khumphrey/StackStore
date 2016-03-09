@@ -17,7 +17,7 @@ var orderSchema = new mongoose.Schema({
 	},
 	// if user is authenticated the html form will pre-fill the user data
 	// if there is no user, these two properties are required for shipping
-	shippingAddress: {
+	shippingEmail: {
 		type: String,
 		required: true
 	},

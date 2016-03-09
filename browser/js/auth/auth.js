@@ -6,14 +6,12 @@ app.controller('AuthCtrl', function ($scope, AuthService, $state, $uibModalInsta
     $scope.sendAuth = function (authInfo) {
 
         $scope.error = null;
-
         AuthService.login(authInfo)
             .then(null, function () {
                 return AuthService.signup(authInfo);
             })
             .then(function (user) {
                 $uibModalInstance.close();
-
                 AuthService.persistCart()
                     .then(function () {
                         //if password reset is required go to user account page 
