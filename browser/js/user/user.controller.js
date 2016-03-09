@@ -13,6 +13,9 @@ app.controller('UserCtrl', function ($scope, loggedInUser, UserFactory) {
     $scope.updateAccountInfo = function (userInfo) {
         $scope.success = false;
         $scope.failure = false;
+        if ($scope.user.password) {
+            $scope.user.requiresPasswordReset = false;
+        }
         UserFactory.updateUser(userInfo)
             .then(function () {
                 delete $scope.user.password;

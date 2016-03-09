@@ -46,7 +46,6 @@ router.get('/:userId', Auth.ensureAdminOrSelf, function(req, res) {
 
 router.put('/:userId', Auth.ensureAdminOrSelf, function(req, res, next) {
     if (Auth.isSelf(req)) delete req.body.admin;
-
     _.extend(req.requestedUser, req.body); //should this be _.assignIn?
     req.requestedUser.save() //because we already pulled this to the server we can just save rather than update
         .then(user => res.json(user.sanitize())) //will this have the cart and history populated? Do we need it?

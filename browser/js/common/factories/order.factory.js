@@ -39,7 +39,7 @@ app.factory('OrderFactory', function($http, $uibModal) {
 		},
 
 		openOrderDetail: function(order) {
-			var modalInstance = $uibModal.open({
+			$uibModal.open({
 				templateUrl: '/js/common/controllers/order.detail.html',
 				controller: 'OrderDetailCtrl',
 				size: 'lg',
