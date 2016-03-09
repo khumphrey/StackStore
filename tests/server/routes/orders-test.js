@@ -268,7 +268,10 @@ describe('Orders Routes', function() {
                 .then(function() {
                     loggedInAgent.post('/api/orders')
                         .send({
-                            shippingAddress: "My house",
+                            streetAddress: "123 ABC",
+                            city: "NYC",
+                            state: "NY",
+                            zipCode: 88888,
                             shippingEmail: "me@email.com",
                             purchasedItems: [{
                                 product: createdProducts[0],
