@@ -8,7 +8,7 @@
 				<tr ng-repeat="item in cart" >
 					<td class="left">
 						<div>
-							<img src="{{item.product.photoUrl}}" class="img-thumbnail" height="200" width="200"/>
+							<img ng-src="{{item.product.photoUrl}}" class="img-thumbnail" height="200" width="200"/>
 						</div>
 					</td>
 					<td width="200">
@@ -24,7 +24,7 @@
 						<div>
 							<button class="btn btn-primary qty" ng-click='change(item, -1)'>-</button>
 
-							<input class="form-control qty" ng-model="item.quantity" max="8" name="qty" style="width:45px" ng-required="true" ng-change="update(item, $index)" ng-focus="cacheVal(item)" ng-blur="revert(item)"></input>
+							<input class="form-control qty" ng-model="item.quantity" maxlength="2" name="qty" style="width:45px" ng-required="true" ng-change="update(item, $index)" ng-focus="cacheVal(item)" ng-blur="revert(item)"></input>
 
 							<button class="btn btn-primary qty" ng-disabled="item.quantity === item.product.quantity" ng-click='change(item, 1, $index)'>+</button>
 						</div>

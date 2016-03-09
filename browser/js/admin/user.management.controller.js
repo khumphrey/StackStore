@@ -8,9 +8,9 @@ app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, 
 	
 	$scope.promoteUserToAdmin = function(user) {
 		UserFactory.promoteToAdmin(user)
-			.then(function(updatedUser) {
-				// console.log("Updated user: ", user);
-			})
+			// .then(function(updatedUser) {
+			// 	console.log("Updated user: ", user);
+			// })
 			.then(null, function(err) {
 				console.log(err);
 			});
@@ -18,18 +18,18 @@ app.controller('UserManagementCtrl', function($scope, AuthService, UserFactory, 
 		
 	$scope.demoteAdminToUser = function(user) {
 		UserFactory.demoteToUser(user)
-			.then(function(updatedUser) {
-				// console.log("Updated user: ", user);
-			})
+			// .then(function(updatedUser) {
+			// 	console.log("Updated user: ", user);
+			// })
 			.then(null, function(err) {
 				console.log(err);
 			});
 	};
 	$scope.resetPassword = function(user) {
 		UserFactory.resetPassword(user)
-			.then(function(updatedUser) {
-				// console.log("Reset password for user " + updatedUser.username);
-			})
+			// .then(function(updatedUser) {
+			// 	console.log("Reset password for user " + updatedUser.username);
+			// })
 			.then(null, function(err) {
 				console.log(err);
 			});
