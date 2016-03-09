@@ -7,6 +7,10 @@
             <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
                 <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label  }}</a>
             </li>
+            <li style="padding-top:5px" ui-sref="cart">
+                <img src="/images/28468-200.png" />
+                <img src="/images/28468-201.png" />
+            </li>
             <li ng-show="isAdmin()">
                 <a ui-sref-active="active" ui-sref="admin.userManagement">ADMIN</a>   
             </li>
