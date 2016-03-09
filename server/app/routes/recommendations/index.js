@@ -97,6 +97,7 @@ router.get('/top', function(req, res, next) {
                 })
             })
             let mostPopularProducts = findTopProducts(productCounts, 3);
+
             topProducts = mostPopularProducts; // save in the cache
             res.json(mostPopularProducts);
         })
